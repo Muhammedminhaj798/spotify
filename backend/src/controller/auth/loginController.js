@@ -1,6 +1,9 @@
 import nodemailer from 'nodemailer';
-import CustomError from '../utils/CustomError.js';
 import User from '../../model/userSchema.js';
+import CustomError from '../../utils/customError.js';
+import { configDotenv } from 'dotenv';
+
+configDotenv();
 
 // Nodemailer setup for OTP email
 const transporter = nodemailer.createTransport({

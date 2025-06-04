@@ -1,6 +1,6 @@
 import User from "../../model/userSchema.js";
 import CustomError from "../../utils/customError.js";
-import joiUserSchema from "../../utils/validation.js";
+import joiUserSchema from "../../utils/registrationValidation.js";
 import bcrypt from 'bcrypt'; // For password hashing
 import jwt from 'jsonwebtoken'; // For token generation
 

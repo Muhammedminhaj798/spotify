@@ -14,7 +14,7 @@ app.use(
   })
 );
 
-app.use("api/auth",authRouter)
+app.use("/api/auth",authRouter)
 mongoose
   .connect(process.env.MONGOOSE)
   .then(() => {
@@ -26,5 +26,5 @@ mongoose
 
 const port = process.env.PORT;
 app.listen(port, () => {
-  console.log(`server running on port ${port}`);
+  console.log(`server running on http://localhost:${port}`);
 });
