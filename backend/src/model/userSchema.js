@@ -8,18 +8,18 @@ const userSchema = new mongoose.Schema({
     },
     email: {
         type: String,
-        required: false, // Optional for phone-based registration
+        required: false, 
         unique: true,
         sparse: true, // Allows null/undefined for unique field
         lowercase: true,
-        match: [/^\S+@\S+\.\S+$/, "Valid email enter cheyyu, da!"]
+        match: [/^\S+@\S+\.\S+$/, "please enter valid phone number"]
     },
     phone: {
         type: String,
-        required: false, // Optional for email-based registration
+        required: false, 
         unique: true,
         sparse: true, // Allows null/undefined for unique field
-        match: [/^\+?[1-9]\d{1,14}$/, "Valid phone number enter cheyyu, da!"] // E.164 format
+        match: [/^\+?[1-9]\d{1,14}$/, "please enter valid phone number"] // E.164 format
     },
     password: {
         type: String,

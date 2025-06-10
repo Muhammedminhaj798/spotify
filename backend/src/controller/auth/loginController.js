@@ -5,100 +5,87 @@ import { configDotenv } from 'dotenv';
 
 configDotenv();
 
-// Nodemailer setup for OTP email
 const transporter = nodemailer.createTransport({
-    service: 'gmail', // Or ninte email service (Gmail, Outlook, etc.)
+    service: 'gmail',
     auth: {
-        user: process.env.EMAIL_USER, // Ninte email ID, .env-il store cheyyu
-        pass: process.env.EMAIL_PASS  // Ninte email password or app-specific password
+        user: process.env.EMAIL_USER, 
+        pass: process.env.EMAIL_PASS 
     }
 });
 
-// Generate OTP function
 const generateOTP = () => {
-    const otp = Math.floor(100000 + Math.random() * 900000).toString(); // 6-digit OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString(); 
     return otp;
 };
 
-// Send OTP Controller
 const sendOTP = async (req, res, next) => {
     try {
         const { email } = req.body;
         if (!email) {
-            return next(new CustomError('Email venam, da! Enter cheyyu!', 400));
+            return next(new CustomError('Email is required. Please enter your email address', 400));
         }
 
-        // Check if user exists
         const user = await User.findOne({ email });
         if (!user) {
-            return next(new CustomError('User not found, da! Register cheyyu!', 404));
+            return next(new CustomError('User not found. Please register to continue', 404));
         }
 
-        // Generate OTP and expiry (10 minutes)
         const otp = generateOTP();
-        const otpExpiry = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes from now
+        const otpExpiry = new Date(Date.now() + 10 * 60 * 1000); 
 
-        // Update user with OTP and expiry
         user.otp = otp;
         user.otpExpiry = otpExpiry;
         await user.save();
 
-        // Send OTP via email
         const mailOptions = {
             from: process.env.EMAIL_USER,
             to: email,
-            subject: 'Adipoli OTP for Verification',
-            text: `Ninte OTP aanu: ${otp}. 10 minutes-il expire aakum, da! Fast aay verify cheyyu!`
+            subject: 'Your OTP for verification is ready',
+            text: `OTP: ${otp}. Valid for 10 minutes only. Kindly complete verification`
         };
 
         await transporter.sendMail(mailOptions);
 
         res.status(200).json({
             success: true,
-            message: 'OTP ninte email-il adipoli aay send cheythu, da! Check cheyyu!'
+            message: 'The OTP has been successfully sent to your email. Please check your inbox'
         });
     } catch (error) {
-        console.error('Adipoli OTP Send Error:', error);
-        return next(new CustomError('OTP send cheyyan pattiyilla, da! Try again!', 500));
+        return next(new CustomError('Failed to send OTP. Please try again', 500));
     }
 };
 
-// Verify OTP Controller
 const verifyOTP = async (req, res, next) => {
     try {
         const { email, otp } = req.body;
         if (!email || !otp) {
-            return next(new CustomError('Email and OTP venam, da! Enter cheyyu!', 400));
+            return next(new CustomError('Email and OTP are required. Please enter both', 400));
         }
 
-        // Find user
         const user = await User.findOne({ email });
         if (!user) {
-            return next(new CustomError('User not found, da! Register cheyyu!', 404));
+            return next(new CustomError('User not found. Please register to continue', 404));
         }
 
-        // Check if OTP matches and not expired
         if (user.otp !== otp) {
-            return next(new CustomError('Invalid OTP, da! Correct aay enter cheyyu!', 400));
+            return next(new CustomError('Invalid OTP. Please enter the correct code', 400));
         }
 
         if (user.otpExpiry < Date.now()) {
-            return next(new CustomError('OTP expired, da! New OTP request cheyyu!', 400));
+            return next(new CustomError('OTP expired. Please request a new one', 400));
         }
 
-        // OTP correct, mark user as verified
         user.isVerified = true;
-        user.otp = null; // Clear OTP
-        user.otpExpiry = null; // Clear expiry
+        user.otp = null; 
+        user.otpExpiry = null; 
         await user.save();
 
         res.status(200).json({
             success: true,
-            message: 'Adipoli! OTP verified, ninte account ready aanu, da!'
+            message: 'login successfully'
         });
     } catch (error) {
-        console.error('Adipoli OTP Verify Error:', error);
-        return next(new CustomError('OTP verify cheyyan pattiyilla, da! Try again!', 500));
+        return next(new CustomError('OTP verification failed. Please try again', 500));
     }
 };
 
