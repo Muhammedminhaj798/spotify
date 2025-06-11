@@ -6,80 +6,22 @@ import { useDispatch, useSelector } from "react-redux";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 
-// Redux slice for auth and form data
-export const registerUser = createAsyncThunk(
-  "auth/registerUser",
-  async (userInfo, { rejectWithValue }) => {
-    try {
-      // Replace with your API call
-      // Example: const response = await api.register(userInfo);
-      // return response.data;
-      return userInfo;
-    } catch (error) {
-      return rejectWithValue(error.response?.data?.message || "Registration failed");
-    }
-  }
-);
-
-const initialFormData = {
-  email: "",
-  password: "",
-  name: "",
-  year: "",
-  month: "",
-  day: "",
-  gender: "",
-  marketingOptOut: false,
-  dataSharing: false,
-};
-
-const authSlice = createSlice({
-  name: "auth",
-  initialState: {
-    user: null,
-    loading: false,
-    error: null,
-    formData: initialFormData,
-  },
-  reducers: {
-    updateFormData: (state, action) => {
-      state.formData = { ...state.formData, ...action.payload };
-    },
-    resetFormData: (state) => {
-      state.formData = initialFormData;
-    },
-    resetAuthState: (state) => {
-      state.user = null;
-      state.loading = false;
-      state.error = null;
-      state.formData = initialFormData;
-    },
-  },
-  extraReducers: (builder) => {
-    builder
-      .addCase(registerUser.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(registerUser.fulfilled, (state, action) => {
-        state.loading = false;
-        state.user = action.payload;
-        state.formData = initialFormData;
-      })
-      .addCase(registerUser.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      });
-  },
-});
-
-export const { updateFormData, resetFormData, resetAuthState } = authSlice.actions;
-export const authReducer = authSlice.reducer;
-
 // Signup Component
 export function Signup() {
   const dispatch = useDispatch();
-  const formData = useSelector((state) => state.auth.formData);
+  const [formData, setFormData] = useState(
+    {
+      email: "",
+      password: "",
+      name: "",
+      year: "",
+      month: "",
+      day: "",
+      gender: "",
+      marketingOptOut: false,
+      dataSharing: false,
+    }
+  )
   const [isEmailValid, setIsEmailValid] = useState(true);
   const navigate = useNavigate();
 
@@ -138,8 +80,8 @@ export function Signup() {
             value={formData.email}
             onChange={handleEmailChange}
             className={`w-full px-4 py-3 bg-gray-900 text-white border-2 rounded-md focus:outline-none focus:ring-0 ${!isEmailValid && formData.email
-                ? "border-red-500"
-                : "border-gray-600 focus:border-white"
+              ? "border-red-500"
+              : "border-gray-600 focus:border-white"
               }`}
             placeholder="name@domain.com"
           />

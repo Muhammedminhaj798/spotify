@@ -2,6 +2,7 @@ import nodemailer from 'nodemailer';
 import User from '../../model/userSchema.js';
 import CustomError from '../../utils/customError.js';
 import { configDotenv } from 'dotenv';
+import jwt from 'jsonwebtoken'; // Ensure jwt is imported
 
 configDotenv();
 
@@ -75,6 +76,19 @@ const verifyOTP = async (req, res, next) => {
             return next(new CustomError('OTP expired. Please request a new one', 400));
         }
 
+        const token = jwt.sign(
+            { id: user._id, name: user.name, email: user.email },
+            process.env.JWT_TOKEN, 
+            { expiresIn: '15m' }
+        );
+
+        res.cookie('jwt', token, {
+            httpOnly: true, 
+            secure: process.env.NODE_ENV === 'production', 
+            sameSite: 'strict', 
+            maxAge: 15 * 60 * 1000 
+        });
+
         user.isVerified = true;
         user.otp = null; 
         user.otpExpiry = null; 
@@ -82,7 +96,8 @@ const verifyOTP = async (req, res, next) => {
 
         res.status(200).json({
             success: true,
-            message: 'login successfully'
+            message: 'Login successfully',
+            token
         });
     } catch (error) {
         return next(new CustomError('OTP verification failed. Please try again', 500));

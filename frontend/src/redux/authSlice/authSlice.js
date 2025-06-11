@@ -7,7 +7,7 @@ export const registerUser = createAsyncThunk(
   async (userInfo, { rejectWithValue }) => {
    try {
       const { data } = await axiosInstance.post("auth/register", userInfo);
-      return data.user; // Return only the user dataReplace with actual API response
+      return data.user; 
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || "Registration failed");
     }
@@ -18,35 +18,35 @@ const initialState = {
   user: null,
   loading: false,
   error: null,
-  formData: {
-    email: "",
-    password: "",
-    name: "",
-    year: "",
-    month: "",
-    day: "",
-    gender: "",
-    marketingOptOut: false,
-    dataSharing: false,
-  },
+  // formData: {
+  //   email: "",
+  //   password: "",
+  //   name: "",
+  //   year: "",
+  //   month: "",
+  //   day: "",
+  //   gender: "",
+  //   marketingOptOut: false,
+  //   dataSharing: false,
+  // },
 };
 
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    updateFormData: (state, action) => {
-      state.formData = { ...state.formData, ...action.payload };
-    },
-    resetFormData: (state) => {
-      state.formData = initialState.formData;
-    },
-    resetAuthState: (state) => {
-      state.user = null;
-      state.loading = false;
-      state.error = null;
-      state.formData = initialState.formData;
-    },
+    // updateFormData: (state, action) => {
+    //   state.formData = { ...state.formData, ...action.payload };
+    // },
+    // resetFormData: (state) => {
+    //   state.formData = initialState.formData;
+    // },
+    // resetAuthState: (state) => {
+    //   state.user = null;
+    //   state.loading = false;
+    //   state.error = null;
+    //   state.formData = initialState.formData;
+    // },
   },
   extraReducers: (builder) => {
     builder
@@ -57,7 +57,6 @@ const authSlice = createSlice({
       .addCase(registerUser.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload;
-        state.formData = initialState.formData; // Reset form after successful registration
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.loading = false;
@@ -66,5 +65,4 @@ const authSlice = createSlice({
   },
 });
 
-export const { updateFormData, resetFormData, resetAuthState } = authSlice.actions;
 export default authSlice.reducer;
