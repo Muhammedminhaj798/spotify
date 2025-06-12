@@ -37,6 +37,14 @@ const Register = async (req, res, next) => {
       process.env.JWT_TOKEN, 
       { expiresIn: '15m' } 
     );
+    console.log("tokn",token);
+    
+   res.cookie("jwt", token, {
+  httpOnly: false,          // if you want to access in frontend
+  secure: true,             // REQUIRED with sameSite: "none"
+  sameSite: "none",         // allows cross-site cookies
+  maxAge: 15 * 60 * 1000
+});
 
     res.status(201).json({
       success: true,

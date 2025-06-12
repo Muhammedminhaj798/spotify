@@ -6,6 +6,6 @@ const axiosInstance = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
-  // withCredentials: true, // Comment out for testing
+  withCredentials: true, // Comment out for testing
 });
 export default axiosInstance

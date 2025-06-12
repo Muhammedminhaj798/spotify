@@ -18,9 +18,6 @@ const App = () => {
       <Route path='/terms&conditions' element={<Terms/>}/>
       <Route path='/' element={<Home/>}/>
     </Routes>
-    <Routes>
-      <Route path='/admin_dashboard' element={<Dashboard/>}/>
-    </Routes>
 
     </>
   );
