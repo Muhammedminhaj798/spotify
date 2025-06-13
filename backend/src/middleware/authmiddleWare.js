@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import CustomError from '../utils/customError';
+import CustomError from '../routes/utils/customError';
 import User from '../model/userSchema';
 
 const user_auth = async (req, res, next) => {

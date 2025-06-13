@@ -1,8 +1,10 @@
 import nodemailer from "nodemailer";
-import User from "../../model/userSchema.js";
-import CustomError from "../../utils/customError.js";
+// import User from "../../../model/userSchema.js";
+// import CustomError from "../../../routes/utils/customError.js";
 import { configDotenv } from "dotenv";
 import jwt from "jsonwebtoken"; // Ensure jwt is imported
+import User from "../../model/userSchema.js";
+import CustomError from "../../utils/customError.js";
 
 configDotenv();
 

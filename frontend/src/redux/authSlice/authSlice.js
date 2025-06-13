@@ -6,11 +6,37 @@ export const registerUser = createAsyncThunk(
   "auth/registerUser",
   async (formData, { rejectWithValue, getState }) => {
     try {
-      const { auth: { formData } } = getState(); // Get formData from Redux state
+      const {
+        auth: { formData },
+      } = getState(); // Get formData from Redux state
       const { data } = await axiosInstance.post("/auth/register", formData);
       return data.user;
     } catch (error) {
-      return rejectWithValue(error.response?.data?.message || "Registration failed");
+      return rejectWithValue(
+        error.response?.data?.message || "Registration failed"
+      );
+    }
+  }
+);
+export const sentOTP = createAsyncThunk(
+  "auth/sentOTP",
+  async (email, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.post("/auth/sendOTP", { email });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+export const verifyOTP = createAsyncThunk(
+  "auth/verifyOTP",
+  async (credential, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.post("/auth/verifyOTP", credential);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error);
     }
   }
 );
@@ -25,8 +51,8 @@ const initialState = {
     password: "",
     cpassword: "",
     DOB: "",
-    gender: ""
-  }
+    gender: "",
+  },
 };
 
 const authSlice = createSlice({
@@ -47,7 +73,7 @@ const authSlice = createSlice({
     },
     clearError: (state) => {
       state.error = null;
-    }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -64,8 +90,9 @@ const authSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       });
-  }
+  },
 });
 
-export const { updateFormData, resetFormData, resetAuthState, clearError } = authSlice.actions;
+export const { updateFormData, resetFormData, resetAuthState, clearError } =
+  authSlice.actions;
 export default authSlice.reducer;

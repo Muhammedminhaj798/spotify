@@ -2,7 +2,9 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
-import authRouter from "./src/routes/auth/authRoute.js";
+import authRouter from "./src/routes/authRoute.js";
+import adminRoutes from "./src/routes/adminRoutes.js";
+// import userRoutes from "./src/routes/adminRoutes.js";
 
 const app = express();
 dotenv.config();
@@ -26,6 +28,7 @@ app.use((req, res, next) => {
 
 
 app.use("/api/auth", authRouter);
+app.use('/api/user', adminRoutes)
 
 
 mongoose
