@@ -37,7 +37,7 @@ export default function OtpComp({ email = "example@gmail.com" }) {
 
   const handleNavigate = async ()=>{
     try{
-        const res = await dispatch(verifyOTP(code)).unwrap()
+        const res = await dispatch(verifyOTP(code))
         if(res.type === 'auth/sendOTP/rejected'){
             throw new Error(res.payload)
         }

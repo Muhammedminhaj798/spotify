@@ -7,7 +7,7 @@ const Sidebar = ({ isOpen, toggleSidebar, activeItem, setActiveItem }) => {
     {
       section: "Overview",
       items: [
-        { id: 'dashboard', name: 'Dashboard', icon: '📊' },
+        { id: '/admin_dashboard', name: 'Dashboard', icon: '📊' },
       ]
     },
     {

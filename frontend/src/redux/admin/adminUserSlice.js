@@ -4,7 +4,7 @@ import axiosInstance from "../../AxiosInstance";
 const initialState = {
   users: [],
   loading: false,
-  error:null
+  error: null,
 };
 
 export const getAllUsers = createAsyncThunk(
@@ -14,32 +14,91 @@ export const getAllUsers = createAsyncThunk(
       const response = await axiosInstance.get("/user/getAllUser");
       return response.data.users;
     } catch (error) {
-      return rejectWithValue(error);
+      return rejectWithValue({
+        message: error.message,
+        status: error.response?.status,
+        data: error.response?.data,
+      });
     }
   }
 );
 
-
+export const toggleBlockUser = createAsyncThunk(
+  "adminUser/toggleBlockUser",
+  async ({ id, currentStatus }, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.patch(
+        `/user/toggleBlockUser/${id}`,
+        {
+          isBlocked: !currentStatus,
+        }
+      );
+      // Return the updated user data with the new blocked status
+      return {
+        userId: id,
+        isBlocked: !currentStatus,
+        updatedUser: response.data.data,
+      };
+    } catch (error) {
+      return rejectWithValue({
+        message: error.message,
+        status: error.response?.status,
+        data: error.response?.data,
+      });
+    }
+  }
+);
 
 const adminUserSlice = createSlice({
   name: "adminUser",
   initialState,
-  reducers: {},
+  reducers: {
+    clearError: (state) => {
+      state.error = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
-    .addCase(getAllUsers.pending, (state)=>{
+      .addCase(getAllUsers.pending, (state) => {
         state.loading = true;
         state.error = null;
-    })
-    .addCase(getAllUsers.fulfilled, (state,action)=>{
+      })
+      .addCase(getAllUsers.fulfilled, (state, action) => {
         state.loading = false;
         state.users = action.payload;
-    })
-    .addCase(getAllUsers.rejected, (state, action) => {
+      })
+      .addCase(getAllUsers.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload
-    })
+        state.error = action.payload;
+      })
+      .addCase(toggleBlockUser.pending, (state) => {
+        // Don't set loading to true for individual user actions
+        // to avoid affecting the entire UI
+        state.error = null;
+      })
+      .addCase(toggleBlockUser.fulfilled, (state, action) => {
+        const { userId, isBlocked, updatedUser } = action.payload;
+
+        // Update the specific user in the users array
+        state.users = state.users.map((user) => {
+          if (user._id === userId) {
+            return {
+              ...user,
+              isBlocked: isBlocked,
+              // Merge any other updated fields from the response
+              ...(updatedUser && typeof updatedUser === "object"
+                ? updatedUser
+                : {}),
+            };
+          }
+          return user;
+        });
+      })
+      .addCase(toggleBlockUser.rejected, (state, action) => {
+        state.error = action.payload;
+      });
   },
 });
 
+export const { clearError } = adminUserSlice.actions;
 export default adminUserSlice.reducer;
