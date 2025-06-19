@@ -11,7 +11,7 @@ export const getAllUsers = createAsyncThunk(
   "adminUser/getAllUsers",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get("/user/getAllUser");
+      const response = await axiosInstance.get("/admin/getAllUser");
       return response.data.users;
     } catch (error) {
       return rejectWithValue({
@@ -28,7 +28,7 @@ export const toggleBlockUser = createAsyncThunk(
   async ({ id, currentStatus }, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.patch(
-        `/user/toggleBlockUser/${id}`,
+        `/admin/toggleBlockUser/${id}`,
         {
           isBlocked: !currentStatus,
         }
@@ -72,20 +72,16 @@ const adminUserSlice = createSlice({
         state.error = action.payload;
       })
       .addCase(toggleBlockUser.pending, (state) => {
-        // Don't set loading to true for individual user actions
-        // to avoid affecting the entire UI
         state.error = null;
       })
       .addCase(toggleBlockUser.fulfilled, (state, action) => {
         const { userId, isBlocked, updatedUser } = action.payload;
 
-        // Update the specific user in the users array
         state.users = state.users.map((user) => {
           if (user._id === userId) {
             return {
               ...user,
               isBlocked: isBlocked,
-              // Merge any other updated fields from the response
               ...(updatedUser && typeof updatedUser === "object"
                 ? updatedUser
                 : {}),

@@ -1,14 +1,16 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { verifyOTP } from '../redux/authSlice/authSlice';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-export default function OtpComp({ email = "example@gmail.com" }) {
+export default function OtpComp() {
   const [code, setCode] = useState(['', '', '', '', '', '']);
   const inputRefs = useRef([]);
   const dispatch = useDispatch()
   const navigate = useNavigate()
-
+  const location = useLocation()
+  const email = location.state.email
+  
   // Function to mask email
   const maskEmail = (email) => {
     if (!email || !email.includes('@')) return email;
@@ -37,11 +39,13 @@ export default function OtpComp({ email = "example@gmail.com" }) {
 
   const handleNavigate = async ()=>{
     try{
-        const res = await dispatch(verifyOTP(code))
-        if(res.type === 'auth/sendOTP/rejected'){
-            throw new Error(res.payload)
-        }
+        const res = await dispatch(verifyOTP({email, otp:code.join("")}))
+        console.log("response", res.payload.isAdmin);
+        if(res.payload.isAdmin === true){
+          navigate('/admin_dashboard')
+        }else{
         navigate('/')
+        }
     }catch(error){
         console.log(error);
         

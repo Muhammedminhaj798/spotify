@@ -81,7 +81,7 @@ const verifyOTP = async (req, res, next) => {
         new CustomError("User not found. Please register to continue", 404)
       );
     }
-
+    console.log("otp", otp);
     if (user.otp !== otp) {
       return next(
         new CustomError("Invalid OTP. Please enter the correct code", 400)
@@ -100,22 +100,23 @@ const verifyOTP = async (req, res, next) => {
       { expiresIn: "15m" }
     );
 
-    res.cookie("jwt", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-      maxAge: 15 * 60 * 1000,
-    });
+  res.cookie("jwt", token, {
+  httpOnly: false,          // if you want to access in frontend
+  secure: true,             // REQUIRED with sameSite: "none"
+  sameSite: "none",         // allows cross-site cookies
+  maxAge: 15 * 60 * 1000
+});
 
     user.isVerified = true;
     user.otp = null;
     user.otpExpiry = null;
     await user.save();
-
+   
     res.status(200).json({
       success: true,
       message: "Login successfully",
       token,
+      isAdmin:user.isAdmin
     });
   } catch (error) {
     return next(

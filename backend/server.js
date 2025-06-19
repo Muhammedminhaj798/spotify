@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import authRouter from "./src/routes/authRoute.js";
 import adminRoutes from "./src/routes/adminRoutes.js";
+import ErrorManager from "./src/middleware/ErrorManager.js";
 // import userRoutes from "./src/routes/adminRoutes.js";
 
 const app = express();
@@ -28,7 +29,7 @@ app.use((req, res, next) => {
 
 
 app.use("/api/auth", authRouter);
-app.use('/api/user', adminRoutes)
+app.use('/api/admin', adminRoutes)
 
 
 mongoose
@@ -39,6 +40,7 @@ mongoose
   .catch((err) => {
     console.error("MongoDB connection error:", err);
   });
+  app.use(ErrorManager)
 
 const port = process.env.PORT || 8080;
 app.listen(port, () => {

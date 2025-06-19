@@ -19,7 +19,9 @@ const Login = () => {
             if (res.type === "auth/sendOTP/rejected") {
                 throw new Error(res.payload);
             }
-            navigate("/otpSection")
+            navigate("/otpSection",{
+                state: { email }
+            })
         } catch (error) {
             console.log(error);
 

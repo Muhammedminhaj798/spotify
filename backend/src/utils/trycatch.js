@@ -1,10 +1,19 @@
-const tryCatch = (func) => async (req, res, next) => {
+// const tryCatch = (func) => async (req, res, next) => {
+//   try {
+//     await func(req, res, next);
+//   } catch (error) {
+//     console.log(error);
+//     next(error);
+//   }
+// }
+
+// export default tryCatch;
+const tryCatch = (controllers) => async (req, res, next) => {
   try {
-    await func(req, res, next);
+    await controllers(req, res, next);
   } catch (error) {
     console.log(error);
-    next(error);
+    return next(error);
   }
-}
-
+};
 export default tryCatch;

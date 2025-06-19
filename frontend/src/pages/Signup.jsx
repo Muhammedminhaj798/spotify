@@ -1254,7 +1254,7 @@ export function Terms() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { loading, error } = useSelector((state) => state.auth);
-
+  
   const handleSignUp = async () => {
     try {
       await dispatch(registerUser()).unwrap();

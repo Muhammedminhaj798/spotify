@@ -14,7 +14,7 @@ const Sidebar = ({ isOpen, toggleSidebar, activeItem, setActiveItem }) => {
       section: "Management",
       items: [
         { id: '/admin_users', name: 'Users', icon: '👥' },
-        { id: '', name: 'Playlists', icon: '🎵' },
+        { id: '/admin_songs', name: 'Songs', icon: '🎵' },
         { id: '', name: 'Artists', icon: '🎤' },
         { id: '', name: 'Tracks', icon: '🎧' }
       ]
