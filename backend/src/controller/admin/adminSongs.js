@@ -62,11 +62,12 @@ const addSongs = async (req, res, next) => {
 
 export const getAllSongs = async(req,res,next) => {
     try{
-        const songs = await Song.find()
+        const songs = await Song.find({isDeleted:false})
 
         if(!songs){
             return next(new CustomError("Songs not found ", 404))
         }
+        
         res.status(200).json({
             message:"songs find success",
             status:"success",

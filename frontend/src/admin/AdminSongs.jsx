@@ -28,7 +28,10 @@ const AdminSongsComponent = () => {
 
     const dispatch = useDispatch();
     const { songs, loading, error } = useSelector((state) => state.adminSongs);
-
+    console.log(songs);
+    // if(songs.isDeleted === true){
+    //     console.log("songs", songs);
+    // }
     useEffect(() => {
         dispatch(getAllSongs());
     }, [dispatch]);
