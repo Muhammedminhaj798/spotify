@@ -5,7 +5,7 @@ import asyncHandler from "express-async-handler";
 
 const getAllUsers = async (req, res, next) => {
   try {
-    const users = await User.find().select("name email");
+    const users = await User.find({isAdmin:false});
 
     if (!users) {
       return next(new CustomError("User not found", 404));

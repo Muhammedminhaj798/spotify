@@ -97,7 +97,7 @@ const verifyOTP = async (req, res, next) => {
     const token = jwt.sign(
       { id: user._id, name: user.name, email: user.email },
       process.env.JWT_TOKEN,
-      { expiresIn: "15m" }
+      { expiresIn: "7d" }
     );
 
   res.cookie("jwt", token, {

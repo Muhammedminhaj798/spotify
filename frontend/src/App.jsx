@@ -8,6 +8,7 @@ import Dashboard from './admin/Dashboard';
 import OtpComp from './pages/OtpComp';
 import Users from './admin/users';
 import AdminSongs from './admin/AdminSongs';
+import AdminArtist from './admin/AdminArtist';
 
 
 
@@ -30,6 +31,7 @@ const App = () => {
           <Route path='/admin_dashboard' element={<Dashboard />} />
           <Route path='/admin_users' element={<Users />} />
           <Route path='/admin_songs' element={<AdminSongs/>}/>
+          <Route path='/admin_artist' element={<AdminArtist/>}/>
         </Routes>
 
       </>

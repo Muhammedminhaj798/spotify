@@ -49,6 +49,7 @@ const Users = () => {
             });
         }
     };
+    console.log(users);
 
     return (
         <div className="min-h-screen bg-black text-white flex">
@@ -303,9 +304,7 @@ const Users = () => {
                                                                     className={`transition-colors ${blockingUsers.has(user._id) ? 'opacity-50 cursor-not-allowed' : ''}`}
                                                                     title={user.isBlocked ? 'Unblock User' : 'Block User'}
                                                                 >
-                                                                    {blockingUsers.has(user._id) ? (
-                                                                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-600"></div>
-                                                                    ) : user.isBlocked ? (
+                                                                    {user.isBlocked ? (
                                                                         <CgUnblock className="text-green-600 w-4 h-4" />
                                                                     ) : (
                                                                         <MdBlock className="text-red-600 w-4 h-4" />

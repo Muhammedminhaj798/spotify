@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Search, Plus, Edit, Trash2, Music, ArrowLeft, SidebarOpen, Upload } from 'lucide-react';
 import Sidebar from '../components/Sidebar';
 import { useDispatch, useSelector } from 'react-redux';
-import { addSong, getAllSongs } from '../redux/admin/adminSongSlice';
+import { addSong, DeletedSong, getAllSongs } from '../redux/admin/adminSongSlice';
 
 const AdminSongsComponent = () => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -28,6 +28,8 @@ const AdminSongsComponent = () => {
 
     const dispatch = useDispatch();
     const { songs, loading, error } = useSelector((state) => state.adminSongs);
+
+   
     console.log(songs);
     // if(songs.isDeleted === true){
     //     console.log("songs", songs);
@@ -152,7 +154,8 @@ const AdminSongsComponent = () => {
     const deleteSong = (id) => {
         if (window.confirm('Are you sure you want to delete this song?')) {
             // You'll need to implement deleteSong action in your Redux slice
-            // dispatch(deleteSong(id));
+            dispatch(DeletedSong(id));
+            
             console.log('Delete song with id:', id);
         }
     };

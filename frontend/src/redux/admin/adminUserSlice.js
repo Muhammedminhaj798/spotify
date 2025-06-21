@@ -55,7 +55,7 @@ const adminUserSlice = createSlice({
   reducers: {
     clearError: (state) => {
       state.error = null;
-    },
+    },    
   },
   extraReducers: (builder) => {
     builder

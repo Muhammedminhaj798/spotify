@@ -149,7 +149,7 @@ const Dashboard = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-gray-400 text-sm">Songs Played</p>
-                    <p className="text-3xl font-bold text-blue-500">45.2M</p>
+                    <p className="text-3xl font-bold text-blue-500">45k</p>
                     <p className="text-blue-500 text-sm">+8% this week</p>
                   </div>
                   <div className="w-12 h-12 bg-blue-500 bg-opacity-20 rounded-xl flex items-center justify-center">
@@ -164,7 +164,7 @@ const Dashboard = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-gray-400 text-sm">Premium Users</p>
-                    <p className="text-3xl font-bold text-yellow-500">892K</p>
+                    <p className="text-3xl font-bold text-yellow-500">8</p>
                     <p className="text-yellow-500 text-sm">+15% conversion</p>
                   </div>
                   <div className="w-12 h-12 bg-yellow-500 bg-opacity-20 rounded-xl flex items-center justify-center">
@@ -179,7 +179,7 @@ const Dashboard = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-gray-400 text-sm">Revenue</p>
-                    <p className="text-3xl font-bold text-purple-500">$1.2M</p>
+                    <p className="text-3xl font-bold text-purple-500">$1k</p>
                     <p className="text-purple-500 text-sm">+22% growth</p>
                   </div>
                   <div className="w-12 h-12 bg-purple-500 bg-opacity-20 rounded-xl flex items-center justify-center">

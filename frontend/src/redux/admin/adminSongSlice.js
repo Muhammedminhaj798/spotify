@@ -22,16 +22,13 @@ export const addSong = createAsyncThunk(
   "songs/addSong",
   async (songData, { rejectWithValue }) => {
     try {
-      songData.forEach((key,value) => {
-        
-        
-        console.log(key,value);
-        
+      songData.forEach((key, value) => {
+        console.log(key, value);
       });
-      const response = await axiosInstance.post("admin/addSongs", songData,{
+      const response = await axiosInstance.post("admin/addSongs", songData, {
         headers: {
-        "Content-Type": "multipart/form-data",
-      },
+          "Content-Type": "multipart/form-data",
+        },
       });
 
       console.log("response", response);
@@ -39,8 +36,28 @@ export const addSong = createAsyncThunk(
       return response.data.song;
     } catch (error) {
       console.log(error);
-      
+
       return rejectWithValue(error);
+    }
+  }
+);
+
+export const DeletedSong = createAsyncThunk(
+  "songs/tDeletedSong",
+  async (id , { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.patch(`admin/toggleDeleted/${id}`);
+
+      return {
+        userId: id,
+        updatedUser: response.data.song,
+      };
+    } catch (error) {
+      return rejectWithValue({
+        message: error.message,
+        status: error.response?.status,
+        data: error.response?.data,
+      });
     }
   }
 );
