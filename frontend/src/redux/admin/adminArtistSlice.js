@@ -19,6 +19,22 @@ export const getAllArtist = createAsyncThunk(
   }
 );
 
+export const addArtist = createAsyncThunk(
+  "adminArtist/addArtist",
+  async (artist, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.post("admin/addArtist", artist, {
+        headers: {
+          "content-type": "multipart/form-data",
+        },
+      });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 export const toggleDisableArtist = createAsyncThunk(
   "adminArtist/toggleDisableArtist",
   async ({ id, currentStatus }, { rejectWithValue }) => {

@@ -1,8 +1,8 @@
-import { User, Plus, Search, Filter, MoreVertical, Edit, Trash2, Eye, UserX, UserCheck, Calendar, Mail, Phone } from 'lucide-react';
+import { User, Plus, Search, Filter, MoreVertical, Edit, Trash2, Eye, UserX, UserCheck, Calendar, Mail, Phone, Upload } from 'lucide-react';
 import React, { useEffect, useState, useCallback } from 'react';
 import Sidebar from '../components/Sidebar';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllArtist, toggleDisableArtist } from '../redux/admin/adminArtistSlice';
+import { addArtist, getAllArtist, toggleDisableArtist } from '../redux/admin/adminArtistSlice';
 
 const AdminArtist = () => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -10,17 +10,19 @@ const AdminArtist = () => {
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [activeItem, setActiveItem] = useState('artists');
+    const [imageFile, setImageFile] = useState(null);
+    const [imagePreview, setImagePreview] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
     const dispatch = useDispatch();
     const { artists, loading, error } = useSelector((state) => state.adminArtist);
 
     console.log("artists", artists);
 
+    // Updated newArtist state with image file handling
     const [newArtist, setNewArtist] = useState({
         name: '',
-        email: '',
-        phone: '',
-        specialty: ''
+        description: ''
     });
 
     useEffect(() => {
@@ -43,20 +45,86 @@ const AdminArtist = () => {
         setSidebarOpen(!sidebarOpen);
     };
 
-    // This function should dispatch to Redux instead of updating local state
-    const handleCreateArtist = () => {
-        if (newArtist.name && newArtist.email) {
-            // TODO: You should create a Redux action for creating artists
-            // For now, this is a placeholder - you'll need to implement createArtist action
-            console.log('Create artist:', newArtist);
+    // Handle image file selection
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setImageFile(file);
+            
+            // Create preview URL
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setImagePreview(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
 
-            // Reset form and close modal
-            setNewArtist({ name: '', email: '', phone: '', specialty: '' });
-            setShowCreateModal(false);
+    // Updated create artist function with file handling
+    const handleCreateArtist = async () => {
+        if (!newArtist.name || !newArtist.description) {
+            alert('Please fill in all required fields');
+            return;
+        }
+
+        if (!imageFile) {
+            alert('Please select an image file');
+            return;
+        }
+
+        setIsLoading(true);
+
+        try {
+            // Create FormData for file upload
+            const artistData = new FormData();
+            artistData.append('name', newArtist.name);
+            artistData.append('description', newArtist.description);
+            artistData.append('imageFile', imageFile);
+
+            // Debug: Log FormData contents
+            console.log('FormData contents:');
+            for (let [key, value] of artistData.entries()) {
+                console.log(key, value);
+            }
+
+            // TODO: You should create a Redux action for creating artists with file upload
+            // For now, this is a placeholder - you'll need to implement createArtist action
+            console.log('Create artist with file:', artistData);
+            await dispatch(addArtist(artistData))
+            // Simulate API call
+            // await new Promise(resolve => setTimeout(resolve, 1000));
+
+            alert('Artist created successfully!');
+            resetForm();
 
             // You might want to dispatch a create action here:
-            // dispatch(createArtist(newArtist));
+            // const result = await dispatch(createArtist(artistData));
+            // if (createArtist.fulfilled.match(result)) {
+            //     alert('Artist created successfully!');
+            //     resetForm();
+            //     dispatch(getAllArtist());
+            // }
+        } catch (error) {
+            console.error('Error creating artist:', error);
+            alert('Failed to create artist. Please try again.');
+        } finally {
+            setIsLoading(false);
         }
+    };
+
+    // Reset form function
+    const resetForm = () => {
+        setNewArtist({
+            name: '',
+            description: ''
+        });
+        setImageFile(null);
+        setImagePreview('');
+        setShowCreateModal(false);
+        
+        // Reset file input
+        const imageInput = document.getElementById('imageFile');
+        if (imageInput) imageInput.value = '';
     };
 
     // FIXED: Use the correct action name and wrap in useCallback
@@ -218,7 +286,7 @@ const AdminArtist = () => {
                                                 <div className="flex items-center">
                                                     <img
                                                         className="h-10 w-10 rounded-full"
-                                                        src={artist.avatar || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=60&h=60&fit=crop&crop=face"}
+                                                        src={artist.image || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=60&h=60&fit=crop&crop=face"}
                                                         alt={artist.name}
                                                     />
                                                     <div className="ml-4">
@@ -230,12 +298,12 @@ const AdminArtist = () => {
                                             <td className="px-6 py-4 whitespace-nowrap">
                                                 <div className="text-sm text-white flex items-center">
                                                     <Calendar className="w-4 h-4 mr-1 text-gray-400" />
-                                                    {artist.joinDate ? new Date(artist.joinDate).toLocaleDateString() : 'N/A'}
+                                                    {artist.createdAt ? new Date(artist.createdAt).toLocaleDateString() : 'N/A'}
                                                 </div>
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap">
                                                 <div className="text-sm text-white">{artist.artworks || 0} artworks</div>
-                                                <div className="text-sm text-gray-400">{artist.totalViews || 0} views</div>
+                                                {/* <div className="text-sm text-gray-400">{artist.totalViews || 0} views</div> */}
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap">
                                                 <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${!artist.isDisabled
@@ -281,14 +349,14 @@ const AdminArtist = () => {
                         )}
                     </div>
 
-                    {/* Create Artist Modal */}
+                    {/* Create Artist Modal - Updated with Image Picker */}
                     {showCreateModal && (
                         <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
-                            <div className="bg-gray-800 rounded-lg p-6 w-full max-w-md border border-gray-700">
+                            <div className="bg-gray-800 rounded-lg p-6 w-full max-w-2xl border border-gray-700 max-h-[90vh] overflow-y-auto">
                                 <h2 className="text-xl font-semibold text-white mb-4">Add New Artist</h2>
                                 <div className="space-y-4">
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-300 mb-1">Name</label>
+                                        <label className="block text-sm font-medium text-gray-300 mb-1">Artist Name *</label>
                                         <input
                                             type="text"
                                             value={newArtist.name}
@@ -297,49 +365,69 @@ const AdminArtist = () => {
                                             placeholder="Enter artist name"
                                         />
                                     </div>
+                                    
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-300 mb-1">Email</label>
-                                        <input
-                                            type="email"
-                                            value={newArtist.email}
-                                            onChange={(e) => setNewArtist({ ...newArtist, email: e.target.value })}
-                                            className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                            placeholder="Enter email address"
-                                        />
+                                        <label className="block text-sm font-medium text-gray-300 mb-1">Artist Image *</label>
+                                        <div className="relative">
+                                            <input
+                                                type="file"
+                                                id="imageFile"
+                                                accept="image/*"
+                                                onChange={handleImageChange}
+                                                className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white file:mr-3 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-sm file:bg-blue-600 file:text-white hover:file:bg-blue-700"
+                                                required
+                                            />
+                                            <Upload className="absolute right-3 top-3 text-gray-400 pointer-events-none" size={16} />
+                                        </div>
+                                        {imageFile && <p className="text-xs text-blue-400 mt-1">Selected: {imageFile.name}</p>}
+                                        
+                                        {/* Image Preview */}
+                                        {imagePreview && (
+                                            <div className="mt-3">
+                                                <p className="text-sm text-gray-300 mb-2">Preview:</p>
+                                                <div className="flex justify-center">
+                                                    <img
+                                                        src={imagePreview}
+                                                        alt="Preview"
+                                                        className="h-32 w-32 rounded-full object-cover border-2 border-gray-600"
+                                                    />
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
+                                    
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-300 mb-1">Phone</label>
-                                        <input
-                                            type="tel"
-                                            value={newArtist.phone}
-                                            onChange={(e) => setNewArtist({ ...newArtist, phone: e.target.value })}
+                                        <label className="block text-sm font-medium text-gray-300 mb-1">Description *</label>
+                                        <textarea
+                                            value={newArtist.description}
+                                            onChange={(e) => setNewArtist({ ...newArtist, description: e.target.value })}
+                                            rows={4}
                                             className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                            placeholder="Enter phone number"
-                                        />
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-300 mb-1">Specialty</label>
-                                        <input
-                                            type="text"
-                                            value={newArtist.specialty}
-                                            onChange={(e) => setNewArtist({ ...newArtist, specialty: e.target.value })}
-                                            className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                            placeholder="e.g., Digital Art, Photography"
+                                            placeholder="Tell us about the artist..."
                                         />
                                     </div>
                                 </div>
                                 <div className="flex justify-end space-x-3 mt-6">
                                     <button
-                                        onClick={() => setShowCreateModal(false)}
-                                        className="px-4 py-2 text-gray-300 border border-gray-600 rounded-lg hover:bg-gray-700 transition-colors"
+                                        onClick={resetForm}
+                                        disabled={isLoading}
+                                        className="px-4 py-2 text-gray-300 border border-gray-600 rounded-lg hover:bg-gray-700 disabled:bg-gray-800 disabled:cursor-not-allowed transition-colors"
                                     >
                                         Cancel
                                     </button>
                                     <button
                                         onClick={handleCreateArtist}
-                                        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                                        disabled={!newArtist.name || !newArtist.description || !imageFile || isLoading}
+                                        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:bg-gray-600 disabled:cursor-not-allowed flex items-center gap-2"
                                     >
-                                        Create Artist
+                                        {isLoading ? (
+                                            <>
+                                                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                                                Creating...
+                                            </>
+                                        ) : (
+                                            'Create Artist'
+                                        )}
                                     </button>
                                 </div>
                             </div>

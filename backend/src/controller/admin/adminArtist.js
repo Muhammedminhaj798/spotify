@@ -2,17 +2,33 @@ import Artist from "../../model/artistSchema.js";
 
 export const addArtist = async (req, res, next) => {
   try {
-    const { name, genre, description } = req.body;
-    if (!name || !genre) {
+    const { name, description } = req.body;
+    if (!name || !description) {
       return res.status(400).json({ message: "Please fill in all fields." });
     }
+    if (!req.files || !req.files.imageFile) {
+      return res
+        .status(400)
+        .json({ message: "Audio and image files are required" });
+    }
+
+    const imageFileUrl = req.files.imageFile[0]?.path;
+    console.log("image");
+    if (!imageFileUrl) {
+      return res.status(400).json({
+        message: "Failed to retrieve Cloudinary URLs",
+        files: req.files,
+      });
+    }
+
     const newArtist = new Artist({
       name: name,
-      // image:image,
-      genre: genre,
       description: description,
+      image: imageFileUrl,
     });
+
     await newArtist.save();
+
     res.status(201).json({
       message: "Artist added successfully",
       status: "success",
@@ -53,7 +69,7 @@ export const toggleDisableArtist = async (req, res, next) => {
     const { isDisabled } = req.body;
     const updatedArtist = await Artist.findByIdAndUpdate(
       req.params.id,
-      { isDisabled},
+      { isDisabled },
       { new: true }
     );
     res.status(200).json({

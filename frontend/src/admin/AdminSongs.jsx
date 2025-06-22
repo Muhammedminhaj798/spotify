@@ -3,6 +3,7 @@ import { Search, Plus, Edit, Trash2, Music, ArrowLeft, SidebarOpen, Upload } fro
 import Sidebar from '../components/Sidebar';
 import { useDispatch, useSelector } from 'react-redux';
 import { addSong, DeletedSong, getAllSongs } from '../redux/admin/adminSongSlice';
+import { getAllArtist } from '../redux/admin/adminArtistSlice';
 
 const AdminSongsComponent = () => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -17,25 +18,18 @@ const AdminSongsComponent = () => {
         duration: '',
         status: 'Active'
     });
-
-    // console.log("form data", formData);
     
     const [audioFile, setAudioFile] = useState(null);
     const [imageFile, setImageFile] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
-    // console.log('setAAUDIO',audioFile);
-    
 
     const dispatch = useDispatch();
     const { songs, loading, error } = useSelector((state) => state.adminSongs);
+    const { artists } = useSelector((state) => state.adminArtist);
 
-   
-    console.log(songs);
-    // if(songs.isDeleted === true){
-    //     console.log("songs", songs);
-    // }
     useEffect(() => {
         dispatch(getAllSongs());
+        dispatch(getAllArtist());
     }, [dispatch]);
 
     const filteredSongs = songs?.filter(song =>
@@ -51,24 +45,20 @@ const AdminSongsComponent = () => {
     };
 
     const handleFileChange = (e, fileType) => {
-        // console.log('t',fileType);
-        
-        const {name,files} = e.target
+        const { files } = e.target;
         
         if (fileType === 'audio') {
-            console.log('audio',files);
             setAudioFile(files[0]);
         } else if (fileType === 'image') {
-            console.log('image',files);
             setImageFile(files[0]);
         }
     };
 
     const handleSubmit = async (e) => {
-        e.preventDefault()
+        e.preventDefault();
+        
         // Validation
-      try {
-          if (!formData.title || !formData.artist || !formData.genre || !formData.duration) {
+        if (!formData.title || !formData.artist || !formData.genre || !formData.duration) {
             alert('Please fill in all required fields');
             return;
         }
@@ -87,42 +77,35 @@ const AdminSongsComponent = () => {
             songData.append('artist', formData.artist);
             songData.append('genre', formData.genre);
             songData.append('duration', formData.duration);
+            songData.append('status', formData.status);
             songData.append('audioFile', audioFile);
             songData.append('imageFile', imageFile);
-            // console.log('songdata',songData);
+
+            // Debug: Log FormData contents
+            console.log('FormData contents:');
+            for (let [key, value] of songData.entries()) {
+                console.log(key, value);
+            }
             
-        //    const data = new FormData();
-
-      // Append form fields
-      songData.forEach((value,key) => {
-        console.log(key,value);
-      });
-
-    //   // Append files
-    //   data.append('audioFile', audioFile);
-    //   data.append('imageFile', imageFile);
-    //   console.log("data",data);
-      
             // Dispatch the action with FormData
-            // console.log('sss',audioFile,imageFile);
-            const result=await dispatch(addSong(songData))
+            const result = await dispatch(addSong(songData));
             
-            
-            // Reset form after successful submission
-            resetForm();
-            
-            // Refresh the songs list
-            dispatch(getAllSongs());
+            // Check if the action was successful
+            if (addSong.fulfilled.match(result)) {
+                alert('Song added successfully!');
+                resetForm();
+                dispatch(getAllSongs()); // Refresh the songs list
+            } else {
+                // Handle rejected case
+                const errorMessage = result.payload || result.error?.message || 'Failed to add song';
+                alert(`Error: ${errorMessage}`);
+            }
         } catch (error) {
             console.error('Error adding song:', error);
             alert('Failed to add song. Please try again.');
         } finally {
             setIsLoading(false);
         }
-      } catch (error) {
-        console.log('e',error);
-        
-      }
     };
 
     const resetForm = () => {
@@ -153,16 +136,12 @@ const AdminSongsComponent = () => {
 
     const deleteSong = (id) => {
         if (window.confirm('Are you sure you want to delete this song?')) {
-            // You'll need to implement deleteSong action in your Redux slice
             dispatch(DeletedSong(id));
-            
-            console.log('Delete song with id:', id);
         }
     };
 
     const toggleStatus = (id) => {
         // You'll need to implement updateSongStatus action in your Redux slice
-        // dispatch(updateSongStatus(id));
         console.log('Toggle status for song with id:', id);
     };
 
@@ -233,109 +212,129 @@ const AdminSongsComponent = () => {
                         <h2 className="text-xl font-semibold mb-4 text-white">
                             {editingSong ? 'Edit Song' : 'Add New Song'}
                         </h2>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                            <div>
-                                <label className="block text-sm font-medium text-gray-300 mb-1">Title *</label>
-                                <input
-                                    type="text"
-                                    name="title"
-                                    placeholder="Enter song title"
-                                    className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                                    value={formData.title}
-                                    onChange={handleInputChange}
-                                />
+                        <form onSubmit={handleSubmit}>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-300 mb-1">Title *</label>
+                                    <input
+                                        type="text"
+                                        name="title"
+                                        placeholder="Enter song title"
+                                        className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                                        value={formData.title}
+                                        onChange={handleInputChange}
+                                        required
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-300 mb-1">Artist *</label>
+                                    <select
+                                        name="artist"
+                                        className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                                        value={formData.artist}
+                                        onChange={handleInputChange}
+                                        required
+                                    >
+                                        <option value="">Select Artist</option>
+                                        {artists && artists.map((artist, index) => (
+                                            <option key={index} value={artist.name || artist}>
+                                                {artist.name || artist}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-300 mb-1">Genre *</label>
+                                    <select
+                                        name="genre"
+                                        className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                                        value={formData.genre}
+                                        onChange={handleInputChange}
+                                        required
+                                    >
+                                        <option value="">Select Genre</option>
+                                        <option value="Rock">Rock</option>
+                                        <option value="Pop">Pop</option>
+                                        <option value="Hip Hop">Hip Hop</option>
+                                        <option value="Jazz">Jazz</option>
+                                        <option value="Classical">Classical</option>
+                                        <option value="Electronic">Electronic</option>
+                                        <option value="Country">Country</option>
+                                        <option value="R&B">R&B</option>
+                                        <option value="Reggae">Reggae</option>
+                                        <option value="Blues">Blues</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-300 mb-1">Duration *</label>
+                                    <input
+                                        type="text"
+                                        name="duration"
+                                        placeholder="e.g., 3:45"
+                                        pattern="^[0-9]+:[0-5][0-9]$"
+                                        title="Please enter duration in MM:SS format (e.g., 3:45)"
+                                        className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                                        value={formData.duration}
+                                        onChange={handleInputChange}
+                                        required
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-300 mb-1">Audio File *</label>
+                                    <div className="relative">
+                                        <input
+                                            type="file"
+                                            id="audioFile"
+                                            accept="audio/*"
+                                            onChange={(e) => handleFileChange(e, 'audio')}
+                                            className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white file:mr-3 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-sm file:bg-green-600 file:text-white hover:file:bg-green-700"
+                                            required
+                                        />
+                                        <Upload className="absolute right-3 top-3 text-gray-500 pointer-events-none" size={16} />
+                                    </div>
+                                    {audioFile && <p className="text-xs text-green-400 mt-1">Selected: {audioFile.name}</p>}
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-300 mb-1">Cover Image *</label>
+                                    <div className="relative">
+                                        <input
+                                            type="file"
+                                            id="imageFile"
+                                            accept="image/*"
+                                            onChange={(e) => handleFileChange(e, 'image')}
+                                            className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white file:mr-3 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-sm file:bg-green-600 file:text-white hover:file:bg-green-700"
+                                            required
+                                        />
+                                        <Upload className="absolute right-3 top-3 text-gray-500 pointer-events-none" size={16} />
+                                    </div>
+                                    {imageFile && <p className="text-xs text-green-400 mt-1">Selected: {imageFile.name}</p>}
+                                </div>
                             </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-300 mb-1">Artist *</label>
-                                <input
-                                    type="text"
-                                    name="artist"
-                                    placeholder="Enter artist name"
-                                    className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                                    value={formData.artist}
-                                    onChange={handleInputChange}
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-300 mb-1">Genre *</label>
-                                <select
-                                    name="genre"
-                                    className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                                    value={formData.genre}
-                                    onChange={handleInputChange}
+                            <div className="flex gap-3 mt-6">
+                                <button
+                                    type="submit"
+                                    disabled={isLoading}
+                                    className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 disabled:bg-gray-700 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
                                 >
-                                    <option value="">Select Genre</option>
-                                    <option value="Rock">Rock</option>
-                                    <option value="Pop">Pop</option>
-                                    <option value="Hip Hop">Hip Hop</option>
-                                    <option value="Jazz">Jazz</option>
-                                    <option value="Classical">Classical</option>
-                                    <option value="Electronic">Electronic</option>
-                                </select>
+                                    {isLoading ? (
+                                        <>
+                                            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                                            Adding...
+                                        </>
+                                    ) : (
+                                        editingSong ? 'Update Song' : 'Add Song'
+                                    )}
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={resetForm}
+                                    disabled={isLoading}
+                                    className="bg-gray-700 text-white px-6 py-2 rounded-lg hover:bg-gray-600 disabled:bg-gray-800 transition-colors"
+                                >
+                                    Cancel
+                                </button>
                             </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-300 mb-1">Duration *</label>
-                                <input
-                                    type="text"
-                                    name="duration"
-                                    placeholder="e.g., 3:45"
-                                    className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                                    value={formData.duration}
-                                    onChange={handleInputChange}
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-300 mb-1">Audio File *</label>
-                                <div className="relative">
-                                    <input
-                                        type="file"
-                                        id="audioFile"
-                                        accept="audio/*"
-                                        onChange={(e) => handleFileChange(e, 'audio')}
-                                        className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white file:mr-3 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-sm file:bg-green-600 file:text-white hover:file:bg-green-700"
-                                    />
-                                    <Upload className="absolute right-3 top-3 text-gray-500" size={16} />
-                                </div>
-                                {audioFile && <p className="text-xs text-green-400 mt-1">Selected: {audioFile.name}</p>}
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-300 mb-1">Cover Image *</label>
-                                <div className="relative">
-                                    <input
-                                        type="file"
-                                        id="imageFile"
-                                        accept="image/*"
-                                        onChange={(e) => handleFileChange(e, 'image')}
-                                        className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white file:mr-3 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-sm file:bg-green-600 file:text-white hover:file:bg-green-700"
-                                    />
-                                    <Upload className="absolute right-3 top-3 text-gray-500" size={16} />
-                                </div>
-                                {imageFile && <p className="text-xs text-green-400 mt-1">Selected: {imageFile.name}</p>}
-                            </div>
-                        </div>
-                        <div className="flex gap-3 mt-6">
-                            <button
-                                onClick={handleSubmit}
-                                disabled={!formData.title || !formData.artist || !formData.genre || !formData.duration || !audioFile || !imageFile || isLoading}
-                                className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 disabled:bg-gray-700 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
-                            >
-                                {isLoading ? (
-                                    <>
-                                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                                        Adding...
-                                    </>
-                                ) : (
-                                    editingSong ? 'Update Song' : 'Add Song'
-                                )}
-                            </button>
-                            <button
-                                onClick={resetForm}
-                                disabled={isLoading}
-                                className="bg-gray-700 text-white px-6 py-2 rounded-lg hover:bg-gray-600 disabled:bg-gray-800 transition-colors"
-                            >
-                                Cancel
-                            </button>
-                        </div>
+                        </form>
                     </div>
                 )}
 
