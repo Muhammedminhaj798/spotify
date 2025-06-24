@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { verifyOTP } from '../redux/authSlice/authSlice';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -10,6 +10,8 @@ export default function OtpComp() {
   const navigate = useNavigate()
   const location = useLocation()
   const email = location.state.email
+  const {isLogin , currentUser} = useSelector((state)=>state.auth)
+  console.log(currentUser);
   
   // Function to mask email
   const maskEmail = (email) => {
@@ -41,11 +43,13 @@ export default function OtpComp() {
     try{
         const res = await dispatch(verifyOTP({email, otp:code.join("")}))
         console.log("response", res.payload.isAdmin);
+        
         if(res.payload.isAdmin === true){
           navigate('/admin_dashboard')
         }else{
         navigate('/')
         }
+
     }catch(error){
         console.log(error);
         
@@ -81,8 +85,10 @@ export default function OtpComp() {
     if (fullCode.length === 6) {
       console.log('Logging in with code:', fullCode);
       // Handle login logic hereh
+      localStorage.setItem("user",JSON.stringify(user))
       handleNavigate();
     }
+    
   };
 
   const isCodeComplete = code.every(digit => digit !== '');
@@ -144,7 +150,7 @@ export default function OtpComp() {
 
         {/* Password Login Link */}
         <div className="mt-8">
-          <button className="text-white hover:underline">
+          <button onClick={()=> navigate('/loginWithPass')} className="text-white hover:underline">
             Log in with a password
           </button>
         </div>

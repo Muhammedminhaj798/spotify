@@ -9,6 +9,9 @@ import OtpComp from './pages/OtpComp';
 import Users from './admin/users';
 import AdminSongs from './admin/AdminSongs';
 import AdminArtist from './admin/AdminArtist';
+import AdminLogin from './admin/AdminLogin';
+import LoginWithPassword from './pages/LoginWithPassword';
+import Navbar from './pages/Navbar';
 
 
 
@@ -16,7 +19,9 @@ const App = () => {
   return (
     <>
       <>
+      <Navbar/>
         <Routes>
+          
           <Route path='/login' element={<Login />} />
           <Route path='/otpSection' element={<OtpComp />} />
           <Route path='/signup' element={<Signup />} />
@@ -24,6 +29,8 @@ const App = () => {
           <Route path='/profileinfo' element={<ProfileInfo />} />
           <Route path='/terms&conditions' element={<Terms />} />
           <Route path='/' element={<Home />} />
+          <Route path='/loginWithPass' element={<LoginWithPassword/>}/>
+          <Route path='/adminLogin' element={<AdminLogin/>}/>
         </Routes>
       </>
       <>

@@ -39,7 +39,7 @@ const Register = async (req, res, next) => {
     );
     console.log("tokn",token);
     
-   res.cookie("jwt", token, {
+   res.cookie("user", token, {
   httpOnly: false,          // if you want to access in frontend
   secure: true,             // REQUIRED with sameSite: "none"
   sameSite: "none",         // allows cross-site cookies
@@ -53,7 +53,7 @@ const Register = async (req, res, next) => {
         id: newUser._id,
         name: newUser.name,
         email: newUser.email,
-        token
+        user:{username:newUser.name,email:newUser.email}
       }
     });
   } catch (error) {

@@ -33,6 +33,11 @@ const sendOTP = async (req, res, next) => {
       );
     }
 
+    // Verify environment variables
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+      throw new Error("Email credentials are missing in environment variables");
+    }
+
     const user = await User.findOne({ email });
     if (!user) {
       return next(
@@ -45,7 +50,9 @@ const sendOTP = async (req, res, next) => {
 
     user.otp = otp;
     user.otpExpiry = otpExpiry;
+    console.log("Saving OTP to user:", { otp, otpExpiry });
     await user.save();
+    console.log("User saved successfully");
 
     const mailOptions = {
       from: process.env.EMAIL_USER,
@@ -54,7 +61,9 @@ const sendOTP = async (req, res, next) => {
       text: `OTP: ${otp}. Valid for 10 minutes only. Kindly complete verification`,
     };
 
+    console.log("Sending email to:", email);
     await transporter.sendMail(mailOptions);
+    console.log("Email sent successfully");
 
     res.status(200).json({
       success: true,
@@ -62,6 +71,7 @@ const sendOTP = async (req, res, next) => {
         "The OTP has been successfully sent to your email. Please check your inbox",
     });
   } catch (error) {
+    console.error("Error in sendOTP:", error);
     return next(new CustomError("Failed to send OTP. Please try again", 500));
   }
 };
@@ -100,23 +110,23 @@ const verifyOTP = async (req, res, next) => {
       { expiresIn: "7d" }
     );
 
-  res.cookie("jwt", token, {
-  httpOnly: false,          // if you want to access in frontend
-  secure: true,             // REQUIRED with sameSite: "none"
-  sameSite: "none",         // allows cross-site cookies
-  maxAge: 15 * 60 * 1000
-});
+    res.cookie("jwt", token, {
+      httpOnly: false, // if you want to access in frontend
+      secure: true, // REQUIRED with sameSite: "none"
+      sameSite: "none", // allows cross-site cookies
+      maxAge: 15 * 60 * 1000,
+    });
 
     user.isVerified = true;
     user.otp = null;
     user.otpExpiry = null;
     await user.save();
-   
+
     res.status(200).json({
       success: true,
       message: "Login successfully",
-      token,
-      isAdmin:user.isAdmin
+      user: { username: user.name, email: user.email },
+      isAdmin: user.isAdmin,
     });
   } catch (error) {
     return next(

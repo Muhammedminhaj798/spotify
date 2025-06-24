@@ -1,7 +1,23 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axiosInstance from "../../AxiosInstance";
 
-// Async thunk for registering user
+const userDetails = localStorage.getItem("user");
+
+const initialState = {
+  user: null,
+  loading: false,
+  currentUser: userDetails ? JSON.parse(userDetails) : null,
+  isAuth: localStorage.getItem("isAuth") === "true" || false,
+  error: null,
+  formData: {
+    name: "",
+    email: "",
+    password: "",
+    cpassword: "",
+    DOB: "",
+    gender: "",
+  },
+};
 export const registerUser = createAsyncThunk(
   "auth/registerUser",
   async (formData, { rejectWithValue, getState }) => {
@@ -25,7 +41,14 @@ export const sentOTP = createAsyncThunk(
       const response = await axiosInstance.post("/auth/sendOTP", { email });
       return response.data;
     } catch (error) {
-      return rejectWithValue(error);
+      // Extract error message from backend response, if available
+      const errorMessage =
+        error.response?.data?.message ||
+        "Failed to send OTP. Please try again.";
+      return rejectWithValue({
+        message: errorMessage,
+        status: error.response?.status || 500,
+      });
     }
   }
 );
@@ -41,19 +64,17 @@ export const verifyOTP = createAsyncThunk(
   }
 );
 
-const initialState = {
-  user: null,
-  loading: false,
-  error: null,
-  formData: {
-    name: "",
-    email: "",
-    password: "",
-    cpassword: "",
-    DOB: "",
-    gender: "",
-  },
-};
+export const logout = createAsyncThunk(
+  "auth/logout",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.post("/auth/logout");
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
 
 const authSlice = createSlice({
   name: "auth",
@@ -89,6 +110,17 @@ const authSlice = createSlice({
       .addCase(registerUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      .addCase(verifyOTP.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload;
+        state.isAuth = true;
+        localStorage.setItem("isAuth", "true");
+        localStorage.setItem("user", JSON.stringify(action.payload));
+      })
+      .addCase(verifyOTP.rejected, (state, action) => {
+        state.loading = false;
+        state.isAuth = false;
       });
   },
 });

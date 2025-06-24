@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { logout } from '../redux/authSlice/authSlice';
 
 const Sidebar = ({ isOpen, toggleSidebar, activeItem, setActiveItem }) => {
-    const navigate = useNavigate()
+  const navigate = useNavigate()
   const menuItems = [
     {
       section: "Overview",
@@ -20,6 +22,13 @@ const Sidebar = ({ isOpen, toggleSidebar, activeItem, setActiveItem }) => {
     },
   ];
 
+  const dispatch = useDispatch()
+
+  const handleLogout = async () => {
+    await dispatch(logout()).unwrap()
+    navigate('/login')
+  }
+
   const handleItemClick = (itemId) => {
     setActiveItem(itemId);
     // Close sidebar on mobile after selection
@@ -32,12 +41,12 @@ const Sidebar = ({ isOpen, toggleSidebar, activeItem, setActiveItem }) => {
     <>
       {/* Mobile Overlay */}
       {isOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
           onClick={toggleSidebar}
         />
       )}
-      
+
       {/* Sidebar */}
       <div className={`
         fixed top-0 left-0 min-h-screen w-80 bg-gray-900 border-r border-gray-800 z-50
@@ -56,9 +65,9 @@ const Sidebar = ({ isOpen, toggleSidebar, activeItem, setActiveItem }) => {
             </div>
             <h2 className="text-xl font-bold text-white">Spotify Admin</h2>
           </div>
-          
+
           {/* Close button for mobile */}
-          <button 
+          <button
             onClick={toggleSidebar}
             className="lg:hidden text-gray-400 hover:text-white transition-colors p-2"
           >
@@ -76,7 +85,7 @@ const Sidebar = ({ isOpen, toggleSidebar, activeItem, setActiveItem }) => {
               <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4 px-3">
                 {section.section}
               </h3>
-              
+
               {/* Section Items */}
               <div className="space-y-1">
                 {section.items.map((item) => (
@@ -96,7 +105,7 @@ const Sidebar = ({ isOpen, toggleSidebar, activeItem, setActiveItem }) => {
                       {item.icon}
                     </span>
                     <span className="truncate">{item.name}</span>
-                    
+
                     {/* Active indicator */}
                     {activeItem === item.id && (
                       <div className="absolute right-3 w-2 h-2 bg-green-500 rounded-full animate-pulse" />
@@ -118,7 +127,7 @@ const Sidebar = ({ isOpen, toggleSidebar, activeItem, setActiveItem }) => {
               <p className="text-sm font-medium text-white truncate">Admin User</p>
               <p className="text-xs text-gray-400 truncate">admin@spotify.com</p>
             </div>
-            <button className="p-1 text-gray-400 hover:text-white transition-colors">
+            <button onClick={()=> handleLogout()} className="p-1 text-gray-400 hover:text-white transition-colors">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
               </svg>
