@@ -1,22 +1,26 @@
+import mongoose from "mongoose";
 
-import mongoose from "mongoose"
+const playlistSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    creator: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true
+    },
+    songs: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Song",
+        default: []
+    }],
+    isPublic: {
+        type: Boolean,
+        default: true
+    }
+}, { timestamps: true });
 
-const songSchema = new mongoose.Schema({
-    title: { type: String, required: true },
-    // artist:  [{ 
-    //     type: mongoose.Schema.Types.ObjectId, 
-    //     ref: "Artist" 
-    // }],
-    artist:{type:String, required:true},
-    coverImage: { type: String },
-    duration: { type: String, required: true },
-    url: { type: String, required: true },
-    playCount: { type: Number, default: 0 },
-    genre: { type: String },
-    isDeleted: { type: Boolean, default: false },
-    createdAt: { type: Date, default: Date.now },
-})
-
-
-const Song = mongoose.model('Song', songSchema)
-export default Song
+const Playlist = mongoose.model("Playlist", playlistSchema);
+export default Playlist;

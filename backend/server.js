@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 import authRouter from "./src/routes/authRoute.js";
 import adminRoutes from "./src/routes/adminRoutes.js";
 import ErrorManager from "./src/middleware/ErrorManager.js";
+import userRoutes from "./src/routes/userRoutes.js";
 // import userRoutes from "./src/routes/adminRoutes.js";
 
 const app = express();
@@ -30,6 +31,7 @@ app.use((req, res, next) => {
 
 app.use("/api/auth", authRouter);
 app.use('/api/admin', adminRoutes)
+app.use('/api/user', userRoutes)
 
 
 mongoose

@@ -1,5 +1,5 @@
 import asyncHandler from "express-async-handler";
-import Song from "../../model/playlistSchema.js";
+import Song from "../../model/songSchema.js";
 import CustomError from "../../utils/customError.js";
 
 const addSongs = async (req, res, next) => {

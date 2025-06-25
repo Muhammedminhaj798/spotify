@@ -43,7 +43,7 @@ export default function OtpComp() {
     try{
         const res = await dispatch(verifyOTP({email, otp:code.join("")}))
         console.log("response", res.payload.isAdmin);
-        
+
         if(res.payload.isAdmin === true){
           navigate('/admin_dashboard')
         }else{
@@ -85,7 +85,7 @@ export default function OtpComp() {
     if (fullCode.length === 6) {
       console.log('Logging in with code:', fullCode);
       // Handle login logic hereh
-      localStorage.setItem("user",JSON.stringify(user))
+      // localStorage.setItem("user",JSON.stringify(user))
       handleNavigate();
     }
     

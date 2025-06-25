@@ -14,6 +14,9 @@ const transporter = nodemailer.createTransport({
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
+  tls: {
+    rejectUnauthorized: false, // 🚨 Accept self-signed certificates (for dev only)
+  },
 });
 
 const generateOTP = () => {
@@ -32,17 +35,21 @@ const sendOTP = async (req, res, next) => {
         )
       );
     }
-
+    
     // Verify environment variables
     if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
       throw new Error("Email credentials are missing in environment variables");
     }
 
     const user = await User.findOne({ email });
+    
     if (!user) {
       return next(
         new CustomError("User not found. Please register to continue", 404)
       );
+    }
+    if(user.isAdmin){
+      return next(new CustomError("Admin cannot login", 403))
     }
 
     const otp = generateOTP();
@@ -85,7 +92,7 @@ const verifyOTP = async (req, res, next) => {
       );
     }
 
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email  });
     if (!user) {
       return next(
         new CustomError("User not found. Please register to continue", 404)

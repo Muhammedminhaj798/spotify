@@ -11,17 +11,18 @@ import AdminSongs from './admin/AdminSongs';
 import AdminArtist from './admin/AdminArtist';
 import AdminLogin from './admin/AdminLogin';
 import LoginWithPassword from './pages/LoginWithPassword';
-import Navbar from './pages/Navbar';
+import Navbar from './components/Navbar';
+import Library from './pages/Library';
 
 
 
 const App = () => {
+  const admin = localStorage.getItem("isAdmin")
   return (
     <>
       <>
-      <Navbar/>
+        {!admin && <Navbar />}
         <Routes>
-          
           <Route path='/login' element={<Login />} />
           <Route path='/otpSection' element={<OtpComp />} />
           <Route path='/signup' element={<Signup />} />
@@ -29,18 +30,22 @@ const App = () => {
           <Route path='/profileinfo' element={<ProfileInfo />} />
           <Route path='/terms&conditions' element={<Terms />} />
           <Route path='/' element={<Home />} />
-          <Route path='/loginWithPass' element={<LoginWithPassword/>}/>
-          <Route path='/adminLogin' element={<AdminLogin/>}/>
+          <Route path='/loginWithPass' element={<LoginWithPassword />} />
+          <Route path='/adminLogin' element={<AdminLogin />} />
         </Routes>
       </>
-      <>
-        <Routes>
-          <Route path='/admin_dashboard' element={<Dashboard />} />
-          <Route path='/admin_users' element={<Users />} />
-          <Route path='/admin_songs' element={<AdminSongs/>}/>
-          <Route path='/admin_artist' element={<AdminArtist/>}/>
-        </Routes>
 
+      <>
+        {admin &&
+          <>
+            <Routes>
+              <Route path='/admin_dashboard' element={<Dashboard />} />
+              <Route path='/admin_users' element={<Users />} />
+              <Route path='/admin_songs' element={<AdminSongs />} />
+              <Route path='/admin_artist' element={<AdminArtist />} />
+            </Routes>
+          </>
+        }
       </>
     </>
   );

@@ -3,8 +3,8 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 export const loginWithPass = async (req, res, next) => {
-    try {
-      console.log("Request body in controller:", req.body);
+  try {
+    console.log("Request body in controller:", req.body);
     const { email, password } = req.body;
 
     if (!email || !password) {
@@ -20,7 +20,7 @@ export const loginWithPass = async (req, res, next) => {
       throw error;
     }
 
-    if (!user.isAdmin) {
+    if (user.isAdmin) {
       const error = new Error("Access denied: Not an admin");
       error.statusCode = 403;
       throw error;
@@ -37,7 +37,7 @@ export const loginWithPass = async (req, res, next) => {
       { id: user._id, isAdmin: user.isAdmin },
       process.env.JWT_TOKEN,
       {
-        expiresIn: "1h",
+        expiresIn: "7d",
       }
     );
     res.cookie("user", token, {
@@ -46,7 +46,11 @@ export const loginWithPass = async (req, res, next) => {
       sameSite: "none", // allows cross-site cookies
       maxAge: 15 * 60 * 1000,
     });
-    res.json({ user:{username:user.name,email:user.email}, message: "Login successful" });
+    res.status(200).json({
+      message: "User logged in successfully",
+      status: "success",
+      admin: { username: user.name, email: user.name },
+    });
   } catch (err) {
     console.error("Login error:", err);
     next(err);

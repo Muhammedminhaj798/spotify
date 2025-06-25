@@ -54,7 +54,7 @@ const Login = () => {
                         <p className='font-bold'>Email or username</p>
                         <input type="text" onChange={userNameInput} className='border h-10 w-[380px] rounded pl-3.5' placeholder='Email or username' />
                         <button className='border rounded-4xl bg-green-600 text-black font-bold  h-[50px]' onClick={handleNavigate}>Continue</button>
-                        <p className='text-gray-300'>Don't have an account?</p>
+                        <p onClick={()=> navigate('/signup')} className='text-gray-300'>Don't have an account?</p>
                     </div>
                 </div>
             </div>

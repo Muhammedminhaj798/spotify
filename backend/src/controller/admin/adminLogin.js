@@ -48,7 +48,7 @@ const adminLogin = async (req, res, next) => {
     res.status(200).json({
       message: "Admin logged in successfully",
       status: "success",
-      token: token,
+      admin:{username : user.name, email:user.name}             
     });
   } catch (err) {
     next(err); // Consider logging the error for debugging

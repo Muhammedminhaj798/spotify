@@ -1,14 +1,17 @@
 import jwt from 'jsonwebtoken';
-import CustomError from '../routes/utils/customError';
-import User from '../model/userSchema';
+// import CustomError from '../routes/utils/customError.js';
+// import User from '../model/userSchema.js';
+import CustomError from '../utils/customError.js';
+import User from '../model/userSchema.js';
 
 const user_auth = async (req, res, next) => {
     try {
         const authHeader = req.headers['authorization'];
-        const token = authHeader && authHeader.startsWith('Bearer ') ? authHeader.split(' ')[1] : null;
+        const token = authHeader && authHeader.startsWith('Bearer') ? authHeader.split(' ')[1] : null;
+        console.log(token);
 
         if (!token) {
-            return next(new CustomError('Access token missing, da! Login cheyyu!', 401));
+            return next(new CustomError('Access token missing, please try again', 401));
         }
 
         // JWT verify cheyyuka

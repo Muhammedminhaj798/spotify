@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosInstance from "../../AxiosInstance";
 
 const initialState = {
+  isAuth: false,
   loading: false,
   error: null,
   data: [],
@@ -43,6 +44,9 @@ const adminAuthSlice = createSlice({
       .addCase(adminLogin.fulfilled, (state, action) => {
         state.loading = false;
         state.data = action.payload;
+        state.isAuth = true;
+        localStorage.setItem("isAuth", "true");
+        localStorage.setItem("isAdmin", JSON.stringify(action.payload))
       })
       .addCase(adminLogin.rejected, (state, action) => {
         state.loading = false;
