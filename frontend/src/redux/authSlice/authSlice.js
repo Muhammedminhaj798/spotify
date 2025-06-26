@@ -160,6 +160,17 @@ const authSlice = createSlice({
         localStorage.setItem("isAuth", "true");
         localStorage.setItem("user", JSON.stringify(action.payload));
       })
+      .addCase(logout.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(logout.fulfilled, (state) => {
+        state.loading = false;
+        state.user = null;
+        state.isAuth = false;
+        localStorage.removeItem("isAuth");
+        localStorage.removeItem("isAdmin");
+      });
   },
 });
 

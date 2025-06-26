@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 
+
 const playlistSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -16,9 +17,17 @@ const playlistSchema = new mongoose.Schema({
         ref: "Song",
         default: []
     }],
+    description: {
+        type: String,
+        trim: true
+        },
     isPublic: {
         type: Boolean,
         default: true
+    },
+    bgColor:{
+        type:String,
+        default:"bg-gray-700"
     }
 }, { timestamps: true });
 

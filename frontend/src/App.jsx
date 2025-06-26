@@ -13,6 +13,7 @@ import AdminLogin from './admin/AdminLogin';
 import LoginWithPassword from './pages/LoginWithPassword';
 import Navbar from './components/Navbar';
 import Library from './pages/Library';
+import AddPlaylist from './pages/AddPlaylist';
 
 
 
@@ -32,6 +33,7 @@ const App = () => {
           <Route path='/' element={<Home />} />
           <Route path='/loginWithPass' element={<LoginWithPassword />} />
           <Route path='/adminLogin' element={<AdminLogin />} />
+          <Route path='/addPlaylist' element={<AddPlaylist/>}/>
         </Routes>
       </>
 

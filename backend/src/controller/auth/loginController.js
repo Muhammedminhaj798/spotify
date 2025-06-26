@@ -121,7 +121,7 @@ const verifyOTP = async (req, res, next) => {
       httpOnly: false, // if you want to access in frontend
       secure: true, // REQUIRED with sameSite: "none"
       sameSite: "none", // allows cross-site cookies
-      maxAge: 15 * 60 * 1000,
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
     user.isVerified = true;

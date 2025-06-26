@@ -42,14 +42,14 @@ const Login = () => {
                         <label className='font-bold text-4xl'>Log in to spotify</label>
                     </div>
                     <div className='flex flex-col gap-4 justify-center pt-4'>
-                        <button className='flex items-center justify-evenly  border-1 border-white/30 rounded-3xl px-4 py-3 hover:border-white'>
+                        {/* <button className='flex items-center justify-evenly  border-1 border-white/30 rounded-3xl px-4 py-3 hover:border-white'>
                             <img src={googlelog} className='h-5 w-5 object-contain' alt="" />
                             <p className='font-semibold '>Continue with google</p>
-                        </button>
+                        </button> */}
 
-                        <button className='border-1 border-white/30 hover:border-white rounded-3xl font-semibold px-4 py-3'>Continue with Phone number</button>
+                        <button onClick={()=> navigate('/loginWithPass')} className='border-1 border-white/30 hover:border-white rounded-3xl font-semibold px-4 py-3'>Continue with Email & Password</button>
 
-                        <hr />
+                        {/* <hr /> */}
 
                         <p className='font-bold'>Email or username</p>
                         <input type="text" onChange={userNameInput} className='border h-10 w-[380px] rounded pl-3.5' placeholder='Email or username' />

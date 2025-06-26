@@ -4,13 +4,15 @@ import adminUserReducer from "./admin/adminUserSlice.js";
 import adminSongReducer from "./admin/adminSongSlice.js";
 import adminArtistReducer from "./admin/adminArtistSlice.js";
 import adminLoginReducer from './admin/adminAuthSlice.js';
+import userPlaylistReducer from "./users/playlistSlice.js"
 const store = configureStore({
   reducer: {
     auth: authReducer,
     adminUser: adminUserReducer,
     adminSongs: adminSongReducer,
     adminArtist: adminArtistReducer,
-    adminAuth: adminLoginReducer
+    adminAuth: adminLoginReducer,
+    userPlaylist: userPlaylistReducer
   },
 });
 

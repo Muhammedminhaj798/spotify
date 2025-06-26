@@ -27,10 +27,10 @@ const LoginWithPassword = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const result = await dispatch(passwordAuth({
-                    email: formData.email,
-                    password: formData.password,
-                })).unwrap();
+            await dispatch(passwordAuth({
+                email: formData.email,
+                password: formData.password,
+            })).unwrap();
             // On success, redirect to admin dashboard
             navigate("/");
         } catch (err) {
