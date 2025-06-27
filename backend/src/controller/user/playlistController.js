@@ -6,7 +6,7 @@ import Playlist from "../../model/playlistSchema.js";
 
 const addPlaylist = async (req, res) => {
   const { name, isPublic, description} = req.body;
-  console.log(req.user);
+
 
   if (!name) {
     res.status(400);

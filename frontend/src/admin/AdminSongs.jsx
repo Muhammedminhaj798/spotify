@@ -137,6 +137,7 @@ const AdminSongsComponent = () => {
     const deleteSong = (id) => {
         if (window.confirm('Are you sure you want to delete this song?')) {
             dispatch(DeletedSong(id));
+            dispatch(getAllSongs());
         }
     };
 

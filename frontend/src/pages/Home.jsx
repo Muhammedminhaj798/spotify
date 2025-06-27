@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import Library from './Library';
 
 const Home = () => {
@@ -11,11 +11,14 @@ const Home = () => {
     }
     return (
         <div>
-            <Library/>
-            welcome to home
-            <button onClick={()=> navigate("/signup")}>signup</button>
-            <button onClick={()=> navigate('/login')}>Login</button>
-            <button onClick={()=> handleLogout()}>Logout</button>
+            <div className="relative flex h-screen">
+                <Library />
+                <div className={` flex-1 h-screen overflow-y-auto`}>
+                    <main className="">
+                        <Outlet />
+                    </main>
+                </div>
+            </div>
         </div>
     );
 }

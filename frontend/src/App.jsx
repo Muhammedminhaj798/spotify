@@ -14,6 +14,7 @@ import LoginWithPassword from './pages/LoginWithPassword';
 import Navbar from './components/Navbar';
 import Library from './pages/Library';
 import AddPlaylist from './pages/AddPlaylist';
+import HomePage from './pages/HomePage';
 
 
 
@@ -30,10 +31,14 @@ const App = () => {
           <Route path='/createPass' element={<CreatePassword />} />
           <Route path='/profileinfo' element={<ProfileInfo />} />
           <Route path='/terms&conditions' element={<Terms />} />
-          <Route path='/' element={<Home />} />
+          <Route path='/' element={<Home />}>
+            <Route path='/' element={<HomePage />} />
+            
+          </Route>
           <Route path='/loginWithPass' element={<LoginWithPassword />} />
           <Route path='/adminLogin' element={<AdminLogin />} />
-          <Route path='/addPlaylist' element={<AddPlaylist/>}/>
+          <Route path='/addPlaylist' element={<AddPlaylist />} />
+          {/* <Route path='/' element={<HomePage/>}/> */}
         </Routes>
       </>
 

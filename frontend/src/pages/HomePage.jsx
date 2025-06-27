@@ -1,0 +1,267 @@
+import React, { useEffect } from 'react';
+import { Play, MoreHorizontal } from 'lucide-react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllArtist } from '../redux/admin/adminArtistSlice';
+import { getAllSongs } from '../redux/admin/adminSongSlice';
+
+const HomePage = () => {
+    const { artists } = useSelector((state) => state.adminArtist)
+
+    // console.log('artists', artists);
+    const dispatch = useDispatch()
+
+
+    useEffect(() => {
+        dispatch(getAllArtist())
+    }, [])
+
+    const popularArtists = artists && artists.length > 0
+        ? artists.slice(0, 10).filter(artist => artist && artist.name)
+        : [];
+    console.log(popularArtists);
+    // const popularArtists = [
+    //     {
+    //         name: "Pritam",
+    //         image: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=200&h=200&fit=crop&crop=face",
+    // //type: "Artist"
+    //     },
+    //     {
+    //         name: "A.R. Rahman",
+    //         image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face",
+    //         // type: "Artist"
+    //     },
+    //     {
+    //         name: "Arijit Singh",
+    //         image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop&crop=face",
+    //         // type: "Artist"
+    //     },
+    //     {
+    //         name: "Sachin-Jigar",
+    //         image: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200&h=200&fit=crop&crop=face",
+    //         // type: "Artist"
+    //     },
+    //     {
+    //         name: "Vishal-Shekhar",
+    //         image: "https://images.unsplash.com/photo-1566492031773-4f4e44671d66?w=200&h=200&fit=crop&crop=face",
+    //         // type: "Artist"
+    //     },
+    //     {
+    //         name: "Atif Aslam",
+    //         image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop&crop=face",
+    //         // type: "Artist"
+    //     }
+    // ];
+
+    const popularAlbums = [
+        {
+            title: "Aashiqui 2",
+            image: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=300&h=300&fit=crop",
+            color: "from-teal-500 to-blue-600"
+        },
+        {
+            title: "Yeh Jawaani Hai Deewani",
+            image: "https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=300&h=300&fit=crop",
+            color: "from-yellow-400 to-orange-500"
+        },
+        {
+            title: "Sanam Teri Kasam",
+            image: "https://images.unsplash.com/photo-1445985543470-41fba5c3144a?w=300&h=300&fit=crop",
+            color: "from-red-500 to-pink-600"
+        },
+        {
+            title: "Finding You",
+            image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=300&h=300&fit=crop",
+            color: "from-blue-400 to-cyan-500"
+        },
+        {
+            title: "Young G.O.A.T",
+            image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=300&h=300&fit=crop",
+            color: "from-orange-400 to-red-500"
+        },
+        {
+            title: "Raanjhan",
+            image: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=300&h=300&fit=crop",
+            color: "from-purple-500 to-pink-600"
+        }
+    ];
+
+    const { songs } = useSelector((state) => state.adminSongs)
+console.log("songs", songs);
+    useEffect(() => {
+        dispatch(getAllSongs())
+    }, [])
+    const trendingSongs = songs && songs.length > 0
+        ? songs.slice(0, 10).filter(song => song && song.title)
+        : [];
+    // const trendingSongs = [
+    //     {
+    //         title: "Shree Hanuman Chalisa",
+    //         artist: "Hariharan",
+    //         image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=300&h=300&fit=crop",
+    //         color: "from-orange-500 to-red-600"
+    //     },
+    //     {
+    //         title: 'Jugraafiya - From "Super 30"',
+    //         artist: "Udit Narayan, Shreya Ghoshal",
+    //         image: "https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=300&h=300&fit=crop",
+    //         color: "from-yellow-400 to-orange-500"
+    //     },
+    //     {
+    //         title: "Raat Ke Shikari",
+    //         artist: "Masoom Sharma",
+    //         image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=300&h=300&fit=crop",
+    //         color: "from-red-600 to-gray-800"
+    //     },
+    //     {
+    //         title: "Aur Mohabbat Kitti Karoon",
+    //         artist: "Pritam, Arijit Singh, Sandeep Srivastava",
+    //         image: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=300&h=300&fit=crop",
+    //         color: "from-blue-500 to-purple-600"
+    //     },
+    //     {
+    //         title: 'Saiyaara (From "Saiyaara")',
+    //         artist: "Tanishk Bagchi, Faheem Abdullah, Arslan Nizami",
+    //         image: "https://images.unsplash.com/photo-1445985543470-41fba5c3144a?w=300&h=300&fit=crop",
+    //         color: "from-pink-500 to-red-600"
+    //     },
+    //     {
+    //         title: "Chirapunji",
+    //         artist: "Nihal Sadiq, Hanan Shaah",
+    //         image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=300&h=300&fit=crop",
+    //         color: "from-green-500 to-teal-600"
+    //     }
+    // ];
+
+    const ArtistCard = ({ artist }) => (
+        <div className="flex-shrink-0 group cursor-pointer">
+            <div className="relative">
+                <img
+                    src={artist.image ? artist.image : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"}
+                    alt={artist.name}
+                    className="w-40 h-40 rounded-full object-cover group-hover:shadow-2xl transition-all duration-300"
+                />
+                <div className="absolute inset-0  group-hover:bg-opacity-20 rounded-full transition-all duration-300 flex items-center justify-center">
+                    <Play className="w-12 h-12 text-white opacity-0 group-hover:opacity-100 transition-all duration-300" fill="white" />
+                </div>
+            </div>
+            <div className="mt-4 text-center">
+                <h3 className="text-white font-semibold text-lg">{artist.name}</h3>
+                <p className="text-gray-400 text-sm">{artist.type}</p>
+            </div>
+        </div>
+    );
+
+    const AlbumCard = ({ album }) => (
+        <div className="flex-shrink-0 group cursor-pointer">
+            <div className="relative">
+                <div className={`w-52 h-52 rounded-lg bg-gradient-to-br ${album.color} overflow-hidden group-hover:scale-105 transition-transform duration-300`}>
+                    <img
+                        src={album.image}
+                        alt={album.title}
+                        className="w-full h-full object-cover opacity-80"
+                    />
+                </div>
+                <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 rounded-lg transition-all duration-300 flex items-center justify-center">
+                    <Play className="w-16 h-16 text-white opacity-0 group-hover:opacity-100 transition-all duration-300" fill="white" />
+                </div>
+            </div>
+        </div>
+    );
+
+    const SongCard = ({ song }) => (
+        <div className="flex-shrink-0 group cursor-pointer">
+            <div className="relative">
+                <div className={`w-52 h-52 rounded-lg bg-gradient-to-br ${song.color} overflow-hidden group-hover:scale-105 transition-transform duration-300`}>
+                    <img
+                        src={song.coverImage}
+                        alt={song.title}
+                        className="w-full h-full object-cover opacity-80"
+                    />
+                </div>
+                <div className="absolute inset-0 group-hover:bg-opacity-20 rounded-lg transition-all duration-300 flex items-center justify-center">
+                    <Play className="w-16 h-16 text-white opacity-0 group-hover:opacity-100 transition-all duration-300" fill="white" />
+                </div>
+            </div>
+            <div className="mt-3">
+                <h3 className="text-white font-semibold text-base truncate">{song.title}</h3>
+                <p className="text-gray-400 text-sm truncate">{song.artist}</p>
+            </div>
+        </div>
+    );
+
+    return (
+        <div className="bg-gradient-to-b from-gray-900 to-black min-h-screen text-white p-6">
+            {/* Popular Artists Section */}
+            <div className="mb-12">
+                <div className="flex items-center justify-between mb-6">
+                    <h2 className="text-3xl font-bold">Popular artists</h2>
+                    <button className="text-gray-400 hover:text-white text-sm font-medium">
+                        Show all
+                    </button>
+                </div>
+                <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide">
+                    {popularArtists.map((artist, index) => (
+                        <ArtistCard key={index} artist={artist} />
+                    ))}
+                </div>
+            </div>
+
+            {/* Popular Albums and Singles Section */}
+            <div className="mb-12">
+                <div className="flex items-center justify-between mb-6">
+                    <h2 className="text-3xl font-bold">Popular albums and singles</h2>
+                    <button className="text-gray-400 hover:text-white text-sm font-medium">
+                        Show all
+                    </button>
+                </div>
+                <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
+                    {popularAlbums.map((album, index) => (
+                        <AlbumCard key={index} album={album} />
+                    ))}
+                </div>
+            </div>
+
+            {/* Trending Songs Section */}
+            <div className="mb-12">
+                <div className="flex items-center justify-between mb-6">
+                    <h2 className="text-3xl font-bold">Trending songs</h2>
+                    <button className="text-gray-400 hover:text-white text-sm font-medium">
+                        Show all
+                    </button>
+                </div>
+                <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
+                    {trendingSongs.map((song, index) => (
+                        <SongCard key={index} song={song} />
+                    ))}
+                </div>
+            </div>
+
+            {/* Popular Artists Section (Repeated) */}
+            <div className="mb-12">
+                <div className="flex items-center justify-between mb-6">
+                    <h2 className="text-3xl font-bold">Popular artists</h2>
+                    <button className="text-gray-400 hover:text-white text-sm font-medium">
+                        Show all
+                    </button>
+                </div>
+                <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide">
+                    {popularArtists.map((artist, index) => (
+                        <ArtistCard key={`repeat-${index}`} artist={artist} />
+                    ))}
+                </div>
+            </div>
+
+            <style jsx>{`
+        .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+      `}</style>
+        </div>
+    );
+};
+
+export default HomePage;

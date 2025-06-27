@@ -170,6 +170,7 @@ const authSlice = createSlice({
         state.isAuth = false;
         localStorage.removeItem("isAuth");
         localStorage.removeItem("isAdmin");
+        localStorage.removeItem("user");
       });
   },
 });

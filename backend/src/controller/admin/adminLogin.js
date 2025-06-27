@@ -13,8 +13,7 @@ const adminLogin = async (req, res, next) => {
         .json({ message: "Email and password are required" });
     }
 
-    const user = await User.findOne({ email });
-    console.log(user);
+    const user = await User.findOne({ email });;
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
