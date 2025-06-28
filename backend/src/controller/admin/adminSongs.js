@@ -7,6 +7,7 @@ const addSongs = async (req, res, next) => {
     // Check for Multer errors
     // console.log('HWY',req.body);
     // console.log("dededede",req);
+console.log('bgvg');
 
     if (req.fileError) {
       return res.status(400).json({ message: req.fileError.message });

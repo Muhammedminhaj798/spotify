@@ -12,7 +12,7 @@ const store = configureStore({
     adminSongs: adminSongReducer,
     adminArtist: adminArtistReducer,
     adminAuth: adminLoginReducer,
-    userPlaylist: userPlaylistReducer
+    userPlaylist: userPlaylistReducer,
   },
 });
 

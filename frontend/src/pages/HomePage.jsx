@@ -161,7 +161,7 @@ console.log("songs", songs);
                         className="w-full h-full object-cover opacity-80"
                     />
                 </div>
-                <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 rounded-lg transition-all duration-300 flex items-center justify-center">
+                <div className="absolute inset-0 group-hover:bg-opacity-20 rounded-lg transition-all duration-300 flex items-center justify-center">
                     <Play className="w-16 h-16 text-white opacity-0 group-hover:opacity-100 transition-all duration-300" fill="white" />
                 </div>
             </div>
@@ -190,7 +190,7 @@ console.log("songs", songs);
     );
 
     return (
-        <div className="bg-gradient-to-b from-gray-900 to-black min-h-screen text-white p-6">
+        <div className="bg-gradient-to-b from-gray-900 to-black min-h-screen text-white p-6 ">
             {/* Popular Artists Section */}
             <div className="mb-12">
                 <div className="flex items-center justify-between mb-6">

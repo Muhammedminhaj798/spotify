@@ -1,1 +1,51 @@
 @import "tailwindcss";
+
+
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  scrollbar-width: none; 
+  -ms-overflow-style: none;
+}
+
+html{
+  scrollbar-width: none;
+}
+
+body::-webkit-scrollbar {
+  display: none; 
+}
+
+.hide-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.custom-scrollbar {
+  -ms-overflow-style: none; 
+  scrollbar-width: none; 
+}
+
+element {
+  scrollbar-width: none; 
+  -ms-overflow-style: none;
+  overflow: hidden; 
+}
+
+element::-webkit-scrollbar {
+  display: none;
+}
