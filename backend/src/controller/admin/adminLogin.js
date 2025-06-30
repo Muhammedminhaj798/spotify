@@ -13,7 +13,7 @@ const adminLogin = async (req, res, next) => {
         .json({ message: "Email and password are required" });
     }
 
-    const user = await User.findOne({ email });;
+    const user = await User.findOne({ email });
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -22,7 +22,7 @@ const adminLogin = async (req, res, next) => {
     if (!user.isAdmin) {
       // Assuming you have an isAdmin field in your userSchema
       return res.status(403).json({ message: "Access denied: Not an admin" });
-    }
+    }F
 
     const isValid = await bcrypt.compare(password, user.password);
     if (!isValid) {
@@ -47,12 +47,11 @@ const adminLogin = async (req, res, next) => {
     res.status(200).json({
       message: "Admin logged in successfully",
       status: "success",
-      admin:{username : user.name, email:user.name}             
+      admin: { username: user.name, email: user.name },
     });
   } catch (err) {
     next(err); // Consider logging the error for debugging
   }
 };
-
 
 export { adminLogin }; // Add export
