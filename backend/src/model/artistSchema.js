@@ -11,7 +11,7 @@ const artistSchema = new mongoose.Schema({
   image: {
     type: String,
     trim: true,
-    default: null, 
+    default: null,
   },
   description: {
     type: String,
@@ -21,7 +21,7 @@ const artistSchema = new mongoose.Schema({
   },
   isDisabled: {
     type: Boolean,
-    default: false, 
+    default: false,
   },
   createdAt: {
     type: Date,
