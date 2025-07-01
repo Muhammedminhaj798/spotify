@@ -22,7 +22,7 @@ const adminLogin = async (req, res, next) => {
     if (!user.isAdmin) {
       // Assuming you have an isAdmin field in your userSchema
       return res.status(403).json({ message: "Access denied: Not an admin" });
-    }F
+    }
 
     const isValid = await bcrypt.compare(password, user.password);
     if (!isValid) {

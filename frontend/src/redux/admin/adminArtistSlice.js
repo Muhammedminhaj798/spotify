@@ -60,6 +60,54 @@ export const toggleDisableArtist = createAsyncThunk(
   }
 );
 
+// export const updatedArtist = createAsyncThunk(
+//   "adminArtist/updatedArtist",
+//   async ({ formData, id }, { rejectWithValue }) => {
+//     try {
+//       const config = {
+//         headers: {
+//           "Content-Type": formData ? "multipart/form-data" : "application/json",
+//         },
+//       };
+
+//       if ((!image, !name)) {
+//         return rejectWithValue("Please fill all fields");
+//       }
+//       const response = await axiosInstance.patch(
+//         `admin/updatedArtist/${id}`,
+//         formData,
+//         config
+//       );
+//       return response.data;
+//     } catch (error) {
+//       return rejectWithValue(error.message);
+//     }
+//   }
+// );
+
+export const updatedArtist = createAsyncThunk(
+  "adminArtist/updatedArtist",
+  async ({ data, id }, { rejectWithValue }) => {
+    try {
+      // Validate input
+      if (!data) {
+        return rejectWithValue("No data provided");
+      }
+
+      const config = {
+        headers: {
+          "Content-Type": data instanceof FormData ? "multipart/form-data" : "application/json",
+        },
+      };
+
+      const response = await axiosInstance.patch(`admin/updatedArtist/${id}`, data, config);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || error.message);
+    }
+  }
+);
+
 const adminArtistSlice = createSlice({
   name: "adminArtist",
   initialState,
@@ -76,6 +124,21 @@ const adminArtistSlice = createSlice({
         state.error = null;
       })
       .addCase(getAllArtist.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(updatedArtist.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updatedArtist.fulfilled, (state, action) => {
+        state.loading = false;
+        state.artists = state.artists.map((artist) =>
+          artist._id === action.payload.data._id ? action.payload.data : artist
+        );
+        state.error = null;
+      })
+      .addCase(updatedArtist.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

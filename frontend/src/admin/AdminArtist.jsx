@@ -3,6 +3,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import Sidebar from '../components/Sidebar';
 import { useDispatch, useSelector } from 'react-redux';
 import { addArtist, getAllArtist, toggleDisableArtist } from '../redux/admin/adminArtistSlice';
+import { useNavigate } from 'react-router-dom';
 
 const AdminArtist = () => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -13,7 +14,7 @@ const AdminArtist = () => {
     const [imageFile, setImageFile] = useState(null);
     const [imagePreview, setImagePreview] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-
+    const navigate = useNavigate()
     const dispatch = useDispatch();
     const { artists, loading, error } = useSelector((state) => state.adminArtist);
 
@@ -315,7 +316,7 @@ const AdminArtist = () => {
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                                 <div className="flex items-center space-x-2">
-                                                    <button className="text-gray-400 hover:text-gray-300 transition-colors">
+                                                    <button onClick={()=> navigate(`/admin_artist_edit/${artist._id}`)} className="text-gray-400 hover:text-gray-300 transition-colors">
                                                         <Edit className="w-4 h-4" />
                                                     </button>
                                                     <button

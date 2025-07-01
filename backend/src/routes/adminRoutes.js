@@ -15,6 +15,7 @@ import {
   disableArstist,
   getAllArtist,
   toggleDisableArtist,
+  updatedArtist,
 } from "../controller/admin/adminArtist.js";
 import { adminLogin } from "../controller/admin/adminLogin.js";
 
@@ -37,6 +38,7 @@ adminRoutes
   .post("/addArtist", upload, tryCatch(addArtist))
   .get("/getAllArtist", tryCatch(getAllArtist))
   .patch("/disableArtist/:id", tryCatch(disableArstist))
-  .patch("/toggleDisableArtist/:id", tryCatch(toggleDisableArtist));
+  .patch("/toggleDisableArtist/:id", tryCatch(toggleDisableArtist))
+  .patch('/updatedArtist/:id',upload,tryCatch(updatedArtist))
 
 export default adminRoutes;

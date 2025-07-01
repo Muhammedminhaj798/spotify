@@ -15,6 +15,7 @@ import Navbar from './components/Navbar';
 import Library from './pages/Library';
 import AddPlaylist from './pages/AddPlaylist';
 import HomePage from './pages/HomePage';
+import AdminArtistEdit from './admin/AdminArtistEdit';
 
 
 
@@ -49,6 +50,8 @@ const App = () => {
               <Route path='/admin_users' element={<Users />} />
               <Route path='/admin_songs' element={<AdminSongs />} />
               <Route path='/admin_artist' element={<AdminArtist />} />
+              <Route path='/admin_artist_edit/:id' element={<AdminArtistEdit />} />
+
             </Routes>
           </>
         }

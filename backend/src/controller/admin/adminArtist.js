@@ -82,3 +82,51 @@ export const toggleDisableArtist = async (req, res, next) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
+export const updatedArtist = async (req, res, next) => {
+  try {
+    const { name } = req.body;
+    const artistId = req.params.id;
+
+    // Validate input
+    if (!name) {
+      return res.status(400).json({
+        message: "Artist name is required",
+        status: "error",
+      });
+    }
+
+    const updateData = { name };
+
+    // Handle image if provided
+    if (req.files && req.files.imageFile) {
+      updateData.image = req.files.imageFile.path; // Use single file
+    }
+
+    const updatedArtist = await Artist.findByIdAndUpdate(
+      artistId,
+      updateData,
+      { new: true }
+    );
+
+    if (!updatedArtist) {
+      return res.status(404).json({
+        message: "Artist not found",
+        status: "error",
+      });
+    }
+
+    res.status(200).json({
+      message: "Artist details updated successfully",
+      status: "success",
+      data: updatedArtist,
+    });
+  } catch (error) {
+    console.error("Error updating artist:", error);
+    res.status(500).json({
+      message: "Internal server error",
+      status: "error",
+      error: error.message,
+    });
+  }
+};
