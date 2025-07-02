@@ -44,6 +44,7 @@ export default function Navbar() {
   const handleProfileClick = () => {
     // Add your profile navigation logic here
     console.log('Navigating to profile...');
+    navigate('/profile')
     setIsProfileDropdownOpen(false);
   };
 
@@ -85,7 +86,7 @@ export default function Navbar() {
   );
   if (isLoggedIn) {
     return (
-      <nav className="bg-black text-white px-4 py-3 flex items-center justify-between relative">
+      <nav className="bg-black text-white px-4 py-3 flex items-center justify-between w-full fixed z-50">
         {/* Left Section - Logo and Home */}
         <div className="flex items-center space-x-4">
           {/* Spotify Logo */}

@@ -14,6 +14,8 @@ import {
 } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllSongs } from '../redux/admin/adminSongSlice';
+import AudioPlayer from 'react-h5-audio-player';
+import 'react-h5-audio-player/lib/styles.css';
 
 const SpotifyAudioPlayer = () => {
     const [isPlaying, setIsPlaying] = useState(false);

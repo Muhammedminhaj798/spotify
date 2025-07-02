@@ -18,39 +18,7 @@ const HomePage = () => {
     const popularArtists = artists && artists.length > 0
         ? artists.slice(0, 10).filter(artist => artist && artist.name)
         : [];
-    console.log(popularArtists);
-    // const popularArtists = [
-    //     {
-    //         name: "Pritam",
-    //         image: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=200&h=200&fit=crop&crop=face",
-    // //type: "Artist"
-    //     },
-    //     {
-    //         name: "A.R. Rahman",
-    //         image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face",
-    //         // type: "Artist"
-    //     },
-    //     {
-    //         name: "Arijit Singh",
-    //         image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop&crop=face",
-    //         // type: "Artist"
-    //     },
-    //     {
-    //         name: "Sachin-Jigar",
-    //         image: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200&h=200&fit=crop&crop=face",
-    //         // type: "Artist"
-    //     },
-    //     {
-    //         name: "Vishal-Shekhar",
-    //         image: "https://images.unsplash.com/photo-1566492031773-4f4e44671d66?w=200&h=200&fit=crop&crop=face",
-    //         // type: "Artist"
-    //     },
-    //     {
-    //         name: "Atif Aslam",
-    //         image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop&crop=face",
-    //         // type: "Artist"
-    //     }
-    // ];
+    console.log(popularArtists)
 
     const popularAlbums = [
         {

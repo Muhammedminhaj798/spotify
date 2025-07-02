@@ -13,7 +13,6 @@ const Library = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const { playlists } = useSelector((state) => state.userPlaylist)
-  console.log("playlist", playlists);
   const [showLoginDropdown, setShowLoginDropdown] = useState(false);
   const [showCreateDropdown, setShowCreateDropdown] = useState(false);
   const loginDropdownRef = useRef(null);

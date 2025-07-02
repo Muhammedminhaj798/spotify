@@ -5,6 +5,7 @@ import adminSongReducer from "./admin/adminSongSlice.js";
 import adminArtistReducer from "./admin/adminArtistSlice.js";
 import adminLoginReducer from './admin/adminAuthSlice.js';
 import userPlaylistReducer from "./users/playlistSlice.js"
+import playSongReducer from "./users/playSong.js"
 const store = configureStore({
   reducer: {
     auth: authReducer,
@@ -13,6 +14,7 @@ const store = configureStore({
     adminArtist: adminArtistReducer,
     adminAuth: adminLoginReducer,
     userPlaylist: userPlaylistReducer,
+    playSong:playSongReducer
   },
 });
 
