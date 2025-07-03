@@ -14,6 +14,7 @@ export const loginWithPass = async (req, res, next) => {
     }
 
     const user = await User.findOne({ email });
+    console.log("usersss : ", user);
     if (!user) {
       const error = new Error("Invalid email or password");
       error.statusCode = 401;

@@ -192,7 +192,7 @@ const Library = () => {
             <div
               key={item.id}
               className="group flex items-center space-x-3 p-2 hover:bg-gray-800 rounded-md transition-colors cursor-pointer"
-              onClick={() => console.log('Clicked playlist:', item.name)}
+              onClick={() => navigate(`/viewPlaylist/${item._id}`)}
             >
               {/* Icon/Image */}
               <div className={`w-12 h-12 rounded-md flex items-center justify-center ${item?.bgColor} flex-shrink-0`}>

@@ -4,6 +4,7 @@ import axiosInstance from "../../AxiosInstance";
 
 const initialState = {
   playlists: [],
+  playlistById: [],
   loading: false,
   error: null,
 };
@@ -25,6 +26,25 @@ export const addPlaylist = createAsyncThunk(
           },
         }
       );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
+
+export const fetchPlaylistById = createAsyncThunk(
+  "playlist/playlistById",
+  async (id, { rejectWithValue }) => {
+    try {
+      const token = Cookies.get("user"); // Adjust 'user' to match your cookie name
+      const response = await axiosInstance.get(`/user/playlistById/${id}`, {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      });
+      console.log("dfghjk");
+      console.log(response.data);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || error.message);
@@ -78,11 +98,24 @@ const playlistSlice = createSlice({
       .addCase(addPlaylist.fulfilled, (state, action) => {
         state.loading = false;
         state.error = null;
-        state.playlists = [...state.playlists, action.payload.data?.playlist || action.payload];
+        state.playlists = [
+          ...state.playlists,
+          action.payload.data?.playlist || action.payload,
+        ];
       })
       .addCase(addPlaylist.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload?.message || action.payload || "Failed to add playlist";
+        state.error =
+          action.payload?.message || action.payload || "Failed to add playlist";
+      })
+      .addCase(fetchPlaylistById.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchPlaylistById.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        state.playlistById = action.payload.data;
       });
   },
 });

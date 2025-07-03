@@ -3,13 +3,15 @@ import { Play, MoreHorizontal } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllArtist } from '../redux/admin/adminArtistSlice';
 import { getAllSongs } from '../redux/admin/adminSongSlice';
+import { playSongRequest } from '../redux/users/playSong';
+import { useNavigate } from 'react-router-dom';
 
 const HomePage = () => {
     const { artists } = useSelector((state) => state.adminArtist)
 
     // console.log('artists', artists);
     const dispatch = useDispatch()
-
+    const navigate = useNavigate()
 
     useEffect(() => {
         dispatch(getAllArtist())
@@ -54,7 +56,7 @@ const HomePage = () => {
     ];
 
     const { songs } = useSelector((state) => state.adminSongs)
-console.log("songs", songs);
+    console.log("songs", songs);
     useEffect(() => {
         dispatch(getAllSongs())
     }, [])
@@ -138,6 +140,7 @@ console.log("songs", songs);
 
     const SongCard = ({ song }) => (
         <div className="flex-shrink-0 group cursor-pointer">
+
             <div className="relative">
                 <div className={`w-52 h-52 rounded-lg bg-gradient-to-br ${song.color} overflow-hidden group-hover:scale-105 transition-transform duration-300`}>
                     <img
@@ -146,7 +149,7 @@ console.log("songs", songs);
                         className="w-full h-full object-cover opacity-80"
                     />
                 </div>
-                <div className="absolute inset-0 group-hover:bg-opacity-20 rounded-lg transition-all duration-300 flex items-center justify-center">
+                <div className="absolute inset-0 group-hover:bg-opacity-20 rounded-lg transition-all duration-300 flex items-center justify-center" onClick={() => dispatch(playSongRequest(song._id))}>
                     <Play className="w-16 h-16 text-white opacity-0 group-hover:opacity-100 transition-all duration-300" fill="white" />
                 </div>
             </div>
@@ -163,7 +166,7 @@ console.log("songs", songs);
             <div className="mb-12">
                 <div className="flex items-center justify-between mb-6">
                     <h2 className="text-3xl font-bold">Popular artists</h2>
-                    <button className="text-gray-400 hover:text-white text-sm font-medium">
+                    <button onClick={()=> navigate('/AllArtist')} className="text-gray-400 hover:text-white text-sm font-medium">
                         Show all
                     </button>
                 </div>

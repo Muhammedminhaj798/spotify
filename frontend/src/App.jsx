@@ -17,6 +17,8 @@ import AddPlaylist from './pages/AddPlaylist';
 import HomePage from './pages/HomePage';
 import AdminArtistEdit from './admin/AdminArtistEdit';
 import Profile from './pages/Profile';
+import ShowAllArtist from './pages/ShowAllArtist';
+import ViewPlaylist from './pages/ViewPlaylist';
 
 
 
@@ -36,6 +38,8 @@ const App = () => {
           <Route path='/' element={<Home />}>
             <Route path='/' element={<HomePage />} />
             <Route path='/profile' element={<Profile/>}/>
+            <Route path='/AllArtist' element={<ShowAllArtist/>}/>
+            <Route path='/viewPlaylist/:id' element={<ViewPlaylist/>}/>
           </Route>
           <Route path='/loginWithPass' element={<LoginWithPassword />} />
           <Route path='/adminLogin' element={<AdminLogin />} />

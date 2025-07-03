@@ -12,7 +12,6 @@ const playSongSlice = createSlice({
     reducers: {
         playSongRequest(state,action) {
             state.id = action.payload;
-
     }}
 })
 

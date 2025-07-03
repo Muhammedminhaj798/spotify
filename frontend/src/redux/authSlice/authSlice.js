@@ -26,7 +26,7 @@ export const registerUser = createAsyncThunk(
         auth: { formData },
       } = getState(); // Get formData from Redux state
       const { data } = await axiosInstance.post("/auth/register", formData);
-      return data.user;
+      return data.data;
     } catch (error) {
       return rejectWithValue(
         error.response?.data?.message || "Registration failed"
@@ -132,11 +132,15 @@ const authSlice = createSlice({
         state.formData = initialState.formData; // Reset form data after successful registration
         state.isAuth = true;
         localStorage.setItem("isAuth", "true");
+        console.log(action.payload);
         localStorage.setItem("user", JSON.stringify(action.payload));
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+        state.isAuth = true;
+        localStorage.setItem("isAuth", "true");
+        localStorage.setItem("user", JSON.stringify(action.payload));
       })
       .addCase(verifyOTP.fulfilled, (state, action) => {
         state.loading = false;

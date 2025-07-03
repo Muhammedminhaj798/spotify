@@ -1,117 +1,79 @@
 import React, { useEffect } from 'react';
-import { MoreHorizontal, Play, Plus, Check } from 'lucide-react';
+import { MoreHorizontal, Play, Pause, Plus, Check, Music } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllArtist } from '../redux/admin/adminArtistSlice';
+import { playSongRequest } from '../redux/users/playSong';
+import { getAllSongs } from '../redux/admin/adminSongSlice';
+import { getPlaylist } from '../redux/users/playlistSlice';
 
 const Profile = () => {
     const dispatch = useDispatch()
     const user = JSON.parse(localStorage.getItem("user"))
     const { artists } = useSelector((state) => state.adminArtist)
-    // Sample artist data
+    const { songs } = useSelector((state) => state.adminSongs)
+    const { currentSong, isPlaying } = useSelector((state) => state.playSong) // Add this to get current playing song
+    const {playlists} = useSelector((state) => state.userPlaylist)
+    console.log("playlist",playlists);
+    useEffect(()=>{
+        dispatch(getPlaylist())
+    },[])
 
 
     useEffect(() => {
+        dispatch(getAllSongs())
+    }, [])
+    
+    useEffect(() => {
         dispatch(getAllArtist())
     }, [])
-
+    
     const popularArtists = artists && artists.length > 0
-        ? artists.slice(0, 5).filter(artist => artist && artist.name)
-        : [];
-    //   const artists = [
-    //     {
-    //       id: 1,
-    //       name: "Artist 1",
-    //       image: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=150&h=150&fit=crop&crop=face"
-    //     },
-    //     {
-    //       id: 2,
-    //       name: "Artist 2", 
-    //       image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face"
-    //     },
-    //     {
-    //       id: 3,
-    //       name: "Artist 3",
-    //       image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face"
-    //     },
-    //     {
-    //       id: 4,
-    //       name: "Artist 4",
-    //       image: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&h=150&fit=crop&crop=face"
-    //     },
-    //     {
-    //       id: 5,
-    //       name: "Artist 5",
-    //       image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=150&h=150&fit=crop&crop=face"
-    //     }
-    //   ];
-
-    // Sample tracks data
-    const topTracks = [
-        {
-            id: 1,
-            title: "Darajapoo - Reprised Version",
-            artist: "Abhi Sulaimani, Fazil AS",
-            image: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=60&h=60&fit=crop",
-            duration: "2:47",
-            isPlaying: false,
-            isLiked: false
-        },
-        {
-            id: 2,
-            title: "Kaanan Ullilulla",
-            artist: "Nafi Nandi",
-            image: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=60&h=60&fit=crop",
-            duration: "1:19",
-            isPlaying: false,
-            isLiked: true
-        },
-        {
-            id: 3,
-            title: "Voice of Voiceless",
-            artist: "Vedan",
-            image: "https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?w=60&h=60&fit=crop",
-            duration: "3:06",
-            isPlaying: false,
-            isLiked: true
-        },
-        {
-            id: 4,
-            title: "MAUNA LOA",
-            artist: "Vedan, AZWIN",
-            image: "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=60&h=60&fit=crop",
-            duration: "2:27",
-            isPlaying: false,
-            isLiked: true
-        }
-    ];
+    ? artists.slice(0, 5).filter(artist => artist && artist.name)
+    : [];
+    
+    const topTracks = songs && songs.length > 0
+    ? songs.slice(0, 5).filter(song => song && song.title)
+    : [];
+    
+    console.log("songs :", topTracks);
 
     // Sample playlists data
-    const playlists = [
-        {
-            id: 1,
-            title: "Playlist 1",
-            image: null,
-            isDefault: true
-        },
-        {
-            id: 2,
-            title: "Playlist 2",
-            image: null,
-            isDefault: true
-        },
-        {
-            id: 3,
-            title: "Samhi Meri Waar",
-            image: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=200&h=200&fit=crop",
-            isDefault: false
-        },
-        {
-            id: 4,
-            title: "Chal",
-            image: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=200&h=200&fit=crop",
-            isDefault: false
-        }
-    ];
+    // const playlists = [
+    //     {
+    //         id: 1,
+    //         title: "Playlist 1",
+    //         image: null,
+    //         isDefault: true
+    //     },
+    //     {
+    //         id: 2,
+    //         title: "Playlist 2",
+    //         image: null,
+    //         isDefault: true
+    //     },
+    //     {
+    //         id: 3,
+    //         title: "Samhi Meri Waar",
+    //         image: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=200&h=200&fit=crop",
+    //         isDefault: false
+    //     },
+    //     {
+    //         id: 4,
+    //         title: "Chal",
+    //         image: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=200&h=200&fit=crop",
+    //         isDefault: false
+    //     }
+    // ];
+
+    // Function to handle play/pause toggle
+    const handlePlayPause = (trackId) => {
+        dispatch(playSongRequest(trackId));
+    };
+
+    // Function to check if current track is playing
+    const isCurrentTrackPlaying = (trackId) => {
+        return currentSong && currentSong._id === trackId && isPlaying;
+    };
 
     return (
         <div className="min-h-screen bg-gradient-to-b from-gray-800 via-gray-900 to-black text-white">
@@ -139,8 +101,6 @@ const Profile = () => {
                         </h1>
                         <div className="flex flex-wrap items-center gap-1 text-sm text-gray-300">
                             <span className="hover:text-white cursor-pointer">4 Public Playlists</span>
-                            {/* <span className="mx-2">•</span> */}
-                            {/* <span className="hover:text-white cursor-pointer">6 Following</span> */}
                         </div>
                     </div>
                 </div>
@@ -174,7 +134,7 @@ const Profile = () => {
                         >
                             <div className="relative mb-3">
                                 <img
-                                    src={artist.image}
+                                    src={artist.image }
                                     alt={artist.name}
                                     className="w-full aspect-square object-cover rounded-full shadow-lg group-hover:shadow-xl transition-shadow"
                                 />
@@ -209,24 +169,43 @@ const Profile = () => {
                         >
                             {/* Track Number / Play Button */}
                             <div className="w-6 flex items-center justify-center">
-                                <span className="text-gray-400 group-hover:hidden text-sm">
-                                    {index + 1}
-                                </span>
-                                <button className="hidden group-hover:block text-white hover:text-green-400">
-                                    <Play className="w-4 h-4 fill-current" />
-                                </button>
+                                {isCurrentTrackPlaying(track._id) ? (
+                                    // Show pause button when song is playing
+                                    <button 
+                                        className="text-green-400 hover:text-green-300" 
+                                        onClick={() => handlePlayPause(track._id)}
+                                    >
+                                        <Pause className="w-4 h-4 fill-current" />
+                                    </button>
+                                ) : (
+                                    <>
+                                        <span className="text-gray-400 group-hover:hidden text-sm">
+                                            {index + 1}
+                                        </span>
+                                        <button 
+                                            className="hidden group-hover:block text-white hover:text-green-400" 
+                                            onClick={() => handlePlayPause(track._id)}
+                                        >
+                                            <Play className="w-4 h-4 fill-current" />
+                                        </button>
+                                    </>
+                                )}
                             </div>
 
                             {/* Album Art */}
                             <img
-                                src={track.image}
+                                src={track.coverImage}
                                 alt={track.title}
                                 className="w-10 h-10 rounded object-cover"
                             />
 
                             {/* Track Info */}
                             <div className="flex-1 min-w-0">
-                                <h4 className="text-white font-medium truncate group-hover:text-green-400 transition-colors">
+                                <h4 className={`font-medium truncate transition-colors ${
+                                    isCurrentTrackPlaying(track._id) 
+                                        ? 'text-green-400' 
+                                        : 'text-white group-hover:text-green-400'
+                                }`}>
                                     {track.title}
                                 </h4>
                                 <p className="text-sm text-gray-400 truncate">
@@ -309,7 +288,7 @@ const Profile = () => {
                             </div>
 
                             <h3 className="text-sm font-medium text-white truncate group-hover:text-green-400 transition-colors">
-                                {playlist.title}
+                                {playlist.name}
                             </h3>
                             <p className="text-xs text-gray-400 mt-1">By Minhaj</p>
                         </div>

@@ -1253,11 +1253,14 @@ export function ProfileInfo() {
 export function Terms() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { loading, error } = useSelector((state) => state.auth);
+  const {formData, loading, error } = useSelector((state) => state.auth);
   
   const handleSignUp = async () => {
     try {
-      await dispatch(registerUser()).unwrap();
+      await dispatch(registerUser({
+        name: formData.name,
+        email: formData.email,
+      })).unwrap();
       toast.success("Registration successful!");
       navigate("/");
     } catch (err) {

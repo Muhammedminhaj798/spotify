@@ -3,6 +3,7 @@
 // import asyncHandler from "express-async-handler"; // Optional: for cleaner async error handling
 
 import Playlist from "../../model/playlistSchema.js";
+import Song from "../../model/songSchema.js";
 
 const addPlaylist = async (req, res) => {
   const { name, isPublic, description} = req.body;
@@ -45,6 +46,82 @@ export const getPlaylists = async (req, res) => {
     res.status(200).json(playlists);
   } catch (err) {
     res.status(500).json({ message: err.message });
+  }
+};
+export const playlistById = async(req, res) => {
+  try {
+    const id = req.params.id;
+    const playlist = await Playlist.findById(id).populate("songs");
+    if (!playlist) {
+      return res.status(404).json({ message: "Playlist not found" });
+      }
+      res.status(200).json({
+        message: "Playlist found",
+        status:"success",
+        data: playlist
+      });
+      } catch (err) {
+        res.status(500).json({ message: err.message });
+      }
+}
+
+export const addSongPlaylist = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { songId } = req.body;
+
+    // Validate inputs
+    if (!id || !songId) {
+      return res.status(400).json({
+        status: "error",
+        message: "Playlist ID and Song ID are required",
+      });
+    }
+
+    // Find the playlist
+    const playlist = await Playlist.findById(id);
+    if (!playlist) {
+      return res.status(404).json({
+        status: "error",
+        message: "Playlist not found",
+      });
+    }
+
+    // Find the song
+    const song = await Song.findById(songId);
+    if (!song) {
+      return res.status(404).json({
+        status: "error",
+        message: "Song not found",
+      });
+    }
+
+    // Check for duplicate song
+    if (playlist.songs.includes(songId)) {
+      return res.status(400).json({
+        status: "error",
+        message: "Song already exists in the playlist",
+      });
+    }
+
+    // Add song to playlist and save
+    playlist.songs.push(songId);
+    await playlist.save();
+
+    // Send success response
+    res.status(200).json({
+      status: "success",
+      message: "Song added to playlist",
+      data: playlist,
+    });
+  } catch (err) {
+    // Log error for debugging
+    console.error("Error adding song to playlist:", err);
+
+    res.status(500).json({
+      status: "error",
+      message: "Internal server error",
+    });
   }
 };
 

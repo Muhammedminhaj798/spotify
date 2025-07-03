@@ -101,7 +101,7 @@ export default function Navbar() {
           </div>
 
           {/* Home Button */}
-          <button className="p-2 hover:bg-gray-800 rounded-full transition-colors">
+          <button onClick={() => navigate('/')} className="p-2 hover:bg-gray-800 rounded-full transition-colors">
             <Home size={24} className="text-white" />
           </button>
         </div>
@@ -134,21 +134,21 @@ export default function Navbar() {
         {/* Right Section - User Controls */}
         <div className="flex items-center space-x-2">
           {/* Install App Button */}
-          <button className="hidden md:flex items-center space-x-2 text-gray-300 hover:text-white transition-colors px-4 py-2 rounded-full hover:bg-gray-800">
+          {/* <button className="hidden md:flex items-center space-x-2 text-gray-300 hover:text-white transition-colors px-4 py-2 rounded-full hover:bg-gray-800">
             <Download size={16} />
             <span className="text-sm font-medium">Install App</span>
-          </button>
+          </button> */}
 
           {/* Notifications */}
-          <button className="p-2 hover:bg-gray-800 rounded-full transition-colors relative">
+          {/* <button className="p-2 hover:bg-gray-800 rounded-full transition-colors relative">
             <Bell size={20} className="text-gray-300 hover:text-white" />
             <div className="absolute -top-1 -right-1 w-3 h-3 bg-blue-600 rounded-full"></div>
-          </button>
+          </button> */}
 
           {/* Settings */}
-          <button className="p-2 hover:bg-gray-800 rounded-full transition-colors">
+          {/* <button className="p-2 hover:bg-gray-800 rounded-full transition-colors">
             <Settings size={20} className="text-gray-300 hover:text-white" />
-          </button>
+          </button> */}
 
           {/* User Profile with Dropdown */}
           <div className="relative" ref={dropdownRef}>
