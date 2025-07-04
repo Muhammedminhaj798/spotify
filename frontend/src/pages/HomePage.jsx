@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Play, MoreHorizontal } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllArtist } from '../redux/admin/adminArtistSlice';
@@ -8,19 +8,21 @@ import { useNavigate } from 'react-router-dom';
 
 const HomePage = () => {
     const { artists } = useSelector((state) => state.adminArtist)
+    const { songs } = useSelector((state) => state.adminSongs)
+    const { id: currentSongId } = useSelector((state) => state.playSong)
+    const audioPlayerRef = useRef(null);
 
-    // console.log('artists', artists);
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
     useEffect(() => {
         dispatch(getAllArtist())
+        dispatch(getAllSongs())
     }, [])
 
     const popularArtists = artists && artists.length > 0
         ? artists.slice(0, 10).filter(artist => artist && artist.name)
         : [];
-    console.log(popularArtists)
 
     const popularAlbums = [
         {
@@ -55,52 +57,21 @@ const HomePage = () => {
         }
     ];
 
-    const { songs } = useSelector((state) => state.adminSongs)
-    console.log("songs", songs);
-    useEffect(() => {
-        dispatch(getAllSongs())
-    }, [])
     const trendingSongs = songs && songs.length > 0
         ? songs.slice(0, 10).filter(song => song && song.title)
         : [];
-    // const trendingSongs = [
-    //     {
-    //         title: "Shree Hanuman Chalisa",
-    //         artist: "Hariharan",
-    //         image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=300&h=300&fit=crop",
-    //         color: "from-orange-500 to-red-600"
-    //     },
-    //     {
-    //         title: 'Jugraafiya - From "Super 30"',
-    //         artist: "Udit Narayan, Shreya Ghoshal",
-    //         image: "https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=300&h=300&fit=crop",
-    //         color: "from-yellow-400 to-orange-500"
-    //     },
-    //     {
-    //         title: "Raat Ke Shikari",
-    //         artist: "Masoom Sharma",
-    //         image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=300&h=300&fit=crop",
-    //         color: "from-red-600 to-gray-800"
-    //     },
-    //     {
-    //         title: "Aur Mohabbat Kitti Karoon",
-    //         artist: "Pritam, Arijit Singh, Sandeep Srivastava",
-    //         image: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=300&h=300&fit=crop",
-    //         color: "from-blue-500 to-purple-600"
-    //     },
-    //     {
-    //         title: 'Saiyaara (From "Saiyaara")',
-    //         artist: "Tanishk Bagchi, Faheem Abdullah, Arslan Nizami",
-    //         image: "https://images.unsplash.com/photo-1445985543470-41fba5c3144a?w=300&h=300&fit=crop",
-    //         color: "from-pink-500 to-red-600"
-    //     },
-    //     {
-    //         title: "Chirapunji",
-    //         artist: "Nihal Sadiq, Hanan Shaah",
-    //         image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=300&h=300&fit=crop",
-    //         color: "from-green-500 to-teal-600"
-    //     }
-    // ];
+
+    // Handle song click with automatic play
+    const handleSongClick = (song) => {
+        // Dispatch the song selection to Redux
+        dispatch(playSongRequest(song._id));
+        
+        // Trigger automatic play by sending a custom event to the audio player
+        setTimeout(() => {
+            const event = new CustomEvent('autoPlay', { detail: { songId: song._id } });
+            window.dispatchEvent(event);
+        }, 100); // Small delay to ensure Redux state is updated
+    };
 
     const ArtistCard = ({ artist }) => (
         <div className="flex-shrink-0 group cursor-pointer">
@@ -140,7 +111,6 @@ const HomePage = () => {
 
     const SongCard = ({ song }) => (
         <div className="flex-shrink-0 group cursor-pointer">
-
             <div className="relative">
                 <div className={`w-52 h-52 rounded-lg bg-gradient-to-br ${song.color} overflow-hidden group-hover:scale-105 transition-transform duration-300`}>
                     <img
@@ -149,7 +119,10 @@ const HomePage = () => {
                         className="w-full h-full object-cover opacity-80"
                     />
                 </div>
-                <div className="absolute inset-0 group-hover:bg-opacity-20 rounded-lg transition-all duration-300 flex items-center justify-center" onClick={() => dispatch(playSongRequest(song._id))}>
+                <div 
+                    className="absolute inset-0 group-hover:bg-opacity-20 rounded-lg transition-all duration-300 flex items-center justify-center" 
+                    onClick={() => handleSongClick(song)}
+                >
                     <Play className="w-16 h-16 text-white opacity-0 group-hover:opacity-100 transition-all duration-300" fill="white" />
                 </div>
             </div>

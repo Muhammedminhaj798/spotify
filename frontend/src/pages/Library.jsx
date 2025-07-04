@@ -196,24 +196,24 @@ const Library = () => {
             >
               {/* Icon/Image */}
               <div className={`w-12 h-12 rounded-md flex items-center justify-center ${item?.bgColor} flex-shrink-0`}>
-                {item.image ? (
+                {console.log("sdhfjek.jf:", item.songs.map(a=>a.coverImage))}
+                {item.songs.map(a=>a.coverImage) ? (
                   <img
-                    src={item?.image}
-                    alt={item.name}
+                    src={item?.songs.map(a=>a.coverImage) }
+                    alt={<Music className="w-6 h-6 text-gray-400" />}
                     className="w-full h-full object-cover rounded-md"
                   />
                 ) : (
                   item.icon || <Music className="w-6 h-6 text-gray-400" />
                 )}
               </div>
-
               {/* Content */}
               <div className="flex-1 min-w-0">
                 <h3 className="text-white font-medium truncate">{item.name}</h3>
                 <p className="text-sm text-gray-400 truncate">
                   {item?.type}
-                  {item.songs && ` • ${item.songs} songs`}
-                  {item.creator && ` • ${item.creator}`}
+                  {item.songs.title && ` • ${item.songs.title} songs`}
+                  {item.creator.name && `Playlist • ${item.creator.name}`}
                 </p>
               </div>
 

@@ -39,7 +39,8 @@ const addPlaylist = async (req, res) => {
 export const getPlaylists = async (req, res) => {
   try {
     const id = req.user.id;
-    const playlists = await Playlist.find({ creator: id }).populate("songs");
+    const playlists = await Playlist.find({ creator: id }).populate("songs")
+    .populate("creator");
     if (!playlists) {
       return res.status(404).json({ message: "No playlists found" });
     }

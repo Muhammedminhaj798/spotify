@@ -9,7 +9,6 @@ const ViewPlaylist = () => {
     const { id } = useParams();
     const dispatch = useDispatch();
     const { playlistById, loading, error } = useSelector((state) => state.userPlaylist);
-    console.log(playlistById);
     
     const [hoveredSong, setHoveredSong] = useState(null);
     const [currentPlayingSong, setCurrentPlayingSong] = useState(null);
@@ -17,7 +16,6 @@ const ViewPlaylist = () => {
     useEffect(() => {
         if (id) {
             dispatch(fetchPlaylistById(id));
-            console.log("Fetching playlist for ID:", id);
         }
     }, [id, dispatch]);
 
@@ -64,7 +62,6 @@ const ViewPlaylist = () => {
     const handlePlaySong = (song) => {
         setCurrentPlayingSong(currentPlayingSong === song.id ? null : song.id);
         // Add your play logic here
-        console.log("Playing song:", song);
     };
 
     const handlePlayPlaylist = () => {
