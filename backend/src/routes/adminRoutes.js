@@ -39,6 +39,6 @@ adminRoutes
   .get("/getAllArtist", tryCatch(getAllArtist))
   .patch("/disableArtist/:id", tryCatch(disableArstist))
   .patch("/toggleDisableArtist/:id", tryCatch(toggleDisableArtist))
-  .patch('/updatedArtist/:id',upload,tryCatch(updatedArtist))
+  .patch("/updatedArtist/:id", upload, tryCatch(updatedArtist));
 
 export default adminRoutes;

@@ -6,9 +6,9 @@ import { getAllArtist } from '../redux/admin/adminArtistSlice';
 const ShowAllArtist = () => {
     const { artists } = useSelector((state) => state.adminArtist);
     const dispatch = useDispatch()
-    useEffect(()=>{
+    useEffect(() => {
         dispatch(getAllArtist())
-    },[])
+    }, [])
     console.log(artists);
 
     const ArtistCard = ({ artist }) => (

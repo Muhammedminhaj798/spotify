@@ -725,7 +725,7 @@
 //   );
 // }
 
-import { useState ,useEffect } from "react";
+import { useState, useEffect } from "react";
 import { ArrowLeft, EyeOff, Eye, ChevronDown } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -799,8 +799,8 @@ export function Signup() {
             value={formData.email}
             onChange={handleEmailChange}
             className={`w-full px-4 py-3 bg-gray-900 text-white border-2 rounded-md focus:outline-none focus:ring-0 ${!isEmailValid && formData.email
-                ? "border-red-500"
-                : "border-gray-600 focus:border-white"
+              ? "border-red-500"
+              : "border-gray-600 focus:border-white"
               }`}
             placeholder="name@domain.com"
           />
@@ -1253,8 +1253,8 @@ export function ProfileInfo() {
 export function Terms() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const {formData, loading, error } = useSelector((state) => state.auth);
-  
+  const { formData, loading, error } = useSelector((state) => state.auth);
+
   const handleSignUp = async () => {
     try {
       await dispatch(registerUser({
@@ -1356,8 +1356,8 @@ export function Terms() {
           onClick={handleSignUp}
           disabled={loading}
           className={`w-full py-4 rounded-full text-lg font-bold transition-all duration-200 ${loading
-              ? "bg-gray-600 text-gray-400 cursor-not-allowed"
-              : "bg-green-500 hover:bg-green-400 text-black transform hover:scale-105"
+            ? "bg-gray-600 text-gray-400 cursor-not-allowed"
+            : "bg-green-500 hover:bg-green-400 text-black transform hover:scale-105"
             }`}
         >
           {loading ? (

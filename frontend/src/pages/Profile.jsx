@@ -12,29 +12,29 @@ const Profile = () => {
     const { artists } = useSelector((state) => state.adminArtist)
     const { songs } = useSelector((state) => state.adminSongs)
     const { currentSong, isPlaying } = useSelector((state) => state.playSong) // Add this to get current playing song
-    const {playlists} = useSelector((state) => state.userPlaylist)
-    console.log("playlist",playlists);
-    useEffect(()=>{
+    const { playlists } = useSelector((state) => state.userPlaylist)
+    console.log("playlist", playlists);
+    useEffect(() => {
         dispatch(getPlaylist())
-    },[])
+    }, [])
 
 
     useEffect(() => {
         dispatch(getAllSongs())
     }, [])
-    
+
     useEffect(() => {
         dispatch(getAllArtist())
     }, [])
-    
+
     const popularArtists = artists && artists.length > 0
-    ? artists.slice(0, 5).filter(artist => artist && artist.name)
-    : [];
-    
+        ? artists.slice(0, 5).filter(artist => artist && artist.name)
+        : [];
+
     const topTracks = songs && songs.length > 0
-    ? songs.slice(0, 5).filter(song => song && song.title)
-    : [];
-    
+        ? songs.slice(0, 5).filter(song => song && song.title)
+        : [];
+
     console.log("songs :", topTracks);
 
     // Sample playlists data
@@ -134,7 +134,7 @@ const Profile = () => {
                         >
                             <div className="relative mb-3">
                                 <img
-                                    src={artist.image }
+                                    src={artist.image}
                                     alt={artist.name}
                                     className="w-full aspect-square object-cover rounded-full shadow-lg group-hover:shadow-xl transition-shadow"
                                 />
@@ -171,8 +171,8 @@ const Profile = () => {
                             <div className="w-6 flex items-center justify-center">
                                 {isCurrentTrackPlaying(track._id) ? (
                                     // Show pause button when song is playing
-                                    <button 
-                                        className="text-green-400 hover:text-green-300" 
+                                    <button
+                                        className="text-green-400 hover:text-green-300"
                                         onClick={() => handlePlayPause(track._id)}
                                     >
                                         <Pause className="w-4 h-4 fill-current" />
@@ -182,8 +182,8 @@ const Profile = () => {
                                         <span className="text-gray-400 group-hover:hidden text-sm">
                                             {index + 1}
                                         </span>
-                                        <button 
-                                            className="hidden group-hover:block text-white hover:text-green-400" 
+                                        <button
+                                            className="hidden group-hover:block text-white hover:text-green-400"
                                             onClick={() => handlePlayPause(track._id)}
                                         >
                                             <Play className="w-4 h-4 fill-current" />
@@ -201,11 +201,10 @@ const Profile = () => {
 
                             {/* Track Info */}
                             <div className="flex-1 min-w-0">
-                                <h4 className={`font-medium truncate transition-colors ${
-                                    isCurrentTrackPlaying(track._id) 
-                                        ? 'text-green-400' 
-                                        : 'text-white group-hover:text-green-400'
-                                }`}>
+                                <h4 className={`font-medium truncate transition-colors ${isCurrentTrackPlaying(track._id)
+                                    ? 'text-green-400'
+                                    : 'text-white group-hover:text-green-400'
+                                    }`}>
                                     {track.title}
                                 </h4>
                                 <p className="text-sm text-gray-400 truncate">

@@ -6,9 +6,8 @@ import Playlist from "../../model/playlistSchema.js";
 import Song from "../../model/songSchema.js";
 
 const addPlaylist = async (req, res) => {
-  const { name, isPublic, description} = req.body;
-  console.log("playlist :", name,description);
-
+  const { name, isPublic, description } = req.body;
+  console.log("playlist :", name, description);
 
   if (!name) {
     res.status(400);
@@ -39,8 +38,9 @@ const addPlaylist = async (req, res) => {
 export const getPlaylists = async (req, res) => {
   try {
     const id = req.user.id;
-    const playlists = await Playlist.find({ creator: id }).populate("songs")
-    .populate("creator");
+    const playlists = await Playlist.find({ creator: id })
+      .populate("songs")
+      .populate("creator");
     if (!playlists) {
       return res.status(404).json({ message: "No playlists found" });
     }
@@ -49,22 +49,22 @@ export const getPlaylists = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
-export const playlistById = async(req, res) => {
+export const playlistById = async (req, res) => {
   try {
     const id = req.params.id;
     const playlist = await Playlist.findById(id).populate("songs");
     if (!playlist) {
       return res.status(404).json({ message: "Playlist not found" });
-      }
-      res.status(200).json({
-        message: "Playlist found",
-        status:"success",
-        data: playlist
-      });
-      } catch (err) {
-        res.status(500).json({ message: err.message });
-      }
-}
+    }
+    res.status(200).json({
+      message: "Playlist found",
+      status: "success",
+      data: playlist,
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
 
 export const addSongPlaylist = async (req, res) => {
   try {
@@ -126,34 +126,33 @@ export const addSongPlaylist = async (req, res) => {
   }
 };
 
-export const deletePlaylist = async(req,res) => {
-  const {id} = req.params
-  await Playlist.findByIdAndDelete(id)
-  res.status(200).json("playlist deleted successfully")
-}
+export const deletePlaylist = async (req, res) => {
+  const { id } = req.params;
+  await Playlist.findByIdAndDelete(id);
+  res.status(200).json("playlist deleted successfully");
+};
 
-export const getAllPlaylist = async(req,res) => {
-  try{
-    const playlists = await Playlist.find().populate("songs")
+export const getAllPlaylist = async (req, res) => {
+  try {
+    const playlists = await Playlist.find().populate("songs");
 
-    if(!playlists){
-      return res.status(404).json({message: "No playlists found"})
+    if (!playlists) {
+      return res.status(404).json({ message: "No playlists found" });
     }
-
 
     const formattedPlaylist = playlists.map((playlist) => ({
       ...Playlist.toObject(),
-      songs:playlist.songs.map((song) => ({
+      songs: playlist.songs.map((song) => ({
         ...song.toObject(),
-        duration:formattedPlaylist(song.duration)
-      }))
-    }))
+        duration: formattedPlaylist(song.duration),
+      })),
+    }));
     res.status(200).json({
-      playlists:formattedPlaylist
-    })
-  } catch(err){
-    res.status(500).json({message:err.message})
-    }
-}
+      playlists: formattedPlaylist,
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
 
 export default addPlaylist;
