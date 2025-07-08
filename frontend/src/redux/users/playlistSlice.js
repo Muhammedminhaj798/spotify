@@ -70,6 +70,30 @@ export const getPlaylist = createAsyncThunk(
   }
 );
 
+export const addSongPlaylist = createAsyncThunk(
+  "playlist/addSongPlaylist",
+  async ({ playlistId, songId }, { rejectWithValue }) => {
+    try {
+      console.log(playlistId, songId);
+      const token = Cookies.get("user");
+      const response = await axiosInstance.post(
+        `/user/addSongPlaylist/${playlistId}`,
+        {
+          songId: songId,
+        },
+        {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
+
 const playlistSlice = createSlice({
   name: "playlist",
   initialState,
@@ -114,6 +138,23 @@ const playlistSlice = createSlice({
         state.loading = false;
         state.error = null;
         state.playlistById = action.payload.data;
+      })
+      .addCase(addSongPlaylist.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(addSongPlaylist.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+
+        state.playlistById = [...state.playlistById, action.payload.data];
+      })
+      .addCase(addSongPlaylist.rejected, (state, action) => {
+        state.loading = false;
+        state.error =
+          action.payload.message ||
+          action.payload ||
+          "Failed to add song to playlist";
       });
   },
 });

@@ -68,11 +68,12 @@ export const playlistById = async (req, res) => {
 
 export const addSongPlaylist = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { playlistId } = req.params ;
     const { songId } = req.body;
-
+    console.log("playlist:", playlistId);
+    console.log("playlist:", songId);
     // Validate inputs
-    if (!id || !songId) {
+    if (!playlistId || !songId) {
       return res.status(400).json({
         status: "error",
         message: "Playlist ID and Song ID are required",
@@ -80,7 +81,7 @@ export const addSongPlaylist = async (req, res) => {
     }
 
     // Find the playlist
-    const playlist = await Playlist.findById(id);
+    const playlist = await Playlist.findById(playlistId);
     if (!playlist) {
       return res.status(404).json({
         status: "error",

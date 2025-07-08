@@ -18,6 +18,9 @@ import {
 } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllSongs } from '../redux/admin/adminSongSlice';
+import {  addSongPlaylist } from '../redux/users/playlistSlice';
+// Import the action to update playlists if available
+// Example: import { addSongToPlaylist } from '../redux/userPlaylistSlice';
 
 const SpotifyAudioPlayer = () => {
     const [isPlaying, setIsPlaying] = useState(false);
@@ -27,13 +30,13 @@ const SpotifyAudioPlayer = () => {
     const [isMuted, setIsMuted] = useState(false);
     const [isRepeat, setIsRepeat] = useState(false);
     const [isShuffle, setIsShuffle] = useState(false);
-    const [isLiked, setIsLiked] = useState(false);
     const [currentSongIndex, setCurrentSongIndex] = useState(0);
     const [shuffledPlaylist, setShuffledPlaylist] = useState([]);
     const [showPlaylistDropdown, setShowPlaylistDropdown] = useState(false);
     const [showCreatePlaylist, setShowCreatePlaylist] = useState(false);
     const [newPlaylistName, setNewPlaylistName] = useState('');
     const [playlists, setPlaylists] = useState([]);
+    const [songPlaylistStatus, setSongPlaylistStatus] = useState({}); // Track which playlists contain current song
     
     const dispatch = useDispatch();
     const audioRef = useRef(null);
@@ -55,8 +58,21 @@ const SpotifyAudioPlayer = () => {
     useEffect(() => {
         if (userPlaylists && userPlaylists.length > 0) {
             setPlaylists(userPlaylists);
+            
+            // Check which playlists contain the current song
+            const currentSongId = id;
+            const songStatus = {};
+            
+            userPlaylists.forEach(playlist => {
+                // Check if current song exists in this playlist
+                // Assuming playlist has a 'songs' array with song IDs
+                const songExists = playlist.songs && playlist.songs.some(songId => songId === currentSongId);
+                songStatus[playlist._id || playlist.id] = songExists;
+            });
+            
+            setSongPlaylistStatus(songStatus);
         }
-    }, [userPlaylists]);
+    }, [userPlaylists, id]);
 
     useEffect(() => {
         if (songs && songs.length > 0) {
@@ -74,7 +90,6 @@ const SpotifyAudioPlayer = () => {
         const handleAutoPlay = (event) => {
             const { songId } = event.detail;
             if (songId && songId === id) {
-                // Small delay to ensure audio is loaded
                 setTimeout(() => {
                     const audio = audioRef.current;
                     if (audio && audio.src) {
@@ -130,7 +145,6 @@ const SpotifyAudioPlayer = () => {
             };
         }
         
-        // Priority logic for current track selection
         if (id && songs && songs.length > 0) {
             const playedSong = songs.find((song) => song._id === id);
             
@@ -170,7 +184,6 @@ const SpotifyAudioPlayer = () => {
     useEffect(() => {
         const audio = audioRef.current;
         if (audio && currentTrack.src) {
-            // Reset audio state when track changes
             audio.load();
             audio.volume = isMuted ? 0 : volume;
 
@@ -234,7 +247,7 @@ const SpotifyAudioPlayer = () => {
 
         setCurrentSongIndex(newIndex);
         setCurrentTime(0);
-        setIsPlaying(false); // Reset play state when manually navigating
+        setIsPlaying(false);
     };
 
     const handleNextSong = () => {
@@ -249,7 +262,7 @@ const SpotifyAudioPlayer = () => {
 
         setCurrentSongIndex(newIndex);
         setCurrentTime(0);
-        setIsPlaying(false); // Reset play state when manually navigating
+        setIsPlaying(false);
     };
 
     const handleProgressChange = (e) => {
@@ -291,27 +304,62 @@ const SpotifyAudioPlayer = () => {
     };
 
     const handleAddToPlaylist = (playlistId) => {
-        setPlaylists(prev => prev.map(playlist => 
-            playlist.id === playlistId 
-                ? { ...playlist, isLiked: !playlist.isLiked }
-                : playlist
-        ));
+        const currentSongId = id;
         
-        console.log(`Added song to playlist ${playlistId}`);
+        if (!currentSongId) {
+            console.error('No song selected');
+            return;
+        }
+        
+        // Toggle song in the specific playlist
+        const isCurrentlyInPlaylist = songPlaylistStatus[playlistId] || false;
+        
+        // Update the local state
+        setSongPlaylistStatus(prev => ({
+            ...prev,
+            [playlistId]: !isCurrentlyInPlaylist
+        }));
+        
+        // Dispatch action to backend
+        if (isCurrentlyInPlaylist) {
+            // Remove song from playlist
+            console.log(`Removing song ${currentSongId} from playlist ${playlistId}`);
+            // dispatch(removeSongFromPlaylist({ playlistId, songId: currentSongId }));
+        } else {
+            // Add song to playlist
+            console.log(`Adding song ${currentSongId} to playlist ${playlistId}`);
+            dispatch(addSongPlaylist({ playlistId, songId: currentSongId }));
+        }
+        
+        // Optional: Close dropdown after adding
+        // setShowPlaylistDropdown(false);
     };
 
     const handleCreatePlaylist = () => {
         if (newPlaylistName.trim()) {
             const newPlaylist = {
                 id: Date.now(),
+                _id: Date.now(), // For backend compatibility
                 name: newPlaylistName.trim(),
-                songCount: 1,
-                isLiked: true
+                songs: [id], // Add current song to new playlist
+                songCount: 1
             };
+            
             setPlaylists(prev => [...prev, newPlaylist]);
+            
+            // Update song playlist status
+            setSongPlaylistStatus(prev => ({
+                ...prev,
+                [newPlaylist.id]: true
+            }));
+            
             setNewPlaylistName('');
             setShowCreatePlaylist(false);
-            setShowPlaylistDropdown(false);
+            
+            // Dispatch action to create playlist in backend
+            // dispatch(createPlaylist({ name: newPlaylistName.trim(), songId: id }));
+            
+            console.log(`Created new playlist: ${newPlaylistName.trim()} with song ${id}`);
         }
     };
 
@@ -357,9 +405,7 @@ const SpotifyAudioPlayer = () => {
                             onClick={handleLikeClick}
                             className="text-gray-400 hover:text-white transition-colors"
                         >
-                            <Heart
-                                className={`w-4 h-4 ${isLiked ? 'fill-green-500 text-green-500' : ''}`}
-                            />
+                            <Heart className="w-4 h-4" />
                         </button>
                         
                         {/* Playlist Dropdown */}
@@ -412,8 +458,8 @@ const SpotifyAudioPlayer = () => {
                                     <div className="mt-2 max-h-60 overflow-y-auto">
                                         {playlists.map((playlist) => (
                                             <button
-                                                key={playlist.id}
-                                                onClick={() => handleAddToPlaylist(playlist.id)}
+                                                key={playlist._id || playlist.id}
+                                                onClick={() => handleAddToPlaylist(playlist._id || playlist.id)}
                                                 className="w-full flex items-center space-x-3 p-2 hover:bg-gray-700 rounded-md transition-colors"
                                             >
                                                 <div className="w-8 h-8 bg-gray-600 rounded-sm flex items-center justify-center">
@@ -421,9 +467,11 @@ const SpotifyAudioPlayer = () => {
                                                 </div>
                                                 <div className="flex-1 text-left">
                                                     <div className="text-white text-sm">{playlist.name}</div>
-                                                    <div className="text-gray-400 text-xs">{playlist.songCount} songs</div>
+                                                    <div className="text-gray-400 text-xs">
+                                                        {playlist.songCount || playlist.songs?.length || 0} songs
+                                                    </div>
                                                 </div>
-                                                {playlist.isLiked && (
+                                                {songPlaylistStatus[playlist._id || playlist.id] && (
                                                     <Check className="w-4 h-4 text-green-500" />
                                                 )}
                                             </button>

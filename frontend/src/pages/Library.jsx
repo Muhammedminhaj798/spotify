@@ -196,7 +196,6 @@ const Library = () => {
             >
               {/* Icon/Image */}
               <div className={`w-12 h-12 rounded-md flex items-center justify-center ${item?.bgColor} flex-shrink-0`}>
-                {console.log("sdhfjek.jf:", item.songs.map(a=>a.coverImage))}
                 {item.songs.map(a=>a.coverImage) ? (
                   <img
                     src={item?.songs.map(a=>a.coverImage) }
