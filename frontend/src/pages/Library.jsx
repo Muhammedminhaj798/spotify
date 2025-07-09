@@ -3,6 +3,7 @@ import { Search, Plus, ArrowUpDown, Heart, Music, User, EllipsisVertical, Trash2
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getPlaylist } from '../redux/users/playlistSlice';
+import { getAllArtist } from '../redux/admin/adminArtistSlice';
 
 const Library = () => {
   const [activeTab, setActiveTab] = useState('Playlists');
@@ -86,6 +87,10 @@ const Library = () => {
   }, [activeDropdown]);
 
   const { artists } = useSelector((state) => state.adminArtist)
+
+  useEffect(() => {
+    dispatch(getAllArtist())
+  }, [])
 
   const popularArtists = artists && artists.length > 0
     ? artists.slice(0, 4).filter(artist => artist && artist.name)
@@ -196,14 +201,16 @@ const Library = () => {
             >
               {/* Icon/Image */}
               <div className={`w-12 h-12 rounded-md flex items-center justify-center ${item?.bgColor} flex-shrink-0`}>
-                {item.songs.map(a=>a.coverImage) ? (
-                  <img
-                    src={item?.songs.map(a=>a.coverImage) }
-                    alt={<Music className="w-6 h-6 text-gray-400" />}
-                    className="w-full h-full object-cover rounded-md"
-                  />
+                {item.songs ? (
+                  <div className="w-full aspect-square bg-gray-700 rounded-lg flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow">
+                    <Music />
+                  </div>
                 ) : (
-                  item.icon || <Music className="w-6 h-6 text-gray-400" />
+                  <img
+                    src={item.songs?.[0]?.coverImage}
+                    // alt={item.title}
+                    className="w-full aspect-square object-cover rounded-lg shadow-lg group-hover:shadow-xl transition-shadow"
+                  />
                 )}
               </div>
               {/* Content */}
@@ -211,8 +218,8 @@ const Library = () => {
                 <h3 className="text-white font-medium truncate">{item.name}</h3>
                 <p className="text-sm text-gray-400 truncate">
                   {item?.type}
-                  {item.songs.title && ` • ${item.songs.title} songs`}
-                  {item.creator.name && `Playlist • ${item.creator.name}`}
+                  {item.songs?.[0]?.title && ` • ${item.songs?.[0]?.title} songs`}
+                  {item.creator?.name && `Playlist • ${item.creator?.name}`}
                 </p>
               </div>
 

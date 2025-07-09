@@ -5,9 +5,11 @@ import { getAllArtist } from '../redux/admin/adminArtistSlice';
 import { playSongRequest } from '../redux/users/playSong';
 import { getAllSongs } from '../redux/admin/adminSongSlice';
 import { getPlaylist } from '../redux/users/playlistSlice';
+import { useNavigate } from 'react-router-dom';
 
 const Profile = () => {
     const dispatch = useDispatch()
+    const navigate = useNavigate()
     const user = JSON.parse(localStorage.getItem("user"))
     const { artists } = useSelector((state) => state.adminArtist)
     const { songs } = useSelector((state) => state.adminSongs)
@@ -220,13 +222,13 @@ const Profile = () => {
                             </div>
 
                             {/* Like Button */}
-                            <button className="text-gray-400 hover:text-white transition-colors">
+                            {/* <button className="text-gray-400 hover:text-white transition-colors">
                                 {track.isLiked ? (
                                     <Check className="w-4 h-4 text-green-500" />
                                 ) : (
                                     <Plus className="w-4 h-4" />
                                 )}
-                            </button>
+                            </button> */}
 
                             {/* Duration */}
                             <span className="text-gray-400 text-sm w-12 text-right">
@@ -234,9 +236,9 @@ const Profile = () => {
                             </span>
 
                             {/* More Options */}
-                            <button className="opacity-0 group-hover:opacity-100 text-gray-400 hover:text-white transition-all">
+                            {/* <button className="opacity-0 group-hover:opacity-100 text-gray-400 hover:text-white transition-all">
                                 <MoreHorizontal className="w-4 h-4" />
-                            </button>
+                            </button> */}
                         </div>
                     ))}
                 </div>
@@ -254,27 +256,16 @@ const Profile = () => {
                         <div
                             key={playlist.id}
                             className="group cursor-pointer p-3 rounded-lg hover:bg-gray-800 transition-all duration-200"
+                            onClick={() => navigate(`/viewPlaylist/${playlist._id}`)}
                         >
                             <div className="relative mb-3">
-                                {playlist.isDefault ? (
+                                {playlist.songs ? (
                                     <div className="w-full aspect-square bg-gray-700 rounded-lg flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow">
-                                        <svg
-                                            className="w-12 h-12 text-gray-400"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            viewBox="0 0 24 24"
-                                        >
-                                            <path
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                strokeWidth={1.5}
-                                                d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"
-                                            />
-                                        </svg>
+                                        <Music />
                                     </div>
                                 ) : (
                                     <img
-                                        src={playlist.image}
+                                        src={playlist.songs.coverImage}
                                         alt={playlist.title}
                                         className="w-full aspect-square object-cover rounded-lg shadow-lg group-hover:shadow-xl transition-shadow"
                                     />
@@ -282,14 +273,14 @@ const Profile = () => {
 
                                 {/* Play Button Overlay */}
                                 <button className="absolute bottom-2 right-2 w-12 h-12 bg-green-500 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-200 hover:bg-green-400 hover:scale-105">
-                                    <Play className="w-5 h-5 fill-black text-black ml-0.5" />
+                                    <Play className="w-5 h-5 ml-0.5" />
                                 </button>
                             </div>
 
                             <h3 className="text-sm font-medium text-white truncate group-hover:text-green-400 transition-colors">
                                 {playlist.name}
                             </h3>
-                            <p className="text-xs text-gray-400 mt-1">By Minhaj</p>
+                            <p className="text-xs text-gray-400 mt-1">{playlist.creator.name}</p>
                         </div>
                     ))}
                 </div>

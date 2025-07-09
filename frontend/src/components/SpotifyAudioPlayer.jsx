@@ -19,6 +19,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllSongs } from '../redux/admin/adminSongSlice';
 import {  addSongPlaylist } from '../redux/users/playlistSlice';
+import { useNavigate } from 'react-router-dom';
 // Import the action to update playlists if available
 // Example: import { addSongToPlaylist } from '../redux/userPlaylistSlice';
 
@@ -43,7 +44,7 @@ const SpotifyAudioPlayer = () => {
     const progressBarRef = useRef(null);
     const volumeBarRef = useRef(null);
     const playlistDropdownRef = useRef(null);
-
+    const navigate = useNavigate()
     // Redux selectors with fallback values
     const { songs = [] } = useSelector((state) => state.adminSongs || {});
     const { id } = useSelector((state) => state.playSong || {});
@@ -73,7 +74,7 @@ const SpotifyAudioPlayer = () => {
             setSongPlaylistStatus(songStatus);
         }
     }, [userPlaylists, id]);
-
+    
     useEffect(() => {
         if (songs && songs.length > 0) {
             if (isShuffle) {
@@ -555,13 +556,10 @@ const SpotifyAudioPlayer = () => {
 
                 {/* Right - Volume Controls */}
                 <div className="flex items-center space-x-3 flex-1 justify-end">
-                    <button className="text-gray-400 hover:text-white transition-colors">
-                        <MoreHorizontal className="w-4 h-4" />
-                    </button>
 
-                    <button className="text-gray-400 hover:text-white transition-colors">
+                    <button onClick={()=> navigate('/SongFullScreen')} className="text-gray-400 hover:text-white transition-colors">
                         <Maximize2 className="w-4 h-4" />
-                    </button>
+                    </button>   
 
                     <button
                         onClick={toggleMute}

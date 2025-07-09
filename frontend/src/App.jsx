@@ -19,6 +19,7 @@ import AdminArtistEdit from './admin/AdminArtistEdit';
 import Profile from './pages/Profile';
 import ShowAllArtist from './pages/ShowAllArtist';
 import ViewPlaylist from './pages/ViewPlaylist';
+import SongFullScreen from './pages/SongFullScreen';
 
 
 
@@ -44,6 +45,7 @@ const App = () => {
           <Route path='/loginWithPass' element={<LoginWithPassword />} />
           <Route path='/adminLogin' element={<AdminLogin />} />
           <Route path='/addPlaylist' element={<AddPlaylist />} />
+          <Route path='/SongFullScreen' element={<SongFullScreen/>}/>
 
         </Routes>
       </>

@@ -68,7 +68,8 @@ export const playlistById = async (req, res) => {
 
 export const addSongPlaylist = async (req, res) => {
   try {
-    const { playlistId } = req.params ;
+    console.log("req:",req.params);
+    const  playlistId  = req.params.id;
     const { songId } = req.body;
     console.log("playlist:", playlistId);
     console.log("playlist:", songId);
