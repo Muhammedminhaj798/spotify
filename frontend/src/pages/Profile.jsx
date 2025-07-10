@@ -102,7 +102,7 @@ const Profile = () => {
                             {user.admin.username}
                         </h1>
                         <div className="flex flex-wrap items-center gap-1 text-sm text-gray-300">
-                            <span className="hover:text-white cursor-pointer">4 Public Playlists</span>
+                            <span className="hover:text-white cursor-pointer">{playlists.length} Public Playlists</span>
                         </div>
                     </div>
                 </div>
@@ -122,7 +122,7 @@ const Profile = () => {
                         <h2 className="text-xl sm:text-2xl font-bold mb-1">Top artists this month</h2>
                         <p className="text-sm text-gray-400">Only visible to you</p>
                     </div>
-                    <button className="text-sm font-medium text-gray-300 hover:text-white transition-colors">
+                    <button onClick={()=> navigate('/AllArtist')} className="text-sm font-medium text-gray-300 hover:text-white transition-colors">
                         Show all
                     </button>
                 </div>

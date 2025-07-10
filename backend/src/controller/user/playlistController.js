@@ -52,7 +52,7 @@ export const getPlaylists = async (req, res) => {
 export const playlistById = async (req, res) => {
   try {
     const id = req.params.id;
-    const playlist = await Playlist.findById(id).populate("songs");
+    const playlist = await Playlist.findById(id).populate("songs").populate('creator');
     if (!playlist) {
       return res.status(404).json({ message: "Playlist not found" });
     }
@@ -68,11 +68,8 @@ export const playlistById = async (req, res) => {
 
 export const addSongPlaylist = async (req, res) => {
   try {
-    console.log("req:",req.params);
     const  playlistId  = req.params.id;
     const { songId } = req.body;
-    console.log("playlist:", playlistId);
-    console.log("playlist:", songId);
     // Validate inputs
     if (!playlistId || !songId) {
       return res.status(400).json({
@@ -122,6 +119,69 @@ export const addSongPlaylist = async (req, res) => {
     console.error("Error adding song to playlist:", err);
 
     res.status(500).json({
+      status: "error",
+      message: "Internal server error",
+    });
+  }
+};
+
+export const removeSongPlaylist = async (req, res) => {
+  try {
+    const playlistId = req.params.id;
+    const { songId } = req.body; // Destructure songId from body
+
+    // Validate input
+    if (!playlistId || !songId) {
+      return res.status(400).json({
+        status: "error",
+        message: "Playlist ID and Song ID are required",
+      });
+    }
+
+    // Find playlist
+    const playlist = await Playlist.findById(playlistId);
+    if (!playlist) {
+      return res.status(404).json({
+        status: "error",
+        message: "Playlist not found",
+      });
+    }
+
+    // Find song
+    const song = await Song.findById(songId);
+    if (!song) {
+      return res.status(404).json({
+        status: "error",
+        message: "Song not found",
+      });
+    }
+
+    // Check if song exists in playlist
+    const songIndex = playlist.songs.findIndex(
+      (song) => song.toString() === songId
+    );
+    if (songIndex === -1) {
+      return res.status(404).json({
+        status: "error",
+        message: "Song not found in playlist",
+      });
+    }
+
+    // Remove song from playlist
+    playlist.songs.splice(songIndex, 1);
+    await playlist.save();
+
+    return res.status(200).json({
+      status: "success",
+      message: "Song removed from playlist successfully",
+      data: {
+        playlistId,
+        songId,
+      },
+    });
+  } catch (error) {
+    console.error("Error removing song from playlist:", error);
+    return res.status(500).json({
       status: "error",
       message: "Internal server error",
     });

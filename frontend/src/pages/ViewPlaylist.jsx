@@ -156,7 +156,7 @@ const ViewPlaylist = () => {
                         </p>
                         <div className="flex items-center gap-2 text-sm">
                             <span className="font-semibold">
-                                {playlistById.creator || playlistById.createdBy || 'Unknown'}
+                                {playlistById.creator?.name || playlistById.createdBy || 'Unknown'}
                             </span>
                             {playlistById.saves && (
                                 <>

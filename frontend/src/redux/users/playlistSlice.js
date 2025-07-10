@@ -94,6 +94,29 @@ export const addSongPlaylist = createAsyncThunk(
   }
 );
 
+export const removeSongPlaylist = createAsyncThunk(
+  "playlist/removeSongPlaylist",
+  async ({ playlistId, songId }, { rejectWithValue }) => {
+    try {
+      const token = Cookies.get("user");
+      const response = await axiosInstance.delete(
+        `/removeSongPlaylist/${playlistId}`,
+        {
+          songId: songId,
+        },
+        {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
+
 const playlistSlice = createSlice({
   name: "playlist",
   initialState,
@@ -156,6 +179,15 @@ const playlistSlice = createSlice({
           action.payload ||
           "Failed to add song to playlist";
       });
+    // .addCase(removeSongPlaylist.pending, (state)=> {
+    //   state.loading = true;
+    //   state.error = null
+    // })
+    // .addCase(removeSongPlaylist.fulfilled, (state) => {
+    //   state.loading = false;
+    //   state.error = null;
+    //   state.playlistById
+    // })
   },
 });
 

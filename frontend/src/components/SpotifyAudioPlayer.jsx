@@ -14,14 +14,13 @@ import {
     Plus,
     Check,
     Music,
-    X
+    X,
 } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllSongs } from '../redux/admin/adminSongSlice';
-import {  addSongPlaylist } from '../redux/users/playlistSlice';
+import { addSongPlaylist, removeSongPlaylist } from '../redux/users/playlistSlice';
 import { useNavigate } from 'react-router-dom';
-// Import the action to update playlists if available
-// Example: import { addSongToPlaylist } from '../redux/userPlaylistSlice';
+import axios from 'axios'; // Add axios for API calls
 
 const SpotifyAudioPlayer = () => {
     const [isPlaying, setIsPlaying] = useState(false);
@@ -37,44 +36,54 @@ const SpotifyAudioPlayer = () => {
     const [showCreatePlaylist, setShowCreatePlaylist] = useState(false);
     const [newPlaylistName, setNewPlaylistName] = useState('');
     const [playlists, setPlaylists] = useState([]);
-    const [songPlaylistStatus, setSongPlaylistStatus] = useState({}); // Track which playlists contain current song
-    
+    const [songPlaylistStatus, setSongPlaylistStatus] = useState({});
+
     const dispatch = useDispatch();
     const audioRef = useRef(null);
     const progressBarRef = useRef(null);
     const volumeBarRef = useRef(null);
     const playlistDropdownRef = useRef(null);
-    const navigate = useNavigate()
-    // Redux selectors with fallback values
+    const navigate = useNavigate();
     const { songs = [] } = useSelector((state) => state.adminSongs || {});
     const { id } = useSelector((state) => state.playSong || {});
     const { playlists: userPlaylists = [] } = useSelector((state) => state.userPlaylist || {});
     const [isAuth] = useState(true);
 
+    // Fetch all songs
     useEffect(() => {
         dispatch(getAllSongs());
     }, [dispatch]);
 
-    // Update local playlists state when Redux playlists change
+    // Fetch song playlist status from backend
+    useEffect(() => {
+        const fetchSongPlaylistStatus = async () => {
+            if (!id || !userPlaylists.length) return;
+
+            try {
+                const response = await axios.get(`/api/songs/${id}/playlists`, {
+                    headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }, // Adjust based on your auth setup
+                });
+                const playlistsWithSong = response.data.playlists || [];
+                const songStatus = {};
+                userPlaylists.forEach((playlist) => {
+                    songStatus[playlist._id] = playlistsWithSong.some((p) => p._id === playlist._id);
+                });
+                setSongPlaylistStatus(songStatus);
+            } catch (error) {
+                console.error('Error fetching song playlist status:', error);
+            }
+        };
+
+        fetchSongPlaylistStatus();
+    }, [id, userPlaylists]);
+
+    // Update playlists and shuffle logic
     useEffect(() => {
         if (userPlaylists && userPlaylists.length > 0) {
             setPlaylists(userPlaylists);
-            
-            // Check which playlists contain the current song
-            const currentSongId = id;
-            const songStatus = {};
-            
-            userPlaylists.forEach(playlist => {
-                // Check if current song exists in this playlist
-                // Assuming playlist has a 'songs' array with song IDs
-                const songExists = playlist.songs && playlist.songs.some(songId => songId === currentSongId);
-                songStatus[playlist._id || playlist.id] = songExists;
-            });
-            
-            setSongPlaylistStatus(songStatus);
         }
-    }, [userPlaylists, id]);
-    
+    }, [userPlaylists]);
+
     useEffect(() => {
         if (songs && songs.length > 0) {
             if (isShuffle) {
@@ -86,7 +95,7 @@ const SpotifyAudioPlayer = () => {
         }
     }, [songs, isShuffle]);
 
-    // Listen for auto-play events from HomePage
+    // Handle auto-play
     useEffect(() => {
         const handleAutoPlay = (event) => {
             const { songId } = event.detail;
@@ -96,7 +105,7 @@ const SpotifyAudioPlayer = () => {
                     if (audio && audio.src) {
                         audio.play().then(() => {
                             setIsPlaying(true);
-                        }).catch(error => {
+                        }).catch((error) => {
                             console.error('Error auto-playing audio:', error);
                         });
                     }
@@ -110,7 +119,7 @@ const SpotifyAudioPlayer = () => {
         };
     }, [id]);
 
-    // Close dropdown when clicking outside
+    // Close dropdown on click outside
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (playlistDropdownRef.current && !playlistDropdownRef.current.contains(event.target)) {
@@ -125,10 +134,10 @@ const SpotifyAudioPlayer = () => {
         };
     }, []);
 
-    // Update current song index when a specific song is selected via Redux
+    // Update current song index
     useEffect(() => {
         if (id && songs && songs.length > 0) {
-            const songIndex = songs.findIndex(song => song._id === id);
+            const songIndex = songs.findIndex((song) => song._id === id);
             if (songIndex !== -1) {
                 setCurrentSongIndex(songIndex);
             }
@@ -138,45 +147,52 @@ const SpotifyAudioPlayer = () => {
     const getCurrentTrack = () => {
         if (!shuffledPlaylist || shuffledPlaylist.length === 0) {
             return {
-                title: "No song selected",
-                artist: "Unknown Artist",
-                album: "Unknown Album",
-                artwork: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=300&h=300&fit=crop",
-                src: ""
+                title: 'No song selected',
+                artist: 'Unknown Artist',
+                album: 'Unknown Album',
+                artwork: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=300&h=300&fit=crop',
+                src: '',
             };
         }
-        
+
         if (id && songs && songs.length > 0) {
             const playedSong = songs.find((song) => song._id === id);
-            
             if (playedSong) {
                 return {
-                    title: playedSong.title || playedSong.name || "Unknown Title",
-                    artist: playedSong.artist || playedSong.artistName || "Unknown Artist",
-                    album: playedSong.album || playedSong.albumName || "Unknown Album",
-                    artwork: playedSong.artwork || playedSong.coverImage || playedSong.image || "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=300&h=300&fit=crop",
-                    src: playedSong.audioUrl || playedSong.src || playedSong.url || ""
+                    title: playedSong.title || playedSong.name || 'Unknown Title',
+                    artist: playedSong.artist || playedSong.artistName || 'Unknown Artist',
+                    album: playedSong.album || playedSong.albumName || 'Unknown Album',
+                    artwork:
+                        playedSong.artwork ||
+                        playedSong.coverImage ||
+                        playedSong.image ||
+                        'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=300&h=300&fit=crop',
+                    src: playedSong.audioUrl || playedSong.src || playedSong.url || '',
                 };
             }
         }
-        
+
         const song = shuffledPlaylist[currentSongIndex];
         if (!song) {
             return {
-                title: "No song selected",
-                artist: "Unknown Artist",
-                album: "Unknown Album",
-                artwork: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=300&h=300&fit=crop",
-                src: ""
+                title: 'No song selected',
+                artist: 'Unknown Artist',
+                album: 'Unknown Album',
+                artwork: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=300&h=300&fit=crop',
+                src: '',
             };
         }
-        
+
         return {
-            title: song.title || song.name || "Unknown Title",
-            artist: song.artist || song.artistName || "Unknown Artist",
-            album: song.album || song.albumName || "Unknown Album",
-            artwork: song.artwork || song.coverImage || song.image || "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=300&h=300&fit=crop",
-            src: song.audioUrl || song.src || song.url || ""
+            title: song.title || song.name || 'Unknown Title',
+            artist: song.artist || song.artistName || 'Unknown Artist',
+            album: song.album || song.albumName || 'Unknown Album',
+            artwork:
+                song.artwork ||
+                song.coverImage ||
+                song.image ||
+                'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=300&h=300&fit=crop',
+            src: song.audioUrl || song.src || song.url || '',
         };
     };
 
@@ -212,7 +228,7 @@ const SpotifyAudioPlayer = () => {
     const handleTrackEnd = () => {
         if (isRepeat) {
             audioRef.current.currentTime = 0;
-            audioRef.current.play().catch(error => {
+            audioRef.current.play().catch((error) => {
                 console.error('Error repeating audio:', error);
             });
         } else {
@@ -228,7 +244,7 @@ const SpotifyAudioPlayer = () => {
             audio.pause();
             setIsPlaying(false);
         } else {
-            audio.play().catch(error => {
+            audio.play().catch((error) => {
                 console.error('Error playing audio:', error);
                 setIsPlaying(false);
             });
@@ -294,7 +310,7 @@ const SpotifyAudioPlayer = () => {
     };
 
     const formatTime = (time) => {
-        if (isNaN(time)) return "0:00";
+        if (isNaN(time)) return '0:00';
         const minutes = Math.floor(time / 60);
         const seconds = Math.floor(time % 60);
         return `${minutes}:${seconds.toString().padStart(2, '0')}`;
@@ -304,68 +320,67 @@ const SpotifyAudioPlayer = () => {
         setShowPlaylistDropdown(!showPlaylistDropdown);
     };
 
-    const handleAddToPlaylist = (playlistId) => {
+    const handleAddToPlaylist = async (playlistId) => {
         const currentSongId = id;
-        
         if (!currentSongId) {
             console.error('No song selected');
             return;
         }
-        
-        // Toggle song in the specific playlist
+
         const isCurrentlyInPlaylist = songPlaylistStatus[playlistId] || false;
-        
-        // Update the local state
-        setSongPlaylistStatus(prev => ({
-            ...prev,
-            [playlistId]: !isCurrentlyInPlaylist
-        }));
-        
-        // Dispatch action to backend
-        if (isCurrentlyInPlaylist) {
-            // Remove song from playlist
-            console.log(`Removing song ${currentSongId} from playlist ${playlistId}`);
-            // dispatch(removeSongFromPlaylist({ playlistId, songId: currentSongId }));
-        } else {
-            // Add song to playlist
-            console.log(`Adding song ${currentSongId} to playlist ${playlistId}`);
-            dispatch(addSongPlaylist({ playlistId, songId: currentSongId }));
+
+        try {
+            if (isCurrentlyInPlaylist) {
+                // Remove song from playlist
+                await dispatch(removeSongPlaylist({ playlistId, songId: currentSongId })).unwrap();
+            } else {
+                // Add song to playlist
+                await dispatch(addSongPlaylist({ playlistId, songId: currentSongId })).unwrap();
+            }
+
+            // Update local state
+            setSongPlaylistStatus((prev) => ({
+                ...prev,
+                [playlistId]: !isCurrentlyInPlaylist,
+            }));
+        } catch (error) {
+            console.error('Error updating playlist:', error);
+            // Revert state on failure
+            setSongPlaylistStatus((prev) => ({
+                ...prev,
+                [playlistId]: isCurrentlyInPlaylist,
+            }));
         }
-        
-        // Optional: Close dropdown after adding
-        // setShowPlaylistDropdown(false);
     };
 
-    const handleCreatePlaylist = () => {
+    const handleCreatePlaylist = async () => {
         if (newPlaylistName.trim()) {
-            const newPlaylist = {
-                id: Date.now(),
-                _id: Date.now(), // For backend compatibility
-                name: newPlaylistName.trim(),
-                songs: [id], // Add current song to new playlist
-                songCount: 1
-            };
-            
-            setPlaylists(prev => [...prev, newPlaylist]);
-            
-            // Update song playlist status
-            setSongPlaylistStatus(prev => ({
-                ...prev,
-                [newPlaylist.id]: true
-            }));
-            
-            setNewPlaylistName('');
-            setShowCreatePlaylist(false);
-            
-            // Dispatch action to create playlist in backend
-            // dispatch(createPlaylist({ name: newPlaylistName.trim(), songId: id }));
-            
-            console.log(`Created new playlist: ${newPlaylistName.trim()} with song ${id}`);
+            try {
+                const newPlaylist = {
+                    name: newPlaylistName.trim(),
+                    songs: [id],
+                };
+
+                // Dispatch action to create playlist in backend
+                // Assuming you have a createPlaylist action
+                // await dispatch(createPlaylist(newPlaylist)).unwrap();
+
+                // Update local state
+                setPlaylists((prev) => [...prev, { ...newPlaylist, _id: Date.now(), songCount: 1 }]);
+                setSongPlaylistStatus((prev) => ({
+                    ...prev,
+                    [Date.now()]: true,
+                }));
+                setNewPlaylistName('');
+                setShowCreatePlaylist(false);
+            } catch (error) {
+                console.error('Error creating playlist:', error);
+            }
         }
     };
 
     const progressPercentage = duration ? (currentTime / duration) * 100 : 0;
-    const volumePercentage = (isMuted ? 0 : volume) * 100;
+    const volumePercentage = isMuted ? 0 : volume * 100;
 
     if (!isAuth) {
         return null;
@@ -389,14 +404,12 @@ const SpotifyAudioPlayer = () => {
                             alt={currentTrack.title}
                             className="w-14 h-14 rounded-md object-cover"
                             onError={(e) => {
-                                e.target.src = "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=300&h=300&fit=crop";
+                                e.target.src = 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=300&h=300&fit=crop';
                             }}
                         />
                     </div>
                     <div className="min-w-0 flex-1">
-                        <h4 className="text-white text-sm font-medium truncate">
-                            {currentTrack.title}
-                        </h4>
+                        <h4 className="text-white text-sm font-medium truncate">{currentTrack.title}</h4>
                         <p className="text-gray-400 text-xs truncate hover:text-white cursor-pointer">
                             {currentTrack.artist}
                         </p>
@@ -408,13 +421,13 @@ const SpotifyAudioPlayer = () => {
                         >
                             <Heart className="w-4 h-4" />
                         </button>
-                        
+
                         {/* Playlist Dropdown */}
                         {showPlaylistDropdown && (
                             <div className="absolute bottom-full left-0 mb-2 w-80 bg-gray-800 rounded-lg shadow-2xl border border-gray-700 z-50">
                                 <div className="p-3">
                                     <h3 className="text-white text-sm font-medium mb-3">Add to playlist</h3>
-                                    
+
                                     {/* Create new playlist button */}
                                     <button
                                         onClick={() => setShowCreatePlaylist(true)}
@@ -425,7 +438,7 @@ const SpotifyAudioPlayer = () => {
                                         </div>
                                         <span className="text-white text-sm">Create playlist</span>
                                     </button>
-                                    
+
                                     {/* Create playlist input */}
                                     {showCreatePlaylist && (
                                         <div className="mt-2 p-2 bg-gray-700 rounded-md">
@@ -454,7 +467,7 @@ const SpotifyAudioPlayer = () => {
                                             </div>
                                         </div>
                                     )}
-                                    
+
                                     {/* Playlist list */}
                                     <div className="mt-2 max-h-60 overflow-y-auto">
                                         {playlists.map((playlist) => (
@@ -486,7 +499,6 @@ const SpotifyAudioPlayer = () => {
 
                 {/* Center - Player Controls */}
                 <div className="flex flex-col items-center space-y-2 flex-1 max-w-2xl">
-                    {/* Control Buttons */}
                     <div className="flex items-center space-x-4">
                         <button
                             onClick={toggleShuffle}
@@ -494,7 +506,6 @@ const SpotifyAudioPlayer = () => {
                         >
                             <Shuffle className="w-4 h-4" />
                         </button>
-
                         <button
                             onClick={handlePreviousSong}
                             className="text-gray-400 hover:text-white transition-colors"
@@ -502,7 +513,6 @@ const SpotifyAudioPlayer = () => {
                         >
                             <SkipBack className="w-5 h-5" />
                         </button>
-
                         <button
                             onClick={togglePlayPause}
                             className="bg-white text-black rounded-full p-2 hover:scale-105 transition-transform disabled:opacity-50"
@@ -514,7 +524,6 @@ const SpotifyAudioPlayer = () => {
                                 <Play className="w-5 h-5 ml-0.5" fill="currentColor" />
                             )}
                         </button>
-
                         <button
                             onClick={handleNextSong}
                             className="text-gray-400 hover:text-white transition-colors"
@@ -522,7 +531,6 @@ const SpotifyAudioPlayer = () => {
                         >
                             <SkipForward className="w-5 h-5" />
                         </button>
-
                         <button
                             onClick={() => setIsRepeat(!isRepeat)}
                             className={`transition-colors ${isRepeat ? 'text-green-500' : 'text-gray-400 hover:text-white'}`}
@@ -530,12 +538,8 @@ const SpotifyAudioPlayer = () => {
                             <Repeat className="w-4 h-4" />
                         </button>
                     </div>
-
-                    {/* Progress Bar */}
                     <div className="flex items-center space-x-3 w-full">
-                        <span className="text-xs text-gray-400 w-10 text-right">
-                            {formatTime(currentTime)}
-                        </span>
+                        <span className="text-xs text-gray-400 w-10 text-right">{formatTime(currentTime)}</span>
                         <div
                             ref={progressBarRef}
                             onClick={handleProgressChange}
@@ -548,30 +552,24 @@ const SpotifyAudioPlayer = () => {
                                 <div className="absolute right-0 top-1/2 transform translate-x-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></div>
                             </div>
                         </div>
-                        <span className="text-xs text-gray-400 w-10">
-                            {formatTime(duration)}
-                        </span>
+                        <span className="text-xs text-gray-400 w-10">{formatTime(duration)}</span>
                     </div>
                 </div>
 
                 {/* Right - Volume Controls */}
                 <div className="flex items-center space-x-3 flex-1 justify-end">
-
-                    <button onClick={()=> navigate('/SongFullScreen')} className="text-gray-400 hover:text-white transition-colors">
+                    <button
+                        onClick={() => navigate('/SongFullScreen')}
+                        className="text-gray-400 hover:text-white transition-colors"
+                    >
                         <Maximize2 className="w-4 h-4" />
-                    </button>   
-
+                    </button>
                     <button
                         onClick={toggleMute}
                         className="text-gray-400 hover:text-white transition-colors"
                     >
-                        {isMuted || volume === 0 ? (
-                            <VolumeX className="w-4 h-4" />
-                        ) : (
-                            <Volume2 className="w-4 h-4" />
-                        )}
+                        {isMuted || volume === 0 ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
                     </button>
-
                     <div
                         ref={volumeBarRef}
                         onClick={handleVolumeChange}
