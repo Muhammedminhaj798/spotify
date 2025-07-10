@@ -64,7 +64,7 @@ export const passwordAuth = createAsyncThunk(
           status: 400,
         });
       }
-      const response = await axios.post("https://spotify-ptha.onrender.com.api/auth/loginWithPass", {
+      const response = await axios.post("https://spotify-ptha.onrender.com/api/auth/loginWithPass", {
         email,
         password,
       });
