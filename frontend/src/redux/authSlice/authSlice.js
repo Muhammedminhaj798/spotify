@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axiosInstance from "../../AxiosInstance";
-import axios from 'axios'
 
 const userDetails = localStorage.getItem("user");
 
@@ -64,7 +63,7 @@ export const passwordAuth = createAsyncThunk(
           status: 400,
         });
       }
-      const response = await axios.post("https://spotify-ptha.onrender.com/api/auth/loginWithPass", {
+      const response = await axiosInstance.post("/auth/loginWithPass", {
         email,
         password,
       });
