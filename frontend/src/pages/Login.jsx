@@ -9,8 +9,6 @@ const Login = () => {
     const [email, setEmail] = useState("")
     const navigate = useNavigate()
     const dispatch = useDispatch()
-    console.log(email);
-
     const handleNavigate = async (e) => {
         try {
             const res = await dispatch(sentOTP(email));

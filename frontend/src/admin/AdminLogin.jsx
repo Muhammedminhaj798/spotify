@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Lock, Mail, Eye, EyeOff } from "lucide-react";
 import { adminLogin } from "../redux/admin/adminAuthSlice";
+import { toast } from "react-toastify";
 
 
 const AdminLogin = () => {
@@ -36,6 +37,7 @@ const AdminLogin = () => {
       navigate("/admin_dashboard");
     } catch (err) {
       // Error is handled by Redux state
+      toast.error("not allowed")
     }
   };
 

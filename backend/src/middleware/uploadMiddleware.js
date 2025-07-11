@@ -29,7 +29,6 @@ const audioStorage = new CloudinaryStorage({
   },
 });
 
-//console.log("audi", audioStorage);
 
 
 const imageStorage = new CloudinaryStorage({
@@ -40,13 +39,11 @@ const imageStorage = new CloudinaryStorage({
     allowed_formats: ["png", "jpg", "jpeg"],
   },
 });
-//console.log("img", imageStorage);
 
 const upload = multer({
   storage: new CloudinaryStorage({
     cloudinary: cloudinary,
     params: async (req, file) => {
-      console.log("req",file);
       
       if (file.fieldname === "audioFile") {
             return {

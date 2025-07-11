@@ -26,6 +26,11 @@ export const loginWithPass = async (req, res, next) => {
       error.statusCode = 403;
       throw error;
     }
+    if(user.isBlocked){
+      const error = new Error("Access denied: Your account is temporerly suspended")
+      error.statusCode = 403;
+      throw error
+    }
 
     const isValid = await bcrypt.compare(password, user.password);
     if (!isValid) {

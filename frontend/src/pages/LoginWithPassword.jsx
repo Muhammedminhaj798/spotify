@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Lock, Mail, Eye, EyeOff } from "lucide-react";
 import { passwordAuth } from "../redux/authSlice/authSlice";
+import {toast} from 'react-toastify'
 
 
 
@@ -32,9 +33,12 @@ const LoginWithPassword = () => {
                 password: formData.password,
             })).unwrap();
             // On success, redirect to admin dashboard
+            toast.success("Login successfully")
             navigate("/");
         } catch (err) {
             // Error is handled by Redux state
+            navigate('/login')
+            toast.error('Your account temporerly suspended')
         }
     };
 

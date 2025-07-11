@@ -101,7 +101,6 @@ const AdminSongsComponent = () => {
                 alert(`Error: ${errorMessage}`);
             }
         } catch (error) {
-            console.error('Error adding song:', error);
             alert('Failed to add song. Please try again.');
         } finally {
             setIsLoading(false);

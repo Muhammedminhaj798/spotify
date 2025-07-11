@@ -1,9 +1,11 @@
 import asyncHandler from "express-async-handler";
 import Song from "../../model/songSchema.js";
 import CustomError from "../../utils/customError.js";
+import Artist from "../../model/artistSchema.js";
 
 const addSongs = async (req, res, next) => {
   try {
+
     if (req.fileError) {
       return res.status(400).json({ message: req.fileError.message });
     }
@@ -39,16 +41,23 @@ const addSongs = async (req, res, next) => {
     const newSong = new Song({
       url: audioFileUrl,
       title: title,
-      artist: artist,
+      artist,
       duration: duration,
       genre: genre,
       coverImage: imageFileUrl,
     });
 
     // Save to database
-    await newSong.save();
+    const savedSong = await newSong.save();
+
+    await Artist.updateMany(
+      { _id: { $in: artist } },
+      { $push: { songs: savedSong._id } }
+    );
 
     res.status(201).json(newSong);
+
+    console.log("asdfghjkqwertyuio");
   } catch (error) {
     console.error("Error in addSongs:", JSON.stringify(error, null, 2));
     res.status(500).json({

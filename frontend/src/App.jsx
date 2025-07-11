@@ -19,6 +19,7 @@ import Profile from './pages/Profile';
 import ShowAllArtist from './pages/ShowAllArtist';
 import ViewPlaylist from './pages/ViewPlaylist';
 import SongFullScreen from './pages/SongFullScreen';
+import { ToastContainer } from 'react-toastify';
 
 
 
@@ -26,6 +27,19 @@ const App = () => {
   const admin = localStorage.getItem("isAdmin")
   return (
     <>
+
+    <ToastContainer
+        position="top-right"      // Position (top-left, top-right, bottom-left, bottom-right)
+        autoClose={3000}          // Auto close after 3 seconds
+        hideProgressBar={false}   // Show progress bar
+        newestOnTop={false}       
+        closeOnClick              
+        rtl={false}               
+        pauseOnFocusLoss          
+        draggable                 
+        pauseOnHover              
+        theme="colored"           // or "light", "dark"
+      />
       <>
         {!admin && <Navbar />}
         <Routes>
@@ -37,14 +51,15 @@ const App = () => {
           <Route path='/terms&conditions' element={<Terms />} />
           <Route path='/' element={<Home />}>
             <Route path='/' element={<HomePage />} />
-            <Route path='/profile' element={<Profile/>}/>
-            <Route path='/AllArtist' element={<ShowAllArtist/>}/>
-            <Route path='/viewPlaylist/:id' element={<ViewPlaylist/>}/>
+            <Route path='/profile' element={<Profile />} />
+            <Route path='/AllArtist' element={<ShowAllArtist />} />
+            <Route path='/viewPlaylist/:id' element={<ViewPlaylist />} />
           </Route>
+
           <Route path='/loginWithPass' element={<LoginWithPassword />} />
           <Route path='/adminLogin' element={<AdminLogin />} />
           <Route path='/addPlaylist' element={<AddPlaylist />} />
-          <Route path='/SongFullScreen' element={<SongFullScreen/>}/>
+          <Route path='/SongFullScreen' element={<SongFullScreen />} />
 
         </Routes>
       </>
