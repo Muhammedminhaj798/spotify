@@ -46,16 +46,18 @@ export const loginWithPass = async (req, res, next) => {
         expiresIn: "7d",
       }
     );
-    res.cookie("user", token, {
-      httpOnly: false, // if you want to access in frontend
-      secure: true, // REQUIRED with sameSite: "none"
-      sameSite: "none", // allows cross-site cookies
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
+
+    // res.cookie("user", token, {
+    //   httpOnly: false, // if you want to access in frontend
+    //   secure: true, // REQUIRED with sameSite: "none"
+    //   sameSite: "none", // allows cross-site cookies
+    //   maxAge: 7 * 24 * 60 * 60 * 1000,
+    // });
     res.status(200).json({
       message: "User logged in successfully",
       status: "success",
       admin: { username: user.name, email: user.name },
+      token
     });
   } catch (err) {
     console.error("Login error:", err);

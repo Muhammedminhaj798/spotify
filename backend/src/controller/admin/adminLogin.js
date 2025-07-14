@@ -4,6 +4,7 @@ import User from "../../model/userSchema.js";
 
 const adminLogin = async (req, res, next) => {
   try {
+    console.log("tyuijhvc : ", req.body);
     const { email, password } = req.body;
 
     // Input validation

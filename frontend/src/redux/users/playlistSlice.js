@@ -13,7 +13,7 @@ export const addPlaylist = createAsyncThunk(
   "playlist/addPlaylist",
   async ({ name, description }, { rejectWithValue }) => {
     try {
-      const token = Cookies.get("user"); // Adjust 'user' to match your cookie name
+      const token = localStorage.getItem("token"); // Adjust 'user' to match your cookie name
       if (!token) {
         throw new Error("No authentication token found in cookies");
       }
@@ -37,7 +37,7 @@ export const fetchPlaylistById = createAsyncThunk(
   "playlist/playlistById",
   async (id, { rejectWithValue }) => {
     try {
-      const token = Cookies.get("user"); // Adjust 'user' to match your cookie name
+      const token = localStorage.getItem("token"); // Adjust 'user' to match your cookie name
       const response = await axiosInstance.get(`/user/playlistById/${id}`, {
         headers: {
           authorization: `Bearer ${token}`,
@@ -54,7 +54,9 @@ export const getPlaylist = createAsyncThunk(
   "playlist/getPlaylist",
   async (_, { rejectWithValue }) => {
     try {
-      const token = Cookies.get("user");
+      const token = localStorage.getItem("token");
+      console.log('tok: ', token);
+      
       if (!token) {
         throw new Error("No authentication token found in cookies");
       }
@@ -75,7 +77,7 @@ export const addSongPlaylist = createAsyncThunk(
   async ({ playlistId, songId }, { rejectWithValue }) => {
     try {
       console.log(playlistId, songId);
-      const token = Cookies.get("user");
+      const token = localStorage.getItem("token");
       const response = await axiosInstance.post(
         `/user/addSongPlaylist/${playlistId}`,
         {
@@ -98,7 +100,7 @@ export const removeSongPlaylist = createAsyncThunk(
   "playlist/removeSongPlaylist",
   async ({ playlistId, songId }, { rejectWithValue }) => {
     try {
-      const token = Cookies.get("user");
+      const token = localStorage.getItem("token");
       const response = await axiosInstance.delete(
         `/removeSongPlaylist/${playlistId}`,
         {

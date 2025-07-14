@@ -19,6 +19,8 @@ const HomePage = () => {
         dispatch(getAllArtist())
         dispatch(getAllSongs())
     }, [])
+    const user = localStorage.getItem("user")
+    
 
     const popularArtists = artists && artists.length > 0
         ? artists.slice(0, 10).filter(artist => artist && artist.name)

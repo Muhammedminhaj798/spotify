@@ -55,7 +55,7 @@ export const sentOTP = createAsyncThunk(
 
 export const passwordAuth = createAsyncThunk(
   "auth/passwordAuth",
-  async ({ email, password }, { rejectWithValue }) => {
+  async ({ email, password  }, { rejectWithValue }) => {
     try {
       if (!email || !password) {
         return rejectWithValue({
@@ -63,6 +63,8 @@ export const passwordAuth = createAsyncThunk(
           status: 400,
         });
       }
+
+      
       const response = await axiosInstance.post("/auth/loginWithPass", {
         email,
         password,
@@ -134,13 +136,11 @@ const authSlice = createSlice({
         localStorage.setItem("isAuth", "true");
         console.log(action.payload);
         localStorage.setItem("user", JSON.stringify(action.payload));
+        localStorage.setItem("token", action.payload.token)
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-        state.isAuth = true;
-        localStorage.setItem("isAuth", "true");
-        localStorage.setItem("user", JSON.stringify(action.payload));
       })
       .addCase(verifyOTP.fulfilled, (state, action) => {
         state.loading = false;
@@ -148,6 +148,7 @@ const authSlice = createSlice({
         state.isAuth = true;
         localStorage.setItem("isAuth", "true");
         localStorage.setItem("user", JSON.stringify(action.payload));
+        localStorage.setItem("token", action.payload.token)
       })
       .addCase(verifyOTP.rejected, (state, action) => {
         state.loading = false;
@@ -163,6 +164,7 @@ const authSlice = createSlice({
         state.isAuth = true;
         localStorage.setItem("isAuth", "true");
         localStorage.setItem("user", JSON.stringify(action.payload));
+        localStorage.setItem("token", action.payload.token)
       })
       .addCase(logout.pending, (state) => {
         state.loading = true;

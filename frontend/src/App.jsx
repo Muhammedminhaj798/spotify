@@ -11,7 +11,7 @@ import AdminSongs from './admin/AdminSongs';
 import AdminArtist from './admin/AdminArtist';
 import AdminLogin from './admin/AdminLogin';
 import LoginWithPassword from './pages/LoginWithPassword';
-import Navbar from './components/Navbar';
+// import Navbar from './components/Navbar';
 import AddPlaylist from './pages/AddPlaylist';
 import HomePage from './pages/HomePage';
 import AdminArtistEdit from './admin/AdminArtistEdit';
@@ -20,6 +20,7 @@ import ShowAllArtist from './pages/ShowAllArtist';
 import ViewPlaylist from './pages/ViewPlaylist';
 import SongFullScreen from './pages/SongFullScreen';
 import { ToastContainer } from 'react-toastify';
+import Navbar from './components/Navbar';
 
 
 
