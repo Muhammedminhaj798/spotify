@@ -31,7 +31,7 @@ const AdminArtist = () => {
     }, [dispatch]);
 
     // Fixed filtering logic to handle potential undefined values
-    const filteredArtists = artists?.filter(artist => {
+    const filteredArtists = artists.filter(artist => {
         const matchesSearch = artist.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
             artist.email?.toLowerCase().includes(searchTerm.toLowerCase());
 
