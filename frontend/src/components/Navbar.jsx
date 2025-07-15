@@ -211,7 +211,7 @@ export default function Navbar() {
   // </div>
 
   return (
-    <nav className="bg-black text-white relative top-0 z-50">
+    <nav className="bg-black text-white fixed top-0 z-50 w-full">
       {/* Main navbar */}
       <div className="px-4 lg:px-6">
         <div className="flex items-center justify-between h-16">

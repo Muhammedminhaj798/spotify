@@ -48,11 +48,11 @@ const addSongs = async (req, res, next) => {
     });
 
     // Save to database
-    const savedSong = await newSong.save();
+     await newSong.save();
 
     await Artist.updateMany(
       { _id: { $in: artist } },
-      { $push: { songs: savedSong._id } }
+      { $push: { songs: newSong._id } }
     );
 
     res.status(201).json(newSong);

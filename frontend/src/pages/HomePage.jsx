@@ -19,8 +19,6 @@ const HomePage = () => {
         dispatch(getAllArtist())
         dispatch(getAllSongs())
     }, [])
-    const user = localStorage.getItem("user")
-    
 
     const popularArtists = artists && artists.length > 0
         ? artists.slice(0, 10).filter(artist => artist && artist.name)
@@ -81,15 +79,15 @@ const HomePage = () => {
                 <img
                     src={artist.image ? artist.image : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"}
                     alt={artist.name}
-                    className="w-40 h-40 rounded-full object-cover group-hover:shadow-2xl transition-all duration-300"
+                    className="w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 rounded-full object-cover group-hover:shadow-2xl transition-all duration-300"
                 />
-                <div className="absolute inset-0  group-hover:bg-opacity-20 rounded-full transition-all duration-300 flex items-center justify-center">
-                    <Play className="w-12 h-12 text-white opacity-0 group-hover:opacity-100 transition-all duration-300" fill="white" />
+                <div className="absolute inset-0 group-hover:bg-opacity-20 rounded-full transition-all duration-300 flex items-center justify-center">
+                    <Play className="w-6 h-6 sm:w-8 sm:h-8 md:w-12 md:h-12 text-white opacity-0 group-hover:opacity-100 transition-all duration-300" fill="white" />
                 </div>
             </div>
-            <div className="mt-4 text-center">
-                <h3 className="text-white font-semibold text-lg">{artist.name}</h3>
-                <p className="text-gray-400 text-sm">{artist.type}</p>
+            <div className="mt-2 md:mt-4 text-center">
+                <h3 className="text-white font-semibold text-sm sm:text-base md:text-lg truncate max-w-24 sm:max-w-32 md:max-w-40">{artist.name}</h3>
+                <p className="text-gray-400 text-xs sm:text-sm truncate max-w-24 sm:max-w-32 md:max-w-40">{artist.type}</p>
             </div>
         </div>
     );
@@ -97,7 +95,7 @@ const HomePage = () => {
     const AlbumCard = ({ album }) => (
         <div className="flex-shrink-0 group cursor-pointer">
             <div className="relative">
-                <div className={`w-52 h-52 rounded-lg bg-gradient-to-br ${album.color} overflow-hidden group-hover:scale-105 transition-transform duration-300`}>
+                <div className={`w-32 h-32 sm:w-40 sm:h-40 md:w-52 md:h-52 rounded-lg bg-gradient-to-br ${album.color} overflow-hidden group-hover:scale-105 transition-transform duration-300`}>
                     <img
                         src={album.image}
                         alt={album.title}
@@ -105,8 +103,11 @@ const HomePage = () => {
                     />
                 </div>
                 <div className="absolute inset-0 group-hover:bg-opacity-20 rounded-lg transition-all duration-300 flex items-center justify-center">
-                    <Play className="w-16 h-16 text-white opacity-0 group-hover:opacity-100 transition-all duration-300" fill="white" />
+                    <Play className="w-8 h-8 sm:w-12 sm:h-12 md:w-16 md:h-16 text-white opacity-0 group-hover:opacity-100 transition-all duration-300" fill="white" />
                 </div>
+            </div>
+            <div className="mt-2 md:mt-3">
+                <h3 className="text-white font-semibold text-sm sm:text-base truncate max-w-32 sm:max-w-40 md:max-w-52">{album.title}</h3>
             </div>
         </div>
     );
@@ -114,7 +115,7 @@ const HomePage = () => {
     const SongCard = ({ song }) => (
         <div className="flex-shrink-0 group cursor-pointer">
             <div className="relative">
-                <div className={`w-52 h-52 rounded-lg bg-gradient-to-br ${song.color} overflow-hidden group-hover:scale-105 transition-transform duration-300`}>
+                <div className={`w-32 h-32 sm:w-40 sm:h-40 md:w-52 md:h-52 rounded-lg bg-gradient-to-br ${song.color || 'from-gray-500 to-gray-700'} overflow-hidden group-hover:scale-105 transition-transform duration-300`}>
                     <img
                         src={song.coverImage}
                         alt={song.title}
@@ -125,27 +126,30 @@ const HomePage = () => {
                     className="absolute inset-0 group-hover:bg-opacity-20 rounded-lg transition-all duration-300 flex items-center justify-center" 
                     onClick={() => handleSongClick(song)}
                 >
-                    <Play className="w-16 h-16 text-white opacity-0 group-hover:opacity-100 transition-all duration-300" fill="white" />
+                    <Play className="w-8 h-8 sm:w-12 sm:h-12 md:w-16 md:h-16 text-white opacity-0 group-hover:opacity-100 transition-all duration-300" fill="white" />
                 </div>
             </div>
-            <div className="mt-3">
-                <h3 className="text-white font-semibold text-base truncate">{song.title}</h3>
-                <p className="text-gray-400 text-sm truncate">{song.artist}</p>
+            <div className="mt-2 md:mt-3">
+                <h3 className="text-white font-semibold text-sm sm:text-base truncate max-w-32 sm:max-w-40 md:max-w-52">{song.title}</h3>
+                <p className="text-gray-400 text-xs sm:text-sm truncate max-w-32 sm:max-w-40 md:max-w-52">{song.artist}</p>
             </div>
         </div>
     );
 
     return (
-        <div className="bg-gradient-to-b from-gray-900 to-black min-h-screen  text-white p-6 ">
+        <div className="bg-gradient-to-b from-gray-900 to-black min-h-screen text-white p-3 sm:p-4 md:p-6">
             {/* Popular Artists Section */}
-            <div className="mb-12">
-                <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-3xl font-bold">Popular artists</h2>
-                    <button onClick={()=> navigate('/AllArtist')} className="text-gray-400 hover:text-white text-sm font-medium">
+            <div className="mb-6 sm:mb-8 md:mb-12">
+                <div className="flex items-center justify-between mb-4 md:mb-6">
+                    <h2 className="text-xl sm:text-2xl md:text-3xl font-bold">Popular artists</h2>
+                    <button 
+                        onClick={() => navigate('/AllArtist')} 
+                        className="text-gray-400 hover:text-white text-xs sm:text-sm font-medium"
+                    >
                         Show all
                     </button>
                 </div>
-                <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide">
+                <div className="flex gap-3 sm:gap-4 md:gap-6 overflow-x-auto pb-4 scrollbar-hide">
                     {popularArtists.map((artist, index) => (
                         <ArtistCard key={index} artist={artist} />
                     ))}
@@ -153,14 +157,14 @@ const HomePage = () => {
             </div>
 
             {/* Popular Albums and Singles Section */}
-            <div className="mb-12">
-                <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-3xl font-bold">Popular albums and singles</h2>
-                    <button className="text-gray-400 hover:text-white text-sm font-medium">
+            <div className="mb-6 sm:mb-8 md:mb-12">
+                <div className="flex items-center justify-between mb-4 md:mb-6">
+                    <h2 className="text-xl sm:text-2xl md:text-3xl font-bold">Popular albums and singles</h2>
+                    <button className="text-gray-400 hover:text-white text-xs sm:text-sm font-medium">
                         Show all
                     </button>
                 </div>
-                <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
+                <div className="flex gap-3 sm:gap-4 overflow-x-auto pb-4 scrollbar-hide">
                     {popularAlbums.map((album, index) => (
                         <AlbumCard key={index} album={album} />
                     ))}
@@ -168,14 +172,14 @@ const HomePage = () => {
             </div>
 
             {/* Trending Songs Section */}
-            <div className="mb-12">
-                <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-3xl font-bold">Trending songs</h2>
-                    <button className="text-gray-400 hover:text-white text-sm font-medium">
+            <div className="mb-6 sm:mb-8 md:mb-12">
+                <div className="flex items-center justify-between mb-4 md:mb-6">
+                    <h2 className="text-xl sm:text-2xl md:text-3xl font-bold">Trending songs</h2>
+                    <button className="text-gray-400 hover:text-white text-xs sm:text-sm font-medium">
                         Show all
                     </button>
                 </div>
-                <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
+                <div className="flex gap-3 sm:gap-4 overflow-x-auto pb-4 scrollbar-hide">
                     {trendingSongs.map((song, index) => (
                         <SongCard key={index} song={song} />
                     ))}
@@ -183,14 +187,14 @@ const HomePage = () => {
             </div>
 
             {/* Popular Artists Section (Repeated) */}
-            <div className="mb-12">
-                <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-3xl font-bold">Popular artists</h2>
-                    <button className="text-gray-400 hover:text-white text-sm font-medium">
+            <div className="mb-6 sm:mb-8 md:mb-12">
+                <div className="flex items-center justify-between mb-4 md:mb-6">
+                    <h2 className="text-xl sm:text-2xl md:text-3xl font-bold">Popular artists</h2>
+                    <button className="text-gray-400 hover:text-white text-xs sm:text-sm font-medium">
                         Show all
                     </button>
                 </div>
-                <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide">
+                <div className="flex gap-3 sm:gap-4 md:gap-6 overflow-x-auto pb-4 scrollbar-hide">
                     {popularArtists.map((artist, index) => (
                         <ArtistCard key={`repeat-${index}`} artist={artist} />
                     ))}
@@ -198,14 +202,14 @@ const HomePage = () => {
             </div>
 
             <style jsx>{`
-        .scrollbar-hide {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-        }
-        .scrollbar-hide::-webkit-scrollbar {
-          display: none;
-        }
-      `}</style>
+                .scrollbar-hide {
+                    -ms-overflow-style: none;
+                    scrollbar-width: none;
+                }
+                .scrollbar-hide::-webkit-scrollbar {
+                    display: none;
+                }
+            `}</style>
         </div>
     );
 };
