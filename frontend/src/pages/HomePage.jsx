@@ -136,7 +136,7 @@ const HomePage = () => {
     );
 
     return (
-        <div className="bg-gradient-to-b from-gray-900 to-black min-h-screen text-white p-6 ">
+        <div className="bg-gradient-to-b from-gray-900 to-black min-h-screen  text-white p-6 ">
             {/* Popular Artists Section */}
             <div className="mb-12">
                 <div className="flex items-center justify-between mb-6">

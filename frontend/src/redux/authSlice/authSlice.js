@@ -177,6 +177,7 @@ const authSlice = createSlice({
         localStorage.removeItem("isAuth");
         localStorage.removeItem("isAdmin");
         localStorage.removeItem("user");
+        localStorage.removeItem("token")
       });
   },
 });
