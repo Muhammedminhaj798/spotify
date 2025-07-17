@@ -61,11 +61,18 @@ const HomePage = () => {
         ? songs.slice(0, 10).filter(song => song && song.title)
         : [];
 
+    const handleArtistClick = (id) => {
+        console.log("id is : ", id);
+        navigate(`/viewArtistSongs/${id}`)
+    }
+
+
+
     // Handle song click with automatic play
     const handleSongClick = (song) => {
         // Dispatch the song selection to Redux
         dispatch(playSongRequest(song._id));
-        
+
         // Trigger automatic play by sending a custom event to the audio player
         setTimeout(() => {
             const event = new CustomEvent('autoPlay', { detail: { songId: song._id } });
@@ -73,8 +80,8 @@ const HomePage = () => {
         }, 100); // Small delay to ensure Redux state is updated
     };
 
-    const ArtistCard = ({ artist }) => (
-        <div className="flex-shrink-0 group cursor-pointer">
+    const ArtistCard = ({ artist, onClick }) => (
+        <div className="flex-shrink-0 group cursor-pointer" onClick={onClick}>
             <div className="relative">
                 <img
                     src={artist.image ? artist.image : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"}
@@ -113,7 +120,7 @@ const HomePage = () => {
     );
 
     const SongCard = ({ song }) => (
-        <div className="flex-shrink-0 group cursor-pointer">
+        <div className="flex-shrink-0 group cursor-pointer" >
             <div className="relative">
                 <div className={`w-32 h-32 sm:w-40 sm:h-40 md:w-52 md:h-52 rounded-lg bg-gradient-to-br ${song.color || 'from-gray-500 to-gray-700'} overflow-hidden group-hover:scale-105 transition-transform duration-300`}>
                     <img
@@ -122,8 +129,8 @@ const HomePage = () => {
                         className="w-full h-full object-cover opacity-80"
                     />
                 </div>
-                <div 
-                    className="absolute inset-0 group-hover:bg-opacity-20 rounded-lg transition-all duration-300 flex items-center justify-center" 
+                <div
+                    className="absolute inset-0 group-hover:bg-opacity-20 rounded-lg transition-all duration-300 flex items-center justify-center"
                     onClick={() => handleSongClick(song)}
                 >
                     <Play className="w-8 h-8 sm:w-12 sm:h-12 md:w-16 md:h-16 text-white opacity-0 group-hover:opacity-100 transition-all duration-300" fill="white" />
@@ -131,7 +138,10 @@ const HomePage = () => {
             </div>
             <div className="mt-2 md:mt-3">
                 <h3 className="text-white font-semibold text-sm sm:text-base truncate max-w-32 sm:max-w-40 md:max-w-52">{song.title}</h3>
-                <p className="text-gray-400 text-xs sm:text-sm truncate max-w-32 sm:max-w-40 md:max-w-52">{song.artist}</p>
+                <p className="text-gray-400 text-xs sm:text-sm truncate max-w-32 sm:max-w-40 md:max-w-52">{song.artist && song.artist.length > 0
+                    ? song.artist.map(artist => artist.name).join(', ')
+                    : 'Unknown Artist'
+                }</p>
             </div>
         </div>
     );
@@ -142,8 +152,8 @@ const HomePage = () => {
             <div className="mb-6 sm:mb-8 md:mb-12">
                 <div className="flex items-center justify-between mb-4 md:mb-6">
                     <h2 className="text-xl sm:text-2xl md:text-3xl font-bold">Popular artists</h2>
-                    <button 
-                        onClick={() => navigate('/AllArtist')} 
+                    <button
+                        onClick={() => navigate('/AllArtist')}
                         className="text-gray-400 hover:text-white text-xs sm:text-sm font-medium"
                     >
                         Show all
@@ -151,7 +161,12 @@ const HomePage = () => {
                 </div>
                 <div className="flex gap-3 sm:gap-4 md:gap-6 overflow-x-auto pb-4 scrollbar-hide">
                     {popularArtists.map((artist, index) => (
-                        <ArtistCard key={index} artist={artist} />
+                        <div key={index} className='flex-shrink-0'>
+                            <ArtistCard
+                                artist={artist}
+                                onClick={() => handleArtistClick(artist._id)}
+                            />
+                        </div>
                     ))}
                 </div>
             </div>

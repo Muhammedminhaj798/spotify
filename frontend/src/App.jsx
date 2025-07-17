@@ -21,6 +21,7 @@ import ViewPlaylist from './pages/ViewPlaylist';
 import SongFullScreen from './pages/SongFullScreen';
 import { ToastContainer } from 'react-toastify';
 import Navbar from './components/Navbar';
+import ArtistSongs from './pages/ArtistSongs';
 
 
 
@@ -55,6 +56,7 @@ const App = () => {
             <Route path='/profile' element={<Profile />} />
             <Route path='/AllArtist' element={<ShowAllArtist />} />
             <Route path='/viewPlaylist/:id' element={<ViewPlaylist />} />
+            <Route path='/viewArtistSongs/:id' element={<ArtistSongs/>}/>
           </Route>
 
           <Route path='/loginWithPass' element={<LoginWithPassword />} />

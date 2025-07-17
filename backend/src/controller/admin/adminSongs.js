@@ -69,7 +69,7 @@ const addSongs = async (req, res, next) => {
 
 export const getAllSongs = async (req, res, next) => {
   try {
-    const songs = await Song.find({ isDeleted: false });
+    const songs = await Song.find({ isDeleted: false }).populate('artist');
 
     if (!songs) {
       return next(new CustomError("Songs not found ", 404));

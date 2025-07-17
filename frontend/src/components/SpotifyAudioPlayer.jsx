@@ -151,7 +151,7 @@ const SpotifyAudioPlayer = () => {
                 artist: 'Unknown Artist',
                 album: 'Unknown Album',
                 artwork: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=300&h=300&fit=crop',
-                src: '',
+                src: null,
             };
         }
 
@@ -410,9 +410,9 @@ const SpotifyAudioPlayer = () => {
                     </div>
                     <div className="min-w-0 flex-1">
                         <h4 className="text-white text-sm font-medium truncate">{currentTrack.title}</h4>
-                        <p className="text-gray-400 text-xs truncate hover:text-white cursor-pointer">
+                        {/* <p className="text-gray-400 text-xs truncate hover:text-white cursor-pointer">
                             {currentTrack.artist}
-                        </p>
+                        </p> */}
                     </div>
                     <div className="relative" ref={playlistDropdownRef}>
                         <button

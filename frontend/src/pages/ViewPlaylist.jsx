@@ -11,7 +11,6 @@ const ViewPlaylist = () => {
     const { playlistById, loading, error } = useSelector((state) => state.userPlaylist);
     const { currentSong, isPlaying } = useSelector((state) => state.playSong);
 
-    const [hoveredSong, setHoveredSong] = useState(null);
     const [currentPlayingSong, setCurrentPlayingSong] = useState(null);
 
     useEffect(() => {

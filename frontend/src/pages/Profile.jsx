@@ -129,9 +129,9 @@ const Profile = () => {
 
                 {/* Artists Grid */}
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                    {popularArtists.map((artist) => (
+                    {popularArtists.map((artist,index) => (
                         <div
-                            key={artist.id}
+                            key={index}
                             className="group cursor-pointer p-3 rounded-lg hover:bg-gray-800 transition-all duration-200"
                         >
                             <div className="relative mb-3">
@@ -166,7 +166,7 @@ const Profile = () => {
                 <div className="space-y-2">
                     {topTracks.map((track, index) => (
                         <div
-                            key={track.id}
+                            key={index}
                             className="group flex items-center gap-4 p-2 rounded-lg hover:bg-gray-800 transition-colors"
                         >
                             {/* Track Number / Play Button */}
@@ -209,9 +209,9 @@ const Profile = () => {
                                     }`}>
                                     {track.title}
                                 </h4>
-                                <p className="text-sm text-gray-400 truncate">
-                                    {track.artist}
-                                </p>
+                                {/* <p className="text-sm text-gray-400 truncate">
+                                    {track?.artist}
+                                </p> */}
                             </div>
 
                             {/* Mobile Track Title (Hidden on desktop) */}
@@ -252,9 +252,9 @@ const Profile = () => {
 
                 {/* Playlists Grid */}
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                    {playlists.map((playlist) => (
+                    {playlists.map((playlist,index) => (
                         <div
-                            key={playlist.id}
+                            key={index}
                             className="group cursor-pointer p-3 rounded-lg hover:bg-gray-800 transition-all duration-200"
                             onClick={() => navigate(`/viewPlaylist/${playlist._id}`)}
                         >

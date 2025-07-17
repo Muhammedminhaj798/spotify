@@ -18,7 +18,7 @@ const AdminSongsComponent = () => {
         duration: '',
         status: 'Active'
     });
-    
+
     const [audioFile, setAudioFile] = useState(null);
     const [imageFile, setImageFile] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
@@ -46,7 +46,7 @@ const AdminSongsComponent = () => {
 
     const handleFileChange = (e, fileType) => {
         const { files } = e.target;
-        
+
         if (fileType === 'audio') {
             setAudioFile(files[0]);
         } else if (fileType === 'image') {
@@ -56,7 +56,7 @@ const AdminSongsComponent = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
+
         // Validation
         if (!formData.title || !formData.artist || !formData.genre || !formData.duration) {
             alert('Please fill in all required fields');
@@ -86,10 +86,10 @@ const AdminSongsComponent = () => {
             for (let [key, value] of songData.entries()) {
                 console.log(key, value);
             }
-            
+
             // Dispatch the action with FormData
             const result = await dispatch(addSong(songData));
-            
+
             // Check if the action was successful
             if (addSong.fulfilled.match(result)) {
                 alert('Song added successfully!');
@@ -113,7 +113,7 @@ const AdminSongsComponent = () => {
         setImageFile(null);
         setShowForm(false);
         setEditingSong(null);
-        
+
         // Reset file inputs
         const audioInput = document.getElementById('audioFile');
         const imageInput = document.getElementById('imageFile');
@@ -208,7 +208,7 @@ const AdminSongsComponent = () => {
 
                 {/* Add/Edit Form */}
                 {showForm && (
-                    <div className="bg-gray-900 border border-gray-800 rounded-lg shadow-lg p-6 mb-6 border-l-4 border-green-500">
+                    <div className="bg-gray-900 border border-gray-800 rounded-lg shadow-lg p-6 mb-6 border-l-4 ">
                         <h2 className="text-xl font-semibold mb-4 text-white">
                             {editingSong ? 'Edit Song' : 'Add New Song'}
                         </h2>
@@ -237,7 +237,7 @@ const AdminSongsComponent = () => {
                                     >
                                         <option value="">Select Artist</option>
                                         {artists && artists.map((artist, index) => (
-                                            <option key={index} value={artist.name || artist}>
+                                            <option key={index} value={artist._id || artist}>
                                                 {artist.name || artist}
                                             </option>
                                         ))}
@@ -404,7 +404,11 @@ const AdminSongsComponent = () => {
                                                     </div>
                                                     <div className="ml-4">
                                                         <div className="text-sm font-medium text-white">{song.title}</div>
-                                                        <div className="text-sm text-gray-400">{song.artist}</div>
+                                                        <div className="text-sm text-gray-400">{song.artist?.map((a, i) => (
+                                                            <span key={a._id}>
+                                                                {a.name}{i < song.artist.length - 1 ? ', ' : ''}
+                                                            </span>
+                                                        ))}</div>
                                                     </div>
                                                 </div>
                                             </td>

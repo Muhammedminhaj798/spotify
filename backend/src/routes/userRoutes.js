@@ -4,6 +4,7 @@ import addPlaylist, {  addSongPlaylist, deletePlaylist, getPlaylists, playlistBy
 import user_auth from "../middleware/authmiddleWare.js";
 import upload from "../middleware/uploadMiddleware.js";
 import { getSearchController } from "../controller/user/searchController.js";
+import { getArtistSongById } from "../controller/user/ArtistController.js";
 
 const userRoutes = express.Router();
 
@@ -15,6 +16,7 @@ userRoutes
     .post('/addSongPlaylist/:id', user_auth,tryCatch(addSongPlaylist))
     .delete('/removeSongPlaylist/:id', user_auth,tryCatch(removeSongPlaylist))
     .get('/searchBar',tryCatch(getSearchController))
+    .get('/getArtistSongById/:id',tryCatch(getArtistSongById))
     // .delete("/deletePlaylist",user_auth,tryCatch(delete))
 
 export default userRoutes;

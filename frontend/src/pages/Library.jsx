@@ -15,12 +15,12 @@ const Library = () => {
   const [showCreateDropdown, setShowCreateDropdown] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
-  
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { playlists } = useSelector((state) => state.userPlaylist);
   const { artists } = useSelector((state) => state.adminArtist);
-  
+
   const loginDropdownRef = useRef(null);
   const createDropdownRef = useRef(null);
 
@@ -168,7 +168,7 @@ const Library = () => {
 
         {/* Mobile Overlay */}
         {isMobileMenuOpen && (
-          <div 
+          <div
             className="md:hidden fixed inset-0 bg-black bg-opacity-50 z-40"
             onClick={() => setIsMobileMenuOpen(false)}
           />
@@ -193,8 +193,8 @@ const Library = () => {
           <div className={`flex items-center justify-between p-4 pb-2 ${isCollapsed ? 'px-2' : ''}`}>
             {!isCollapsed && <h1 className="text-xl md:text-2xl font-bold">Your Library</h1>}
             <div className="flex items-center space-x-2">
-              <button 
-                onClick={() => navigate("/addPlaylist")} 
+              <button
+                onClick={() => navigate("/addPlaylist")}
                 className="p-2 hover:bg-gray-800 rounded-full transition-colors"
                 title="Add Playlist"
               >
@@ -216,11 +216,10 @@ const Library = () => {
                   <button
                     key={tab}
                     onClick={() => setActiveTab(tab)}
-                    className={`px-3 md:px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                      activeTab === tab
-                        ? 'bg-gray-800 text-white'
-                        : 'bg-transparent text-gray-400 hover:text-white'
-                    }`}
+                    className={`px-3 md:px-4 py-2 rounded-full text-sm font-medium transition-colors ${activeTab === tab
+                      ? 'bg-gray-800 text-white'
+                      : 'bg-transparent text-gray-400 hover:text-white'
+                      }`}
                   >
                     {tab}
                   </button>
@@ -253,12 +252,11 @@ const Library = () => {
 
           {/* Content List */}
           <div className={`space-y-2 ${isCollapsed ? 'px-2' : 'px-4'}`}>
-            {filteredData.map((item) => (
+            {filteredData.map((item, index) => (
               <div
-                key={item.id}
-                className={`group flex items-center p-2 hover:bg-gray-800 rounded-md transition-colors cursor-pointer ${
-                  isCollapsed ? 'justify-center' : 'space-x-3'
-                }`}
+                key={index}
+                className={`group flex items-center p-2 hover:bg-gray-800 rounded-md transition-colors cursor-pointer ${isCollapsed ? 'justify-center' : 'space-x-3'
+                  }`}
                 onClick={() => {
                   navigate(`/viewPlaylist/${item._id}`);
                   setIsMobileMenuOpen(false);
@@ -294,15 +292,15 @@ const Library = () => {
                     {/* Ellipsis Menu Container */}
                     <div className="relative">
                       <button
-                        id={`button-${item.id}`}
-                        onClick={(e) => handleEllipsisClick(e, item.id)}
+                        id={`button-${item._id}`}
+                        onClick={(e) => handleEllipsisClick(e, item._id)}
                         className="opacity-0 group-hover:opacity-100 p-1 hover:bg-gray-700 rounded transition-all duration-200 flex-shrink-0"
                       >
                         <EllipsisVertical className="w-4 h-4 text-gray-400 hover:text-white" />
                       </button>
 
                       {/* Dropdown Menu */}
-                      {activeDropdown === item.id && (
+                      {activeDropdown === item._id && (
                         <div
                           id={`dropdown-${item.id}`}
                           className="absolute right-0 top-8 w-48 bg-gray-800 rounded-md shadow-lg border border-gray-700 z-50"
@@ -403,7 +401,7 @@ const Library = () => {
 
       {/* Mobile Overlay */}
       {isMobileMenuOpen && (
-        <div 
+        <div
           className="md:hidden fixed inset-0 bg-black bg-opacity-50 z-40"
           onClick={() => setIsMobileMenuOpen(false)}
         />
