@@ -21,6 +21,7 @@ import { getAllSongs } from '../redux/admin/adminSongSlice';
 import { addSongPlaylist, removeSongPlaylist } from '../redux/users/playlistSlice';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios'; // Add axios for API calls
+import ArtistSongs from '../pages/ArtistSongs';
 
 const SpotifyAudioPlayer = () => {
     const [isPlaying, setIsPlaying] = useState(false);

@@ -15,6 +15,8 @@ const HomePage = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
+   
+
     useEffect(() => {
         dispatch(getAllArtist())
         dispatch(getAllSongs())

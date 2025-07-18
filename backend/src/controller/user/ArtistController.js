@@ -5,7 +5,7 @@ export const getArtistSongById = async (req, res) => {
     const { id } = req.params; // Extract id from params correctly
 
     const artist = await Artist.findById(id)
-      .populate("Songs")
+      .populate("songs")
       .populate("Artist ");
 
     if (!artist) {
