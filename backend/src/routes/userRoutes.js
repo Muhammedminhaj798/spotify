@@ -17,6 +17,6 @@ userRoutes
     .delete('/removeSongPlaylist/:id', user_auth,tryCatch(removeSongPlaylist))
     .get('/searchBar',tryCatch(getSearchController))
     .get('/getArtistSongById/:id',tryCatch(getArtistSongById))
-    // .delete("/deletePlaylist",user_auth,tryCatch(delete))
+    .delete("/deletePlaylist/:id",user_auth,tryCatch(deletePlaylist))
 
 export default userRoutes;

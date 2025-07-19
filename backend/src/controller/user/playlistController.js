@@ -189,9 +189,17 @@ export const removeSongPlaylist = async (req, res) => {
 };
 
 export const deletePlaylist = async (req, res) => {
+  try{
   const { id } = req.params;
   await Playlist.findByIdAndDelete(id);
   res.status(200).json("playlist deleted successfully");
+  }catch(err){
+    console.log("rrororororor");
+    return res.status(500).json({
+      status:"error",
+      message:"Internal server error"
+    })
+  }
 };
 
 export const getAllPlaylist = async (req, res) => {

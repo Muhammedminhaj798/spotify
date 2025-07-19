@@ -119,6 +119,25 @@ export const removeSongPlaylist = createAsyncThunk(
   }
 );
 
+export const deletePlaylist = createAsyncThunk(
+  "playlist/deletePlaylist",
+  async(id, {rejectWithValue}) => {
+    try{
+      const token = localStorage.getItem("token");
+      const response = await axiosInstance.delete(`/user/deletePlaylist/${id}`,
+        {
+          headers:{
+            authorization:`Bearer ${token}`
+          }
+        }
+      )
+      return response.data
+    }catch(err){
+      return rejectWithValue(err.response?.data || err.message)
+    }
+  }
+)
+
 const playlistSlice = createSlice({
   name: "playlist",
   initialState,

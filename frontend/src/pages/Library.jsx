@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Search, Plus, ArrowUpDown, Heart, Music, User, EllipsisVertical, Trash2, Edit, X, Globe, Menu } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getPlaylist } from '../redux/users/playlistSlice';
+import { deletePlaylist, getPlaylist } from '../redux/users/playlistSlice';
 import { getAllArtist } from '../redux/admin/adminArtistSlice';
 
 const Library = () => {
@@ -141,6 +141,7 @@ const Library = () => {
   const handleDeleteConfirm = () => {
     console.log('Deleting playlist:', selectedPlaylist.name);
     // dispatch(deletePlaylist(selectedPlaylist.id));
+    dispatch(deletePlaylist(selectedPlaylist._id))
     setShowDeleteModal(false);
     setSelectedPlaylist(null);
   };
