@@ -45,7 +45,7 @@ const Login = () => {
                 {/* Title */}
                 <div className='flex justify-center mb-6'>
                     <h1 className='font-bold text-2xl sm:text-3xl lg:text-4xl text-center'>
-                      <span onClick={()=> navigate('/adminLogin')}>Log</span> in to Spotify
+                      <span onClick={()=> navigate('/adminLogin')}>L</span>og in to Spotify
                     </h1>
                 </div>
                 
