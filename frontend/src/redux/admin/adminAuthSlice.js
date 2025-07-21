@@ -46,7 +46,8 @@ const adminAuthSlice = createSlice({
         state.data = action.payload;
         state.isAuth = true;
         localStorage.setItem("isAuth", "true");
-        localStorage.setItem("isAdmin", JSON.stringify(action.payload))
+        localStorage.setItem("isAdmin", JSON.stringify(action.payload));
+        localStorage.setItem("admin_token", action.payload.token);
       })
       .addCase(adminLogin.rejected, (state, action) => {
         state.loading = false;
