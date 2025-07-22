@@ -96,11 +96,18 @@ export const updatedArtist = createAsyncThunk(
 
       const config = {
         headers: {
-          "Content-Type": data instanceof FormData ? "multipart/form-data" : "application/json",
+          "Content-Type":
+            data instanceof FormData
+              ? "multipart/form-data"
+              : "application/json",
         },
       };
 
-      const response = await axiosInstance.patch(`admin/updatedArtist/${id}`, data, config);
+      const response = await axiosInstance.patch(
+        `admin/updatedArtist/${id}`,
+        data,
+        config
+      );
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || error.message);
