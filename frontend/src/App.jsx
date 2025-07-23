@@ -30,16 +30,16 @@ const App = () => {
   return (
     <>
 
-    <ToastContainer
+      <ToastContainer
         position="top-right"      // Position (top-left, top-right, bottom-left, bottom-right)
         autoClose={3000}          // Auto close after 3 seconds
         hideProgressBar={false}   // Show progress bar
-        newestOnTop={false}       
-        closeOnClick              
-        rtl={false}               
-        pauseOnFocusLoss          
-        draggable                 
-        pauseOnHover              
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
         theme="colored"           // or "light", "dark"
       />
       <>
@@ -56,7 +56,7 @@ const App = () => {
             <Route path='/profile' element={<Profile />} />
             <Route path='/AllArtist' element={<ShowAllArtist />} />
             <Route path='/viewPlaylist/:id' element={<ViewPlaylist />} />
-            <Route path='/viewArtistSongs/:id' element={<ArtistSongs/>}/>
+            <Route path='/viewArtistSongs/:id' element={<ArtistSongs />} />
           </Route>
 
           <Route path='/loginWithPass' element={<LoginWithPassword />} />
