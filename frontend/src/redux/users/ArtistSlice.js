@@ -14,7 +14,7 @@ export const getArtistSongById = createAsyncThunk(
       const response = await axiosInstance.get(`/user/getArtistSongById/${id}`);
       return response.data.data; // Extract the data object from response
     } catch (error) {
-        console.log("error is ", error);
+      console.log("error is ", error);
       return rejectWithValue(error.response?.data?.message || error.message);
     }
   }
