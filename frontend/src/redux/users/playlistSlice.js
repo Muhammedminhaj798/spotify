@@ -55,8 +55,8 @@ export const getPlaylist = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem("token");
-      console.log('tok: ', token);
-      
+      console.log("tok: ", token);
+
       if (!token) {
         throw new Error("No authentication token found in cookies");
       }
@@ -121,22 +121,23 @@ export const removeSongPlaylist = createAsyncThunk(
 
 export const deletePlaylist = createAsyncThunk(
   "playlist/deletePlaylist",
-  async(id, {rejectWithValue}) => {
-    try{
+  async (id, { rejectWithValue }) => {
+    try {
       const token = localStorage.getItem("token");
-      const response = await axiosInstance.delete(`/user/deletePlaylist/${id}`,
+      const response = await axiosInstance.delete(
+        `/user/deletePlaylist/${id}`,
         {
-          headers:{
-            authorization:`Bearer ${token}`
-          }
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
         }
-      )
-      return response.data
-    }catch(err){
-      return rejectWithValue(err.response?.data || err.message)
+      );
+      return response.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data || err.message);
     }
   }
-)
+);
 
 const playlistSlice = createSlice({
   name: "playlist",
