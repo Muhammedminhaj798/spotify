@@ -7,13 +7,14 @@ const initialState = {
 };
 
 const playSongSlice = createSlice({
-    name: "playSong",
-    initialState,
-    reducers: {
-        playSongRequest(state,action) {
-            state.id = action.payload;
-    }}
-})
+  name: "playSong",
+  initialState,
+  reducers: {
+    playSongRequest(state, action) {
+      state.id = action.payload;
+    },
+  },
+});
 
 export default playSongSlice.reducer;
 export const { playSongRequest } = playSongSlice.actions;
