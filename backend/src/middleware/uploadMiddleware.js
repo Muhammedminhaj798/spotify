@@ -29,8 +29,6 @@ const audioStorage = new CloudinaryStorage({
   },
 });
 
-
-
 const imageStorage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
@@ -44,19 +42,18 @@ const upload = multer({
   storage: new CloudinaryStorage({
     cloudinary: cloudinary,
     params: async (req, file) => {
-      
       if (file.fieldname === "audioFile") {
-            return {
-            folder: "songs/audio",
-            resource_type: "raw",
-            allowed_formats: ["mp3", "wav", "ogg", "m4a", "mp4"],
-            };
+        return {
+          folder: "songs/audio",
+          resource_type: "raw",
+          allowed_formats: ["mp3", "wav", "ogg", "m4a", "mp4"],
+        };
       }
       if (file.fieldname === "imageFile") {
         return {
           folder: "songs/images",
           resource_type: "image",
-          allowed_formats: ["png", "jpg", "jpeg","webp"],
+          allowed_formats: ["png", "jpg", "jpeg", "webp"],
         };
       }
     },
