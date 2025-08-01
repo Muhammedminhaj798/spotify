@@ -5,7 +5,6 @@ import Artist from "../../model/artistSchema.js";
 
 const addSongs = async (req, res, next) => {
   try {
-
     if (req.fileError) {
       return res.status(400).json({ message: req.fileError.message });
     }
@@ -48,7 +47,7 @@ const addSongs = async (req, res, next) => {
     });
 
     // Save to database
-     await newSong.save();
+    await newSong.save();
 
     await Artist.updateMany(
       { _id: { $in: artist } },
@@ -69,7 +68,7 @@ const addSongs = async (req, res, next) => {
 
 export const getAllSongs = async (req, res, next) => {
   try {
-    const songs = await Song.find({ isDeleted: false }).populate('artist');
+    const songs = await Song.find({ isDeleted: false }).populate("artist");
 
     if (!songs) {
       return next(new CustomError("Songs not found ", 404));
