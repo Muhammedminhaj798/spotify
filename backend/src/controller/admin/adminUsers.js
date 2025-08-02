@@ -1,11 +1,10 @@
-
 import User from "../../model/userSchema.js";
 import CustomError from "../../utils/customError.js";
 import asyncHandler from "express-async-handler";
 
 const getAllUsers = async (req, res, next) => {
   try {
-    const users = await User.find({isAdmin:false});
+    const users = await User.find({ isAdmin: false });
 
     if (!users) {
       return next(new CustomError("User not found", 404));
@@ -53,7 +52,6 @@ export const toggleBlockUser = asyncHandler(async (req, res, next) => {
       { new: true }
     );
 
-    
     if (!updatedUser) {
       return next(new Error("User not found"));
     }
@@ -92,4 +90,4 @@ export const toggleBlockUser = asyncHandler(async (req, res, next) => {
 //   })
 // });
 
-export { getAllUsers, getUSerById, };
+export { getAllUsers, getUSerById };
