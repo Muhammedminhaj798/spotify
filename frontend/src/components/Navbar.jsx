@@ -72,7 +72,6 @@ export default function Navbar() {
   const handleSignup = () => {
     console.log('Signup clicked');
     setIsProfileDropdownOpen(false);
-    // Add your signup logic here
     navigate('/signup')
   };
 
