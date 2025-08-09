@@ -9,7 +9,6 @@ const songSchema = new mongoose.Schema(
         ref: "Artist",
       },
     ],
-    // artist: { r required: true },
     coverImage: { type: String },
     duration: { type: String, required: true },
     url: { type: String, required: true },

@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import React, { useRef, useState, useEffect } from 'react';
 import { Search, Home, Download, Clock, Menu, X, ChevronLeft, ChevronRight, Bell, Settings, User, ChevronDown, UserPlus, LogIn, LogOut } from 'lucide-react';
 // import { Search, Home, Download, Bell, Settings, User } from 'lucide-react';
