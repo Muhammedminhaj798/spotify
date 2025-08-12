@@ -19,7 +19,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: false,
       unique: true,
-      sparse: true, // Allows null/undefined for unique field
+      sparse: true, 
       match: [/^\+?[1-9]\d{1,14}$/, "please enter valid phone number"], // E.164 format
     },
     password: {
