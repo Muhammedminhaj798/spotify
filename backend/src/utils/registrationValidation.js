@@ -45,7 +45,7 @@ const joiRegisterSchema = Joi.object({
             'any.required': 'Date of birth is required.'
         }),
     gender: Joi.string()
-        .valid('Man','Woman','Prefer not to say','Non-binary','Something else')
+        .valid('Man', 'Woman', 'Prefer not to say', 'Non-binary', 'Something else')
         .required()
         .messages({
             'string.base': 'Gender must be a string.',
