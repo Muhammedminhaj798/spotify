@@ -1,5 +1,4 @@
-// const tryCatch = (func) => async (req, res, next) => {
-//   try {
+
 const tryCatch = (controllers) => async (req, res, next) => {
   try {
     await controllers(req, res, next);
