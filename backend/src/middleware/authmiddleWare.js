@@ -1,6 +1,4 @@
 import jwt from "jsonwebtoken";
-// import CustomError from '../routes/utils/customError.js';
-// import User from '../model/userSchema.js';
 import CustomError from "../utils/customError.js";
 import User from "../model/userSchema.js";
 
