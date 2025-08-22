@@ -33,7 +33,7 @@ const imageStorage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
     folder: "songs/images",
-    resource_type: "image", // For image files
+    resource_type: "image",
     allowed_formats: ["png", "jpg", "jpeg"],
   },
 });
