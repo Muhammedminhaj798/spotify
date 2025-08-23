@@ -15,10 +15,10 @@ dotenv.config();
 app.use(express.json());
 app.use(
   cors({
-    origin: process.env.CLIENT_URL, 
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"], 
-    allowedHeaders: ["Content-Type", "Authorization"], 
-    credentials: true, 
+    origin: process.env.CLIENT_URL,
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
   })
 );
 
@@ -42,7 +42,7 @@ mongoose
   .catch((err) => {
     console.error("MongoDB connection error:", err);
   });
-  app.use(ErrorManager)
+app.use(ErrorManager)
 
 const port = process.env.PORT || 8080;
 app.listen(port, () => {
