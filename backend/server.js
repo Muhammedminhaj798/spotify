@@ -31,6 +31,9 @@ app.use("/api/auth", authRouter);
 app.use('/api/admin', adminRoutes)
 app.use('/api/user', userRoutes)
 
+
+
+
 mongoose
   .connect(process.env.MONGOOSE)
   .then(() => {
