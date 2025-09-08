@@ -149,7 +149,7 @@ const authSlice = createSlice({
         localStorage.setItem("user", JSON.stringify(action.payload));
         localStorage.setItem("token", action.payload.token);
       })
-      .addCase(verifyOTP.rejected, (state, action) => {
+      .addCase(verifyOTP.rejected, (state) => {
         state.loading = false;
         state.isAuth = false;
       })

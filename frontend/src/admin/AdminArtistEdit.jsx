@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import { Save, Upload, User, Edit3 } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
@@ -21,7 +22,7 @@ const AdminArtistEdit = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [dataLoaded, setDataLoaded] = useState(false);
 
-  const { artists, loading, error } = useSelector((state) => state.adminArtist);
+  const { artists, loading,  } = useSelector((state) => state.adminArtist);
 
   useEffect(() => {
     const loadArtistData = async () => {

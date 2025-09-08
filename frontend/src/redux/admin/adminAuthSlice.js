@@ -22,7 +22,7 @@ export const adminLogin = createAsyncThunk(
         password,
       });
 
-      return response.data; // Contains { token, message }
+      return response.data; 
     } catch (error) {
       // Handle server and network errors
       if (error.response && error.response.data) {
