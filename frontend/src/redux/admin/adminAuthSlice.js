@@ -12,7 +12,6 @@ export const adminLogin = createAsyncThunk(
   "adminAuth/login",
   async ({ email, password }, { rejectWithValue }) => {
     try {
-      // Validate inputs
       if (!email || !password) {
         return rejectWithValue({ message: "Email and password are required" });
       }
