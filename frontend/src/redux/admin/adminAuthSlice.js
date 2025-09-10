@@ -23,7 +23,6 @@ export const adminLogin = createAsyncThunk(
 
       return response.data; 
     } catch (error) {
-      // Handle server and network errors
       if (error.response && error.response.data) {
         return rejectWithValue(error.response.data);
       }
