@@ -21,7 +21,7 @@ export const adminLogin = createAsyncThunk(
         password,
       });
 
-      return response.data; 
+      return response.data;
     } catch (error) {
       if (error.response && error.response.data) {
         return rejectWithValue(error.response.data);
