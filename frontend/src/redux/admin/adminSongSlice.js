@@ -44,7 +44,7 @@ export const addSong = createAsyncThunk(
 
 export const DeletedSong = createAsyncThunk(
   "songs/tDeletedSong",
-  async (id , { rejectWithValue }) => {
+  async (id, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.patch(`admin/toggleDeleted/${id}`);
 
