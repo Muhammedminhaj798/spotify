@@ -33,7 +33,6 @@ export const toggleBlockUser = createAsyncThunk(
           isBlocked: !currentStatus,
         }
       );
-      // Return the updated user data with the new blocked status
       return {
         userId: id,
         isBlocked: !currentStatus,
@@ -55,7 +54,7 @@ const adminUserSlice = createSlice({
   reducers: {
     clearError: (state) => {
       state.error = null;
-    },    
+    },
   },
   extraReducers: (builder) => {
     builder
