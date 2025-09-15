@@ -41,7 +41,6 @@ export const sentOTP = createAsyncThunk(
       const response = await axiosInstance.post("/auth/sendOTP", { email });
       return response.data;
     } catch (error) {
-      // Extract error message from backend response, if available
       const errorMessage =
         error.response?.data?.message ||
         "Failed to send OTP. Please try again.";
