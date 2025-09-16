@@ -129,7 +129,7 @@ const authSlice = createSlice({
       .addCase(registerUser.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload;
-        state.formData = initialState.formData; // Reset form data after successful registration
+        state.formData = initialState.formData; 
         state.isAuth = true;
         localStorage.setItem("isAuth", "true");
         console.log(action.payload);
