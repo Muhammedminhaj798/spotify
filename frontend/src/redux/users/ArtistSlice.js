@@ -12,7 +12,7 @@ export const getArtistSongById = createAsyncThunk(
   async (id, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.get(`/user/getArtistSongById/${id}`);
-      return response.data.data; // Extract the data object from response
+      return response.data.data;
     } catch (error) {
       console.log("error is ", error);
       return rejectWithValue(error.response?.data?.message || error.message);
