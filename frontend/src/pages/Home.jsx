@@ -1,5 +1,5 @@
 import React from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import Library from './Library';
 import SpotifyAudioPlayer from '../components/SpotifyAudioPlayer';
 

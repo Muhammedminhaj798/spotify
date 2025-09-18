@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { Play, MoreHorizontal } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllArtist } from '../redux/admin/adminArtistSlice';
@@ -9,8 +9,8 @@ import { useNavigate } from 'react-router-dom';
 const HomePage = () => {
     const { artists } = useSelector((state) => state.adminArtist)
     const { songs } = useSelector((state) => state.adminSongs)
-    const { id: currentSongId } = useSelector((state) => state.playSong)
-    const audioPlayerRef = useRef(null);
+    // const { id: currentSongId } = useSelector((state) => state.playSong)
+    // const audioPlayerRef = useRef(null);
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
@@ -26,38 +26,38 @@ const HomePage = () => {
         ? artists.slice(0, 10).filter(artist => artist && artist.name)
         : [];
 
-    const popularAlbums = [
-        {
-            title: "Aashiqui 2",
-            image: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=300&h=300&fit=crop",
-            color: "from-teal-500 to-blue-600"
-        },
-        {
-            title: "Yeh Jawaani Hai Deewani",
-            image: "https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=300&h=300&fit=crop",
-            color: "from-yellow-400 to-orange-500"
-        },
-        {
-            title: "Sanam Teri Kasam",
-            image: "https://images.unsplash.com/photo-1445985543470-41fba5c3144a?w=300&h=300&fit=crop",
-            color: "from-red-500 to-pink-600"
-        },
-        {
-            title: "Finding You",
-            image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=300&h=300&fit=crop",
-            color: "from-blue-400 to-cyan-500"
-        },
-        {
-            title: "Young G.O.A.T",
-            image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=300&h=300&fit=crop",
-            color: "from-orange-400 to-red-500"
-        },
-        {
-            title: "Raanjhan",
-            image: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=300&h=300&fit=crop",
-            color: "from-purple-500 to-pink-600"
-        }
-    ];
+    // const popularAlbums = [
+    //     {
+    //         title: "Aashiqui 2",
+    //         image: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=300&h=300&fit=crop",
+    //         color: "from-teal-500 to-blue-600"
+    //     },
+    //     {
+    //         title: "Yeh Jawaani Hai Deewani",
+    //         image: "https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=300&h=300&fit=crop",
+    //         color: "from-yellow-400 to-orange-500"
+    //     },
+    //     {
+    //         title: "Sanam Teri Kasam",
+    //         image: "https://images.unsplash.com/photo-1445985543470-41fba5c3144a?w=300&h=300&fit=crop",
+    //         color: "from-red-500 to-pink-600"
+    //     },
+    //     {
+    //         title: "Finding You",
+    //         image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=300&h=300&fit=crop",
+    //         color: "from-blue-400 to-cyan-500"
+    //     },
+    //     {
+    //         title: "Young G.O.A.T",
+    //         image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=300&h=300&fit=crop",
+    //         color: "from-orange-400 to-red-500"
+    //     },
+    //     {
+    //         title: "Raanjhan",
+    //         image: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=300&h=300&fit=crop",
+    //         color: "from-purple-500 to-pink-600"
+    //     }
+    // ];
 
     const trendingSongs = songs && songs.length > 0
         ? songs.slice(0, 10).filter(song => song && song.title)
@@ -173,20 +173,20 @@ const HomePage = () => {
                 </div>
             </div>
 
-            {/* Popular Albums and Singles Section */}
-            <div className="mb-6 sm:mb-8 md:mb-12">
-                <div className="flex items-center justify-between mb-4 md:mb-6">
-                    <h2 className="text-xl sm:text-2xl md:text-3xl font-bold">Popular albums and singles</h2>
-                    <button className="text-gray-400 hover:text-white text-xs sm:text-sm font-medium">
-                        Show all
-                    </button>
-                </div>
-                <div className="flex gap-3 sm:gap-4 overflow-x-auto pb-4 scrollbar-hide">
-                    {popularAlbums.map((album, index) => (
-                        <AlbumCard key={index} album={album} />
-                    ))}
-                </div>
-            </div>
+            {/* Popular Albums and Singles Section
+            // <div className="mb-6 sm:mb-8 md:mb-12">
+            //     <div className="flex items-center justify-between mb-4 md:mb-6">
+            //         <h2 className="text-xl sm:text-2xl md:text-3xl font-bold">Popular albums and singles</h2>
+            //         <button className="text-gray-400 hover:text-white text-xs sm:text-sm font-medium">
+            //             Show all
+            //         </button>
+            //     </div>
+            //     <div className="flex gap-3 sm:gap-4 overflow-x-auto pb-4 scrollbar-hide">
+            //         {popularAlbums.map((album, index) => (
+            //             <AlbumCard key={index} album={album} />
+            //         ))}
+            //     </div>
+            // </div> */}
 
             {/* Trending Songs Section */}
             <div className="mb-6 sm:mb-8 md:mb-12">

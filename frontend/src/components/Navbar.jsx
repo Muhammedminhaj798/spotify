@@ -231,7 +231,7 @@ export default function Navbar() {
             </div>
 
             {/* Home button - Desktop */}
-            <button className="hidden lg:flex items-center justify-center w-12 h-12 bg-gray-900 hover:bg-gray-800 rounded-full transition-colors">
+            <button className="hidden lg:flex items-center justify-center w-12 h-12 bg-gray-900 hover:bg-gray-800 rounded-full transition-colors" onClick={() => naviga}>
               <Home className="w-6 h-6 fill-white" />
             </button>
           </div>
@@ -375,7 +375,7 @@ export default function Navbar() {
       {/* Bottom navigation for mobile */}
       <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-black border-t border-gray-800 z-50">
         <div className="grid grid-cols-5 h-16">
-          <button className="flex flex-col items-center justify-center space-y-1 text-white">
+          <button className="flex flex-col items-center justify-center space-y-1 text-white" >
             <Home className="w-5 h-5 fill-current" />
             <span className="text-xs font-medium">Home</span>
           </button>
