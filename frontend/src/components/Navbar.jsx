@@ -231,7 +231,7 @@ export default function Navbar() {
             </div>
 
             {/* Home button - Desktop */}
-            <button className="hidden lg:flex items-center justify-center w-12 h-12 bg-gray-900 hover:bg-gray-800 rounded-full transition-colors" onClick={() => naviga}>
+            <button  className="hidden lg:flex items-center justify-center w-12 h-12 bg-gray-900 hover:bg-gray-800 rounded-full transition-colors">
               <Home className="w-6 h-6 fill-white" />
             </button>
           </div>
