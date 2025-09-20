@@ -49,7 +49,7 @@ const artistSlice = createSlice({
         state.artistData = null;
       });
   },
-});
+});  
 
 export const { clearArtistData, clearError } = artistSlice.actions;
 export default artistSlice.reducer;
