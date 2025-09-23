@@ -29,7 +29,6 @@ adminRoutes
   .patch("/toggleBlockUser/:id", tryCatch(toggleBlockUser))
   .patch("/toggleDeleted/:id", tryCatch(toggleDeleted))
 
-  //songs routes
 
   .post("/addSongs", upload, tryCatch(addSongs))
   .get("/getAllSongs", tryCatch(getAllSongs))
