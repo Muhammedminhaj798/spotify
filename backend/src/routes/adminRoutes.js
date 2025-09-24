@@ -32,8 +32,6 @@ adminRoutes
 
   .post("/addSongs", upload, tryCatch(addSongs))
   .get("/getAllSongs", tryCatch(getAllSongs))
-
-  //artist routes
   .post("/addArtist", upload, tryCatch(addArtist))
   .get("/getAllArtist", tryCatch(getAllArtist))
   .patch("/disableArtist/:id", tryCatch(disableArstist))
