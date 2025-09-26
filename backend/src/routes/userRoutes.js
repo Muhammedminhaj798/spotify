@@ -2,7 +2,6 @@ import express from "express";
 import tryCatch from "../utils/trycatch.js";
 import addPlaylist, { addSongPlaylist, deletePlaylist, getPlaylists, playlistById, removeSongPlaylist } from "../controller/user/playlistController.js";
 import user_auth from "../middleware/authmiddleWare.js";
-import upload from "../middleware/uploadMiddleware.js";
 import { getSearchController } from "../controller/user/searchController.js";
 import { getArtistSongById } from "../controller/user/ArtistController.js";
 
