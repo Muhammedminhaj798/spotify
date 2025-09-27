@@ -17,6 +17,7 @@ export default function Navbar() {
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
   const profileDropdownRef = useRef(null);
   const dropdownRef = useRef(null);
+  const [search, setSearch] = useState(null)
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -75,7 +76,9 @@ export default function Navbar() {
     setIsProfileDropdownOpen(false);
     navigate('/signup')
   };
-
+  const handleSearch = () => {
+    
+  }
 
   const SpotifyLogo = () => (
     <div className="flex items-center">
@@ -246,6 +249,7 @@ export default function Navbar() {
                 className="w-full bg-gray-800 text-white placeholder-gray-400 pl-12 pr-4 py-3 rounded-full border-0 focus:outline-none focus:ring-2 focus:ring-white focus:bg-gray-700 transition-all text-sm lg:text-base"
                 onFocus={() => setIsSearchFocused(true)}
                 onBlur={() => setIsSearchFocused(false)}
+                onChange={() => handleSearch()}
               />
             </div>
           </div>

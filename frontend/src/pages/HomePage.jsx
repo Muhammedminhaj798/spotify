@@ -173,21 +173,6 @@ const HomePage = () => {
                 </div>
             </div>
 
-            {/* Popular Albums and Singles Section
-            // <div className="mb-6 sm:mb-8 md:mb-12">
-            //     <div className="flex items-center justify-between mb-4 md:mb-6">
-            //         <h2 className="text-xl sm:text-2xl md:text-3xl font-bold">Popular albums and singles</h2>
-            //         <button className="text-gray-400 hover:text-white text-xs sm:text-sm font-medium">
-            //             Show all
-            //         </button>
-            //     </div>
-            //     <div className="flex gap-3 sm:gap-4 overflow-x-auto pb-4 scrollbar-hide">
-            //         {popularAlbums.map((album, index) => (
-            //             <AlbumCard key={index} album={album} />
-            //         ))}
-            //     </div>
-            // </div> */}
-
             {/* Trending Songs Section */}
             <div className="mb-6 sm:mb-8 md:mb-12">
                 <div className="flex items-center justify-between mb-4 md:mb-6">
