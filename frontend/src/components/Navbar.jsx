@@ -19,7 +19,6 @@ export default function Navbar() {
   const dropdownRef = useRef(null);
   const [search, setSearch] = useState(null)
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
