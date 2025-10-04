@@ -17,7 +17,7 @@ export default function Navbar() {
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
   const profileDropdownRef = useRef(null);
   const dropdownRef = useRef(null);
-  const [search, setSearch] = useState(null)
+  // const [search, setSearch] = useState(null)
 
   useEffect(() => {
     const handleClickOutside = (event) => {
